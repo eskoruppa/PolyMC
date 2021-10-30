@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PolyMC" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/PolyMC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add option="-std=c++11" />
+					<Add option="-ftree-vectorize" />
+					<Add option="-DARMA_DONT_USE_WRAPPER" />
+					<Add option="-DARMA_USE_LAPACK" />
+					<Add option="-DARMA_USE_BLAS" />
+					<Add option="-DARMA_USE_CXX1" />
+					<Add option="-DARMA_NO_DEBUG" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-llapack" />
+					<Add option="-lblas" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/PolyMC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add option="-std=c++11" />
+					<Add option="-ftree-vectorize" />
+					<Add option="-DARMA_DONT_USE_WRAPPER" />
+					<Add option="-DARMA_USE_LAPACK" />
+					<Add option="-DARMA_USE_BLAS" />
+					<Add option="-DARMA_NO_DEBUG" />
+				</Compiler>
+				<Linker>
+					<Add option="-llapack" />
+					<Add option="-lblas" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="BPStep/BPStep.cpp" />
+		<Unit filename="BPStep/BPStep.h" />
+		<Unit filename="BPStep/CalEnergy.cpp" />
+		<Unit filename="BPStep/CalEnergy/CalEnergy_stiffmat.cpp" />
+		<Unit filename="BPStep/CalEnergy_additional.cpp" />
+		<Unit filename="BPStep/EvalEnergy.cpp" />
+		<Unit filename="BPStep/EvalEnergy.h" />
+		<Unit filename="BPStep/EvalEnergy/EE_KinkXY.cpp" />
+		<Unit filename="BPStep/EvalEnergy/EE_KinkXY.h" />
+		<Unit filename="BPStep/EvalEnergy/EE_StiffMat.cpp" />
+		<Unit filename="BPStep/EvalEnergy/EE_StiffMat.h" />
+		<Unit filename="BPStep/IDB.cpp" />
+		<Unit filename="BPStep/IDB.h" />
+		<Unit filename="BPStep/SelectHamiltonian.cpp" />
+		<Unit filename="Calcs/LinkingNumber.cpp" />
+		<Unit filename="Calcs/LinkingNumber.h" />
+		<Unit filename="Chain.cpp" />
+		<Unit filename="Chain.h" />
+		<Unit filename="ChainFuncs/Chain_Consistency.cpp" />
+		<Unit filename="ChainFuncs/Chain_EvalEnergy.cpp" />
+		<Unit filename="ChainFuncs/Chain_LinkAndTorque.cpp" />
+		<Unit filename="Constraints/Constr_Orientation.cpp" />
+		<Unit filename="Constraints/Constr_Orientation.h" />
+		<Unit filename="Constraints/Constr_Position.cpp" />
+		<Unit filename="Constraints/Constr_Position.h" />
+		<Unit filename="Constraints/Constraint.cpp" />
+		<Unit filename="Constraints/Constraint.h" />
+		<Unit filename="ExcludedVolume/EV_Beads.cpp" />
+		<Unit filename="ExcludedVolume/EV_Beads.h" />
+		<Unit filename="ExcludedVolume/ExcludedVolume.cpp" />
+		<Unit filename="ExcludedVolume/ExcludedVolume.h" />
+		<Unit filename="ExcludedVolume/MagneticBead.cpp" />
+		<Unit filename="ExcludedVolume/MagneticBead.h" />
+		<Unit filename="ExcludedVolume/ProximityCluster.cpp" />
+		<Unit filename="ExcludedVolume/ProximityCluster.h" />
+		<Unit filename="Extra/Seed.cpp" />
+		<Unit filename="Extra/Seed.h" />
+		<Unit filename="ExtraArma.cpp" />
+		<Unit filename="ExtraArma.h" />
+		<Unit filename="ExtraFuncs.cpp" />
+		<Unit filename="ExtraFuncs.h" />
+		<Unit filename="Input/Argparse.cpp" />
+		<Unit filename="Input/Argparse.h" />
+		<Unit filename="Input/GenInputFile.cpp" />
+		<Unit filename="Input/GenInputFile.h" />
+		<Unit filename="Input/InputChoice.cpp" />
+		<Unit filename="Input/InputChoice.h" />
+		<Unit filename="Input/InputRead.cpp" />
+		<Unit filename="Input/InputRead.h" />
+		<Unit filename="Input/ManipulateArgv.cpp" />
+		<Unit filename="Input/ManipulateArgv.h" />
+		<Unit filename="Input/MultiLine.cpp" />
+		<Unit filename="Input/MultiLine.h" />
+		<Unit filename="Input/ReadFunctions.cpp" />
+		<Unit filename="Input/ReadFunctions.h" />
+		<Unit filename="Input/SingleLine.cpp" />
+		<Unit filename="Input/SingleLine.h" />
+		<Unit filename="Input/WriteLoadRestart.cpp" />
+		<Unit filename="Input/WriteLoadRestart.h" />
+		<Unit filename="MCMethods/ReplicaExchange.cpp" />
+		<Unit filename="MCMethods/ReplicaExchange.h" />
+		<Unit filename="MCStep/MCS_CSrot.cpp" />
+		<Unit filename="MCStep/MCS_CSrot.h" />
+		<Unit filename="MCStep/MCS_CSrot2d.cpp" />
+		<Unit filename="MCStep/MCS_CSrot2d.h" />
+		<Unit filename="MCStep/MCS_CSrot_2dpot.cpp" />
+		<Unit filename="MCStep/MCS_CSrot_2dpot.h" />
+		<Unit filename="MCStep/MCS_CStrans.cpp" />
+		<Unit filename="MCStep/MCS_CStrans.h" />
+		<Unit filename="MCStep/MCS_ClusterTwist.cpp" />
+		<Unit filename="MCStep/MCS_ClusterTwist.h" />
+		<Unit filename="MCStep/MCS_Kinkxy.cpp" />
+		<Unit filename="MCStep/MCS_Kinkxy.h" />
+		<Unit filename="MCStep/MCS_PivCon.cpp" />
+		<Unit filename="MCStep/MCS_PivCon.h" />
+		<Unit filename="MCStep/MCS_Pivot.cpp" />
+		<Unit filename="MCStep/MCS_Pivot.h" />
+		<Unit filename="MCStep/MCS_Pivot2d.cpp" />
+		<Unit filename="MCStep/MCS_Pivot2d.h" />
+		<Unit filename="MCStep/MCS_Slither2d.cpp" />
+		<Unit filename="MCStep/MCS_Slither2d.h" />
+		<Unit filename="MCStep/MCS_Slither4.cpp" />
+		<Unit filename="MCStep/MCS_Slither4.h" />
+		<Unit filename="MCStep/MCS_TailTwist.cpp" />
+		<Unit filename="MCStep/MCS_TailTwist.h" />
+		<Unit filename="MCStep/MCS_TorquePiv.cpp" />
+		<Unit filename="MCStep/MCS_TorquePiv.h" />
+		<Unit filename="MCStep/MCS_Twist.cpp" />
+		<Unit filename="MCStep/MCS_Twist.h" />
+		<Unit filename="MCStep/MCS_Unwinder.cpp" />
+		<Unit filename="MCStep/MCS_Unwinder.h" />
+		<Unit filename="MCStep/MCS_zPiv.cpp" />
+		<Unit filename="MCStep/MCS_zPiv.h" />
+		<Unit filename="MCStep/MCStep.cpp" />
+		<Unit filename="MCStep/MCStep.h" />
+		<Unit filename="Observables/Link.cpp" />
+		<Unit filename="Observables/elasticity.cpp" />
+		<Unit filename="Observables/general.cpp" />
+		<Unit filename="PlecFinder/BranchBoxes.cpp" />
+		<Unit filename="PlecFinder/BranchBoxes.h" />
+		<Unit filename="PlecFinder/PlecFinder.cpp" />
+		<Unit filename="PlecFinder/PlecFinder.h" />
+		<Unit filename="PlecFinder/ProximityPlecFinder.cpp" />
+		<Unit filename="PlecFinder/ProximityPlecFinder.h" />
+		<Unit filename="PlecFreeEnergy/GenPFEConf.cpp" />
+		<Unit filename="PlecFreeEnergy/GenPFEConf.h" />
+		<Unit filename="PolyMC.h" />
+		<Unit filename="PolyMC/PolyMC.cpp" />
+		<Unit filename="PolyMC/PolyMC_Closed2d.cpp" />
+		<Unit filename="PolyMC/PolyMC_Lin2d.cpp" />
+		<Unit filename="PolyMC/PolyMC_Open.cpp" />
+		<Unit filename="PolyMC/PolyMC_Plasmid.cpp" />
+		<Unit filename="PolyMC/PolyMC_Plec.cpp" />
+		<Unit filename="PolyMC/PolyMC_ReadSequence.cpp" />
+		<Unit filename="PolyMC/PolyMC_Tweezer.cpp" />
+		<Unit filename="SO3Methods.cpp" />
+		<Unit filename="SO3Methods.h" />
+		<Unit filename="Unbound/AtomType.cpp" />
+		<Unit filename="Unbound/AtomType.h" />
+		<Unit filename="Unbound/InitPairStyles.cpp" />
+		<Unit filename="Unbound/Interactions/Interaction.cpp" />
+		<Unit filename="Unbound/Interactions/Interaction.h" />
+		<Unit filename="Unbound/Pair.cpp" />
+		<Unit filename="Unbound/Pair.h" />
+		<Unit filename="Unbound/PairStyles/Pair_LJ.cpp" />
+		<Unit filename="Unbound/PairStyles/Pair_LJ.h" />
+		<Unit filename="Unbound/Unbound.cpp" />
+		<Unit filename="Unbound/Unbound.h" />
+		<Unit filename="dump/Dump.cpp" />
+		<Unit filename="dump/Dump.h" />
+		<Unit filename="dump/Dump_Conf.cpp" />
+		<Unit filename="dump/Dump_Conf.h" />
+		<Unit filename="dump/Dump_DistanceMap.cpp" />
+		<Unit filename="dump/Dump_DistanceMap.h" />
+		<Unit filename="dump/Dump_EndToEndDistance.cpp" />
+		<Unit filename="dump/Dump_EndToEndDistance.h" />
+		<Unit filename="dump/Dump_Endbead.cpp" />
+		<Unit filename="dump/Dump_Endbead.h" />
+		<Unit filename="dump/Dump_Energy.cpp" />
+		<Unit filename="dump/Dump_Energy.h" />
+		<Unit filename="dump/Dump_Extension.cpp" />
+		<Unit filename="dump/Dump_Extension.h" />
+		<Unit filename="dump/Dump_ForceExtension.cpp" />
+		<Unit filename="dump/Dump_ForceExtension.h" />
+		<Unit filename="dump/Dump_Full_Coup_Matrix.cpp" />
+		<Unit filename="dump/Dump_Full_Coup_Matrix.h" />
+		<Unit filename="dump/Dump_HatCurve.cpp" />
+		<Unit filename="dump/Dump_HatCurve.h" />
+		<Unit filename="dump/Dump_Helicity.cpp" />
+		<Unit filename="dump/Dump_Helicity.h" />
+		<Unit filename="dump/Dump_Kinkstats.cpp" />
+		<Unit filename="dump/Dump_Kinkstats.h" />
+		<Unit filename="dump/Dump_Linkingnumber.cpp" />
+		<Unit filename="dump/Dump_Linkingnumber.h" />
+		<Unit filename="dump/Dump_MSD.cpp" />
+		<Unit filename="dump/Dump_MSD.h" />
+		<Unit filename="dump/Dump_PersistenceLength.cpp" />
+		<Unit filename="dump/Dump_PersistenceLength.h" />
+		<Unit filename="dump/Dump_PlasmidEndpoints.cpp" />
+		<Unit filename="dump/Dump_PlasmidEndpoints.h" />
+		<Unit filename="dump/Dump_PlecStats.cpp" />
+		<Unit filename="dump/Dump_PlecStats.h" />
+		<Unit filename="dump/Dump_ProximityPlec.cpp" />
+		<Unit filename="dump/Dump_ProximityPlec.h" />
+		<Unit filename="dump/Dump_Restart.cpp" />
+		<Unit filename="dump/Dump_Restart.h" />
+		<Unit filename="dump/Dump_SolenoidCorrelationFunction.cpp" />
+		<Unit filename="dump/Dump_SolenoidCorrelationFunction.h" />
+		<Unit filename="dump/Dump_State.cpp" />
+		<Unit filename="dump/Dump_State.h" />
+		<Unit filename="dump/Dump_Stiff.cpp" />
+		<Unit filename="dump/Dump_Stiff.h" />
+		<Unit filename="dump/Dump_SupercoilingPhase.cpp" />
+		<Unit filename="dump/Dump_SupercoilingPhase.h" />
+		<Unit filename="dump/Dump_TangentCorrelation.cpp" />
+		<Unit filename="dump/Dump_TangentCorrelation.h" />
+		<Unit filename="dump/Dump_Thetas.cpp" />
+		<Unit filename="dump/Dump_Thetas.h" />
+		<Unit filename="dump/Dump_Torque.cpp" />
+		<Unit filename="dump/Dump_Torque.h" />
+		<Unit filename="dump/Dump_TorqueTrap.cpp" />
+		<Unit filename="dump/Dump_TorqueTrap.h" />
+		<Unit filename="dump/Dump_TorsionalStiffness.cpp" />
+		<Unit filename="dump/Dump_TorsionalStiffness.h" />
+		<Unit filename="dump/Dump_Twist.cpp" />
+		<Unit filename="dump/Dump_Twist.h" />
+		<Unit filename="dump/Dump_WritheMap.cpp" />
+		<Unit filename="dump/Dump_WritheMap.h" />
+		<Unit filename="dump/Dump_xyz.cpp" />
+		<Unit filename="dump/Dump_xyz.h" />
+		<Unit filename="dump/Dump_xyz_extreme_ext.cpp" />
+		<Unit filename="dump/Dump_xyz_extreme_ext.h" />
+		<Unit filename="dump/InitDump.cpp" />
+		<Unit filename="dump/InitDump.h" />
+		<Unit filename="main.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

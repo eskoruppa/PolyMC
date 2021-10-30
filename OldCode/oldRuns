@@ -1,0 +1,740 @@
+
+void open() {
+
+string inter_fn = "IDB/kink";
+
+
+    double sigma  = -0.00;
+    int num_bp    = 40;
+
+    int print  = 10000;
+    int cal_Lk = 1;
+    bool Lk_first = false;
+
+    bool EV_active = true;
+
+
+    bool kill_if_EV_voilated = false;
+
+
+    int turns = num_bp/10*(1.+sigma);
+    double excess_link = num_bp/10*sigma;
+//    turns = 11;
+    cout << "turns = " << turns << endl;
+    cout << "exlin = " << excess_link << endl;
+
+
+    Chain chain(inter_fn);
+
+//    chain.gen_linear(num_bp, "a" , sigma,{0,0,1});
+    chain.gen_linear(num_bp, "aaaaaaaaaaaaaaaaaabbbaaaaaaaaaaaaaaaaaaa" , sigma,{0,0,1});
+//    chain.gen_linear(num_bp, "aabb" , 0);
+//    chain.gen_linear(num_bp, "aabb" , 10,{0,0,1});
+
+
+//    chain.gen_circular(num_bp, 10, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabb");
+//    chain.gen_circular(num_bp, 10, "aaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaa");
+//    chain.gen_circular(num_bp, sigma, "a");
+
+    chain.set_T0_subtract(true);
+    chain.set_T(300);
+//    chain.set_force(2.8,{0,0,1});
+//    chain.set_torque(4);
+//    chain.fix_termini_orientation();
+//    chain.fix_termini_position();
+//    chain.set_interaction_range(0);
+
+
+
+//    ////// EXCLUDED VOLUMES /////
+//    cout << "########################" << endl;
+//    cout << "### EXCLUDED VOLUMES ###" << endl;
+
+    double bp_per_EV  = 11;
+    bp_per_EV = 5;
+    double EV_rad     = 0.34*(bp_per_EV+0.1);
+    int num_EV_per_PB = 11;
+
+//    double bp_per_EV  = 3;
+//    double EV_rad     = 7;
+//    int num_EV_per_PB = 11;
+
+    ExVol EV(&chain,EV_rad,num_EV_per_PB);
+
+
+
+
+    MCS_CSrot   rot1(&chain,2,40);
+    MCS_CSrot   rot2(&chain,larger(2,num_bp/32),larger(2,num_bp/16));
+    MCS_CSrot   rot3(&chain,larger(2,num_bp/16),larger(2,num_bp/8));
+    MCS_CSrot   rot4(&chain,larger(2,num_bp/8),larger(2,num_bp/4));
+    MCS_CSrot   rot5(&chain,larger(2,num_bp/4),larger(2,num_bp/2));
+
+    MCS_Pivot   piv(&chain);
+    MCS_CStrans trans(&chain,2,400,{0,0,1});
+
+    MCS_Twist   twi(&chain);
+
+
+
+    if (EV_active) {
+        piv.set_excluded_volume(&EV);
+        trans.set_excluded_volume(&EV);
+
+        rot1.set_excluded_volume(&EV);
+        rot2.set_excluded_volume(&EV);
+        rot3.set_excluded_volume(&EV);
+        rot4.set_excluded_volume(&EV);
+        rot5.set_excluded_volume(&EV);
+    }
+    chain.fix_link();
+
+
+
+    if (!rot1.suitable()) {
+        cout << "Unsuitable MC Move" << endl;
+    }
+    else {
+        cout << "Suitable MC Move" << endl;
+
+
+        long long int steps = 1e9;
+        long long int equi  = 0;
+
+        int    XYZ_dump_every      = 1000;
+        string XYZ_dumpxyzfilename = "dump/open.xyz";
+        string XYZ_dumpxyzcenter   = "COM";
+        string XYZ_rep             = "dna"; //"EV"
+
+        int    triads_dump_every      = 1000;
+        string triads_dumpxyzfilename = "dump/open.triads";
+        string triads_dumpxyzcenter   = "COM";
+
+        int    stiff_dump_every  = 50;
+        string stiff_filename    = "dump/stiff";
+        bool   stiff_all         = true;
+
+        int    lb_dump_every  = 25;
+        string lb_filename    = "dump/lb";
+        int    lb_m_max       = 10;
+
+        int    FE_dump_every  = 25;
+        string FE_filename    = "dump/FE";
+
+        int    ETS_dump_every  = 50;
+        string ETS_filename    = "dump/Ceff";
+        string ETS_writhe      = "fuller";
+
+        int    LINK_dump_every  = 100;
+        string LINK_filename    = "dump/Link";
+        string LINK_options     = "quick";
+
+        int    DM_dump_every  = 50000;
+        string DM_filename    = "dump/branch_test/distmap";
+        double DM_density     = 0.1; //0.2;
+
+
+        ///// DUMPS
+
+        Dump_avgThetas          DTheta(&chain, 1e5, "dump/Thetas",false);
+        Dump_Stiff              Dstiff(&chain, stiff_dump_every, stiff_filename,stiff_all);
+        Dump_xyz                Dxyz(&chain, XYZ_dump_every, XYZ_dumpxyzfilename ,false, XYZ_dumpxyzcenter,XYZ_rep);
+        Dump_xyz                Dtriads(&chain, triads_dump_every, triads_dumpxyzfilename ,false, triads_dumpxyzcenter,"PDB");
+        Dump_PersLen            Dlb(&chain, lb_dump_every, lb_filename,true,lb_m_max);
+        Dump_ForceExtension     DFE(&chain, FE_dump_every, FE_filename,0.25*num_bp,0.75*num_bp,true);
+        Dump_EffTorsStiff       DETS(&chain, ETS_dump_every, ETS_filename, {0,0,1},ETS_writhe ,0.25*num_bp,0.75*num_bp,true);
+
+        Dump_Linkingnumber      DLINK(&chain, LINK_dump_every, LINK_filename,LINK_options,false);
+        Dump_DistMap            DDM(&chain, DM_dump_every, DM_filename, DM_density);
+
+
+
+        double LK;
+        double TW;
+
+        double LK1_F = 0;
+        double LK2_F = 0;
+        double LK1 = 0;
+        double LK2 = 0;
+        int LK_count = 0;
+        int LK_N = 1000;
+
+        arma::colvec dir = {0,0,1};
+
+
+        bool acpt;
+
+        vector<BPStep*> BPS = *chain.get_BPS();
+
+        auto timer_start = std::chrono::high_resolution_clock::now();
+        auto timer_finish = std::chrono::high_resolution_clock::now();
+        chrono::duration<double> timer_elapsed;
+
+        for (long long int step=0;step<equi;step++) {
+            if (step%10000==0) {
+                cout << "Equilibration-step " << step << endl;
+            }
+//            acpt = piv.MC();
+//            acpt = trans.MC();
+            acpt = rot1.MC();
+            acpt = rot2.MC();
+            acpt = rot3.MC();
+            acpt = rot4.MC();
+            acpt = rot5.MC();
+//            Dxyz.dump();
+        }
+        cout << "Equilibrated" << endl;
+
+
+//        chain.set_T(50);
+//        piv.update_config();
+//        trans.update_config();
+//        rot.update_config();
+//        for (long long int step=0;step<equi;step++) {
+//            acpt = rot.MC();
+//            DumpStepXYZ(*chain.get_bp_pos(), *chain.get_triads(), step,XYZ_dump_every, XYZ_dumpxyzfilename, XYZ_dumpxyzcenter, XYZ_rep );
+//        }
+//
+//        chain.set_T(25);
+//        piv.update_config();
+//        trans.update_config();
+//        rot.update_config();
+
+        double Wr,Tw,Lk,Lk_old;
+        Wr = chain.cal_langowski_writhe_1a(0.2);
+        Tw = chain.cal_twist(0,num_bp);
+        Lk = Wr+Tw;
+
+        double dLk=0;
+
+        for (long long int step=0;step<=steps;step++) {
+
+//            Wr = chain.cal_langowski_writhe_1a(0.05);
+
+            if (step%print==0) {
+
+                if (step%(cal_Lk*print)==0) {
+                    if (Lk_first || step!=0) {
+                        Wr = chain.cal_langowski_writhe_1a(0.05);
+                        Tw = chain.cal_twist(0,num_bp);
+                        Lk_old = Lk;
+                        Lk = Wr+Tw;
+                        dLk = std::abs(Lk-Lk_old);
+                    }
+                }
+
+                cout << "################" << endl;
+                cout << "step " << step << endl;
+                cout << "piv  acceptance rate = " << piv.acceptance_rate()   << endl;
+                cout << "twi  acceptance rate = " << twi.acceptance_rate()   << endl;
+                cout << "rot1 acceptance rate = " << rot1.acceptance_rate()   << endl;
+                cout << "rot2 acceptance rate = " << rot2.acceptance_rate()   << endl;
+                cout << "rot3 acceptance rate = " << rot3.acceptance_rate()   << endl;
+                cout << "rot4 acceptance rate = " << rot4.acceptance_rate()   << endl;
+                cout << "rot5 acceptance rate = " << rot5.acceptance_rate()   << endl;
+                cout << "traj acceptance rate = " << trans.acceptance_rate() << endl;
+                cout << "ExVol rejection rate = " << EV.rejection_rate() << endl;
+//                cout << "Lang1a Writhe: " << chain.cal_langowski_writhe_1a() << endl;
+//                cout << "Fuller Writhe: " << chain.cal_fuller_writhe(0,num_bp,dir) << endl;
+//                cout << "Fuller Twist : " << chain.cal_twist(0,num_bp) << endl;
+
+                timer_finish = std::chrono::high_resolution_clock::now();
+                timer_elapsed       = timer_finish - timer_start;
+                cout << "elapsed time:   " << timer_elapsed.count() << " s\n";
+
+                timer_start = std::chrono::high_resolution_clock::now();
+
+                if (step%(cal_Lk*print)==0) {
+                    if (dLk > 1) {
+                        Wr = chain.cal_langowski_writhe_1a(0.2);
+                        Lk = Wr+Tw;
+                        dLk = std::abs(Lk-Lk_old);
+                    }
+
+                    cout << "Tw = " << Tw << endl;
+                    cout << "Wr = " << Wr << endl;
+                    cout << "Lk = " << Lk << endl;
+
+                    if (dLk > 1) {
+//                        Dxyz.final_dump();
+//                        Dtriads.final_dump();
+                        if (kill_if_EV_voilated) {
+                            std::exit(0);
+                        }
+                    }
+                }
+            }
+
+//            cout << "PIVOT" << endl;
+            acpt = piv.MC();
+//            cout << "ROT" << endl;
+
+//            for (int rep=0;rep<30;rep++) {
+//                acpt = twi.MC();
+//            }
+
+//            for (int rep=0;rep<5;rep++) {
+//                acpt = rot1.MC();
+//            }
+            acpt = rot2.MC();
+            acpt = rot3.MC();
+            acpt = rot4.MC();
+            acpt = rot5.MC();
+//            cout << "TRANS" << endl;
+//            acpt = trans.MC();
+
+
+
+//            DTheta.dump();
+            Dxyz.dump();
+            Dtriads.dump();
+//            Dstiff.dump();
+//            Dlb.dump();
+//            DFE.dump();
+//            DETS.dump();
+//            DDM.dump();
+//            DPEP.dump();
+//            DLINK.dump();
+
+        }
+//        DTheta.final_dump();
+//        Dstiff.final_dump();
+//        Dlb.final_dump();
+//        DFE.final_dump();
+//        DETS.final_dump();
+//        DDM.final_dump();
+//        DPEP.final_dump();
+
+        cout << "piv acceptance rate = " << piv.acceptance_rate() << endl;
+        cout << "rot acceptance rate = " << rot1.acceptance_rate() << endl;
+        cout << "tra acceptance rate = " << trans.acceptance_rate() << endl;
+
+
+        LK1_F = LK1_F/LK_count;
+        LK2_F = LK2_F/LK_count;
+        LK1 = LK1/LK_count;
+        LK2 = LK2/LK_count;
+
+        double VarLK_F = LK2_F - LK1_F * LK1_F;
+        double VarLK   = LK2   - LK1   * LK1;
+
+        double L = chain.get_num_bps()*chain.get_disc_len();
+
+        double Ceff_F = L/VarLK_F / (4*M_PI*M_PI);
+        double Ceff   = L/VarLK   / (4*M_PI*M_PI);
+
+        cout << "\n\n";
+        cout << "Fuller Ceff" << endl;
+        cout << "<LK>   = " << LK1_F << endl;
+        cout << "<LK^2> = " << LK2_F << endl;
+        cout << "Var    = " << VarLK_F << endl;
+        cout << "Ceff   = " << Ceff_F << endl;
+
+        cout << "\n\n";
+        cout << "Langowski Ceff" << endl;
+        cout << "<LK>   = " << LK1 << endl;
+        cout << "<LK^2> = " << LK2 << endl;
+        cout << "Var    = " << VarLK << endl;
+        cout << "Ceff   = " << Ceff << endl;
+
+    }
+
+}
+
+
+
+
+
+
+
+void writhe_run() {
+
+    arma::mat bp_pos;
+    arma::cube triads;
+
+    double T_init=151;
+
+    string inter_fn = "IDB/kink";
+
+    for (int temp=T_init;temp>=50;temp-=25)
+    {
+        long long int steps = 2e5;
+        long long int equi  = 0;
+
+        bool EV_active = false;
+
+        double sigma  = 0.00;
+        int num_bp    = 100;
+        double T      = 50;
+        T = temp;
+
+        double Wr_threshold = 10.08;
+
+        // EV
+        double bp_per_EV  = 3;
+        double EV_rad     = 0.34*(bp_per_EV+0.1);
+        int num_EV_per_PB = 11;
+
+
+        int turns = num_bp/10*(1.+sigma);
+        cout << "turns = " << turns << endl;
+
+
+        Chain chain(inter_fn);
+    //    chain.gen_linear(num_bp, "a" , 10, 300);
+    //    chain.gen_linear(num_bp, "aabb" , 0, 300);
+    //    chain.gen_linear(num_bp, "aabb" , 10, 300,{0,0,1});
+
+//        chain.gen_circular(num_bp, sigma, "a");
+
+        chain.gen_circular(num_bp, sigma, "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab");
+//        chain.gen_circular(num_bp, sigma, "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab");
+
+        if (T!=T_init) {
+            chain.set_config(&bp_pos,&triads,true);
+        }
+
+
+
+
+
+        chain.set_T(T);
+//        chain.gen_circular(num_bp, sigma, "a");
+
+
+        chain.set_T0_subtract(true);
+    //    chain.set_force(3,{0,0,1});
+    //    chain.set_torque(4);
+    //    chain.fix_termini_orientation();
+    //    chain.fix_termini_position();
+    //    chain.set_interaction_range(0);
+
+
+
+
+
+        MCS_CSrot   rot1(&chain,2,40);
+        MCS_CSrot   rot2(&chain,larger(2,num_bp/32),larger(2,num_bp/16));
+        MCS_CSrot   rot3(&chain,larger(2,num_bp/16),larger(2,num_bp/8));
+        MCS_CSrot   rot4(&chain,larger(2,num_bp/8),larger(2,num_bp/4));
+        MCS_CSrot   rot5(&chain,larger(2,num_bp/4),larger(2,num_bp/2));
+
+        MCS_Pivot   piv(&chain);
+        MCS_CStrans trans(&chain,2,100,{0,0,1});
+
+        MCS_Twist   twi(&chain);
+
+
+        ExVol EV(&chain,EV_rad,num_EV_per_PB);
+        if (EV_active) {
+            piv.set_excluded_volume(&EV);
+            trans.set_excluded_volume(&EV);
+            rot1.set_excluded_volume(&EV);
+            rot2.set_excluded_volume(&EV);
+            rot3.set_excluded_volume(&EV);
+            rot4.set_excluded_volume(&EV);
+            rot5.set_excluded_volume(&EV);
+        }
+
+
+        chain.fix_link();
+
+        vector<BPStep*> BPS = *chain.get_BPS();
+
+
+        int    XYZ_dump_every      = 5000;
+        string XYZ_dumpxyzfilename = "dump/TeardropMS.xyz";
+        string XYZ_dumpxyzcenter   = "COM";
+        string XYZ_rep             = "simple"; //"EV"
+
+        int    LINK_dump_every  = 100;
+        string LINK_filename    = "dump/Link_equi";
+        string LINK_options     = "quick";
+
+        ///// DUMPS
+        Dump_xyz                Dxyz(&chain, XYZ_dump_every, XYZ_dumpxyzfilename ,false, XYZ_dumpxyzcenter,XYZ_rep);
+        Dump_Linkingnumber      DLINK(&chain, LINK_dump_every, LINK_filename,LINK_options,false);
+
+
+        auto timer_start = std::chrono::high_resolution_clock::now();
+        auto timer_finish = std::chrono::high_resolution_clock::now();
+        chrono::duration<double> timer_elapsed;
+
+        double Wr,Tw,Lk;
+        Wr = chain.cal_langowski_writhe_1a(0.2);
+        Tw = chain.cal_twist(0,num_bp);
+        Lk = Wr+Tw;
+
+        double dLk=0;
+        int print  = 100000;
+        int cal_Lk = 1;
+        bool Lk_first = false;
+
+        for (long long int step=0;step<=steps;step++) {
+
+
+
+            if (step%print==0) {
+
+                if (step%(cal_Lk*print)==0) {
+                    if (Lk_first || step!=0) {
+                        Wr = chain.cal_langowski_writhe_1a(0.5);
+                        Tw = chain.cal_twist(0,num_bp);
+                        dLk = std::abs(Wr+Tw-Lk);
+                        Lk = Wr+Tw;
+                    }
+                }
+
+                cout << "################" << endl;
+                cout << "step " << step << endl;
+                cout << "T  = " << T    << endl;
+                cout << "piv  acceptance rate = " << piv.acceptance_rate()   << endl;
+                cout << "twi  acceptance rate = " << twi.acceptance_rate()   << endl;
+                cout << "rot1 acceptance rate = " << rot1.acceptance_rate()   << endl;
+                cout << "rot2 acceptance rate = " << rot2.acceptance_rate()   << endl;
+                cout << "rot3 acceptance rate = " << rot3.acceptance_rate()   << endl;
+                cout << "rot4 acceptance rate = " << rot4.acceptance_rate()   << endl;
+                cout << "rot5 acceptance rate = " << rot5.acceptance_rate()   << endl;
+                cout << "traj acceptance rate = " << trans.acceptance_rate() << endl;
+                cout << "ExVol rejection rate = " << EV.rejection_rate() << endl;
+    //                cout << "Lang1a Writhe: " << chain.cal_langowski_writhe_1a() << endl;
+    //                cout << "Fuller Writhe: " << chain.cal_fuller_writhe(0,num_bp,dir) << endl;
+    //                cout << "Fuller Twist : " << chain.cal_twist(0,num_bp) << endl;
+
+                timer_finish = std::chrono::high_resolution_clock::now();
+                timer_elapsed       = timer_finish - timer_start;
+                cout << "elapsed time:   " << timer_elapsed.count() << " s\n";
+
+                timer_start = std::chrono::high_resolution_clock::now();
+
+                if (step%(cal_Lk*print)==0) {
+                    cout << "Tw = " << Tw << endl;
+                    cout << "Wr = " << Wr << endl;
+                    cout << "Lk = " << Lk << endl;
+
+                    if (dLk > 1) {
+                        Dxyz.final_dump();
+                        std::exit(0);
+                    }
+                    if (Wr > Wr_threshold) break;
+                }
+            }
+
+//            twi.MC();
+
+    //            for (int rep=0;rep<5;rep++) {
+    //                acpt = rot1.MC();
+    //            }
+            rot2.MC();
+            rot3.MC();
+            rot4.MC();
+            rot5.MC();
+
+    //            DTheta.dump();
+//            Dxyz.dump();
+//            DLINK.dump();
+
+        }
+
+        bp_pos=*chain.get_bp_pos();
+        triads=*chain.get_triads();
+
+    }
+
+    for (int rep=0;rep<1;rep++)
+    {
+//        string inter_fn = "IDB/Proto6";
+
+        long long int steps = 2e7;
+        long long int equi  = 0;
+
+        bool EV_active = false;
+
+        double sigma  = 0.00;
+        int num_bp    = 100;
+        double T      = 50;
+
+        // EV
+        double bp_per_EV  = 1;
+        double EV_rad     = 0.34*(bp_per_EV+0.1);
+        int num_EV_per_PB = 11;
+
+
+        Chain chain(inter_fn);
+
+
+    //    chain.gen_linear(num_bp, "a" , 10, 300);
+    //    chain.gen_linear(num_bp, "aabb" , 0, 300);
+    //    chain.gen_linear(num_bp, "aabb" , 10, 300,{0,0,1});
+
+//        chain.gen_circular(num_bp, sigma, "a");
+        chain.gen_circular(num_bp, 0, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//        chain.gen_circular(num_bp, 0, "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab");
+    //    chain.gen_circular(num_bp, 10, "aaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        chain.set_T(T);
+//        chain.gen_circular(num_bp, sigma, "a");
+
+        chain.set_config(&bp_pos,&triads,true);
+
+        chain.set_T0_subtract(true);
+
+    //    chain.set_force(3,{0,0,1});
+    //    chain.set_torque(4);
+    //    chain.fix_termini_orientation();
+    //    chain.fix_termini_position();
+    //    chain.set_interaction_range(0);
+
+
+
+
+        MCS_CSrot   rot1(&chain,2,40);
+        MCS_CSrot   rot2(&chain,larger(2,num_bp/32),larger(2,num_bp/16));
+        MCS_CSrot   rot3(&chain,larger(2,num_bp/16),larger(2,num_bp/8));
+        MCS_CSrot   rot4(&chain,larger(2,num_bp/8),larger(2,num_bp/4));
+        MCS_CSrot   rot5(&chain,larger(2,num_bp/4),larger(2,num_bp/2));
+
+        MCS_Pivot   piv(&chain);
+        MCS_CStrans trans(&chain,2,100,{0,0,1});
+
+        MCS_Twist   twi(&chain);
+
+        ExVol EV(&chain,EV_rad,num_EV_per_PB);
+        if (EV_active) {
+            piv.set_excluded_volume(&EV);
+            trans.set_excluded_volume(&EV);
+            rot1.set_excluded_volume(&EV);
+            rot2.set_excluded_volume(&EV);
+            rot3.set_excluded_volume(&EV);
+            rot4.set_excluded_volume(&EV);
+            rot5.set_excluded_volume(&EV);
+        }
+
+        chain.fix_link();
+
+        vector<BPStep*> BPS = *chain.get_BPS();
+
+
+
+        int    Thet_dump_every  = 900000;
+        string Thet_filename    = "dump/Teardrop/run";
+
+        int    avgT_dump_every  = 20;
+        string avgT_filename    = "dump/Teardrop/run";
+
+        int    XYZ_dump_every      = 1000;
+        string XYZ_dumpxyzfilename = "dump/kink_circ.xyz";
+        string XYZ_dumpxyzcenter   = "COM";
+        string XYZ_rep             = "dna"; //"EV"
+
+
+        int    triads_dump_every      = 1000;
+        string triads_dumpxyzfilename = "dump/kink_circ.triads";
+        string triads_dumpxyzcenter   = "COM";
+
+
+        int    LINK_dump_every  = 100;
+        string LINK_filename    = "dump/Link";
+        string LINK_options     = "quick";
+
+
+        ///// DUMPS
+
+        Dump_Thetas             DTheta(&chain, Thet_dump_every,Thet_filename ,false);
+        Dump_avgThetas          DThetaAVG(&chain, avgT_dump_every,avgT_filename ,false);
+        Dump_xyz                Dxyz(&chain, XYZ_dump_every, XYZ_dumpxyzfilename ,false, XYZ_dumpxyzcenter,XYZ_rep);
+        Dump_xyz                Dtriads(&chain, triads_dump_every, triads_dumpxyzfilename ,false, triads_dumpxyzcenter,"pdb");
+        Dump_Linkingnumber      DLINK(&chain, LINK_dump_every, LINK_filename,LINK_options,false);
+
+
+        auto timer_start = std::chrono::high_resolution_clock::now();
+        auto timer_finish = std::chrono::high_resolution_clock::now();
+        chrono::duration<double> timer_elapsed;
+
+        double Wr,Tw,Lk;
+        Wr = chain.cal_langowski_writhe_1a(0.2);
+        Tw = chain.cal_twist(0,num_bp);
+        Lk = Wr+Tw;
+
+        double refLk=Lk;
+        cout << "Tw = " << Tw << endl;
+        cout << "Wr = " << Wr << endl;
+        cout << "Lk = " << Lk << endl;
+
+
+        double dLk;
+        int print  = 100000;
+        int cal_Lk = 1;
+        bool Lk_first = false;
+
+        for (long long int step=0;step<=steps;step++) {
+
+
+
+            if (step%print==0) {
+
+                if (step%(cal_Lk*print)==0) {
+                    if (Lk_first || step!=0) {
+                        Wr = chain.cal_langowski_writhe_1a(0.2);
+                        Tw = chain.cal_twist(0,num_bp);
+                        dLk = std::abs(Wr+Tw-refLk);
+                        Lk = Wr+Tw;
+                    }
+                }
+
+                cout << "################" << endl;
+                cout << "step " << step << endl;
+                cout << "piv  acceptance rate = " << piv.acceptance_rate()   << endl;
+                cout << "twi  acceptance rate = " << twi.acceptance_rate()   << endl;
+                cout << "rot1 acceptance rate = " << rot1.acceptance_rate()   << endl;
+                cout << "rot2 acceptance rate = " << rot2.acceptance_rate()   << endl;
+                cout << "rot3 acceptance rate = " << rot3.acceptance_rate()   << endl;
+                cout << "rot4 acceptance rate = " << rot4.acceptance_rate()   << endl;
+                cout << "rot5 acceptance rate = " << rot5.acceptance_rate()   << endl;
+                cout << "traj acceptance rate = " << trans.acceptance_rate() << endl;
+                cout << "ExVol rejection rate = " << EV.rejection_rate() << endl;
+    //                cout << "Lang1a Writhe: " << chain.cal_langowski_writhe_1a() << endl;
+    //                cout << "Fuller Writhe: " << chain.cal_fuller_writhe(0,num_bp,dir) << endl;
+    //                cout << "Fuller Twist : " << chain.cal_twist(0,num_bp) << endl;
+
+                timer_finish = std::chrono::high_resolution_clock::now();
+                timer_elapsed       = timer_finish - timer_start;
+                cout << "elapsed time:   " << timer_elapsed.count() << " s\n";
+
+                timer_start = std::chrono::high_resolution_clock::now();
+
+                if (step%(cal_Lk*print)==0) {
+                    cout << "Tw = " << Tw << endl;
+                    cout << "Wr = " << Wr << endl;
+                    cout << "Lk = " << Lk << endl;
+
+                    if (dLk > 1) {
+                        Dxyz.final_dump();
+                        std::exit(0);
+                    }
+                }
+            }
+
+//            twi.MC();
+    //            for (int rep=0;rep<5;rep++) {
+    //                acpt = rot1.MC();
+    //            }
+            rot2.MC();
+            rot3.MC();
+            rot4.MC();
+            rot5.MC();
+
+//            DThetaAVG.dump();
+//            DTheta.dump();
+            Dxyz.dump();
+            Dtriads.dump();
+//            DLINK.dump();
+
+        }
+
+        DThetaAVG.final_dump();
+//        DTheta.final_dump();
+    }
+
+
+}
