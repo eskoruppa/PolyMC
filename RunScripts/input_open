@@ -1,0 +1,108 @@
+########################################################
+## Simulation Mode #####################################
+########################################################
+
+mode = open
+
+use_cluster_twist   = 0
+num_twist           = 0
+
+check_link              = 0
+check_consistency_every = 1000000
+
+seed = -1
+   
+########################################################
+## Interaction Database ################################
+########################################################
+
+IDB         = TWLC.idb
+sequence    = seq
+subtract_T0 = 0
+
+########################################################
+## Simulation Parameters ###############################
+########################################################
+
+T      = 300
+num_bp = 1000
+sigma  = 0
+torque = 0 
+force  = 0
+EV     = 0
+
+steps  = 10000000
+equi   = 100000
+
+########################################################
+## Output ##############################################
+########################################################
+
+print_every     = 100000
+print_link_info = 0
+
+########################################################
+## Dump Setup ##########################################
+########################################################
+
+copy_input = 1
+dump_dir   = dump/test
+
+###################################
+# dump extension along force direction
+Extn = 0
+
+###################################
+# dump XYZ configuration
+XYZn          = 0
+XYZ_translate = first
+
+###################################
+# dump endbead linking number
+EBn = 0
+
+###################################
+# dump energy
+En = 0
+
+###################################
+# dump kink statistics
+# THIS MAY CRASH IF SET TO NON-ZERO WHILE NOT USING KINKS!
+kinkstatn = 0
+
+###################################
+# dump linking number
+# use this option only for input_tweezer for 'free' tweezer setup
+# will dump: tw lk_fuller lk_endbead
+LKn    = 0   
+LKoptn = ebfu 
+
+###################################
+# dump persistence length
+# LBdist: maximum consider bp distance
+# LBtors (boolean): also calculate torsional persistence length
+LBn    = 0
+LBdist = 100
+LBtors = 1
+
+###################################
+# dump state
+Stn      = 0
+Sttriads = 0
+StOmegas = 0
+
+###################################
+# dump Thetas
+Thetasn = 0
+
+###################################
+# dump Torque
+TRQn = 0
+
+###################################
+# dump XYZ
+XYZn = 0
+
+ 
+	
+

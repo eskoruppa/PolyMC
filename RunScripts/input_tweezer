@@ -1,0 +1,132 @@
+########################################################
+## Simulation Mode #####################################
+########################################################
+
+#replica_exchange
+#	temps      = 300 350 410 480 560 650 750 870 1000   
+#	sweeps     = 500000
+#	sweepsteps = 100
+#	equi       = 0
+#	output_all = 1
+
+
+
+mode = tweezer
+
+
+#slow_wind ##########
+# dLK_step = 1
+# steps    = 50000
+# dump     = 0
+####################
+
+
+tweezer_setup 		= open
+use_torpiv    		= 0
+num_twist              = 0
+use_cluster_twist   	= 1
+
+check_link              = 1
+check_consistency_every = 100000
+   
+
+########################################################
+## Interaction Database ################################
+########################################################
+
+IDB         = TWLC.idb
+sequence    = seq
+subtract_T0 = 0
+
+########################################################
+## Simulation Parameters ###############################
+########################################################
+
+# restart          = last
+# restart_snapshot = 1
+
+#Constraints:
+#    fix_pos 0 10 10 10 10 10 10
+#    #fix_ori 50 740
+
+
+T      = 300
+num_bp = 400
+sigma  = 0.00
+torque = 0 
+force  = 1
+EV     = 4.0
+
+steps  = 1000000
+equi   = 100000
+
+########################################################
+## Output ##############################################
+########################################################
+
+print_every     = 10000
+print_link_info = 10000
+
+########################################################
+## Dump Setup ##########################################
+########################################################
+
+copy_input = 1
+dump_dir   = dump/test
+
+###################################
+# dump extension along force direction
+Extn = 0
+
+###################################
+# dump XYZ configuration
+XYZn          = 0
+XYZ_translate = first
+
+###################################
+# dump endbead linking number
+EBn = 0
+
+###################################
+# dump energy
+En = 0
+
+###################################
+# dump kink statistics
+# THIS MAY CRASH IF SET TO NON-ZERO WHILE NOT USING KINKS!
+kinkstatn = 0
+
+###################################
+# dump linking number
+# use this option only for input_tweezer for 'free' tweezer setup
+# will dump: tw lk_fuller lk_endbead
+LKn    = 0   
+LKoptn = ebfu 
+
+###################################
+# dump persistence length
+# LBdist: maximum consider bp distance
+# LBtors (boolean): also calculate torsional persistence length
+LBn    = 0
+LBdist = 100
+LBtors = 1
+
+###################################
+# dump state
+Stn      = 0
+Sttriads = 0
+StOmegas = 0
+
+###################################
+# dump Thetas
+Thetasn = 0
+
+###################################
+# dump Torque
+TRQn = 0
+
+###################################
+# dump XYZ
+XYZn = 0
+	
+

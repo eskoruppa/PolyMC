@@ -110,11 +110,7 @@ bool MCS_Pivot2d::MC_move() {
         deltaE += arma::dot(chain->get_beta_force_vec(),ETE_old-ETE_new); //- arma::dot(chain->get_beta_force_vec(),ETE_new);
 	}
 
-//	deltaE = 0;
 	if (exp(-deltaE) <= choice) {
-//        if (hingeID > 0){
-//            BPS[BPS_ID]->set_move(false);
-//        }
 		return false;
     }
 	else {
@@ -124,10 +120,6 @@ bool MCS_Pivot2d::MC_move() {
             triads->slice(j) = rot_mat * triads->slice(j);
             pos->col(j)      = pos->col(j-1) + triads->slice(j-1).col(2)*disc_len;
         }
-
-//		if (hingeID > 0) {
-//            BPS[BPS_ID]->set_move(true);
-//		}
 
         moved_intervals[0](EV_TO) = hingeID;
         moved_intervals[1](EV_FROM) = hingeID+1;

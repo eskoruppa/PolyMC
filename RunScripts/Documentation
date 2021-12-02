@@ -1,0 +1,353 @@
+PolyMC Dump Options:
+
+###################################################################################
+###################################################################################
+## General Options
+#
+###################################################################################
+
+dump_dir: 
+	value: string
+
+	specifies the directory and filename of the basename of all output files 
+	including the copied input files. Unless further specified all output files
+	will be assigned this name together with an extension signifying the 
+	particular content of the file.
+
+	default: default_output
+
+
+copy_input 
+	value: 0 or 1
+
+	All input files are copied.
+
+	detault: 0
+
+
+append (or app) 
+	value: 0 or 1
+
+	If set to 1 new output is appended to existing files. If not set
+	existing files will be overwritten.
+
+	default: 0
+  	
+###################################################################################
+###################################################################################
+## Dump Options
+#
+#	Most dumps are activated by setting the respective "dump_every" to a 
+#	positive value. This means that the respective output will be printed
+#	to file after every so many MC steps.
+#
+#	If no additional filename is specified the filename of the dump will be
+#	the one specified in dump_dir with the respective extension
+#
+###################################################################################
+Spacial Configuration
+
+	Dumps the positions of all triads.
+
+	format: triad_id x y z
+
+dump_every: CONFn 
+filename:   CONFfn
+
+extension: .conf
+
+###################################################################################
+Distance Map
+
+dump_every: DMn 
+filename:   DMfn
+density: 	DMdens
+
+extension: .dm
+
+###################################################################################
+Endbead Linking Number
+	
+	Dumps the total linking number of the chain as measured by the orientation of 
+	the terminal bead and the total twist contained in the chain
+
+dump_every: EBn 
+filename:   EBfn
+
+extension: .endlink
+
+###################################################################################
+Endbead Statistics
+	
+	Measures the endbead "linking number" at every step. The running averages 
+	of the first two moments are printed to file every EBSTATn steps
+
+	output: mean_link mean_squared_link
+
+dump_every: EBSTATn 
+filename:   EBSTATfn
+
+extension: .endlinkstats
+
+###################################################################################
+Endbead Effective Torsional Stiffness
+	
+	Collects the entire statistics of the endbead rotation over the run and 
+	dumps the evaluation once the fun is finished.
+	
+	output: Ceff force contour_length mean_link mean_squared_link
+
+dump_every: EBCEFFn 
+filename:   EBCEFFfn
+
+extension: .ebceff
+
+###################################################################################
+End-to-End Distance
+	
+	Distance between first and last monomer
+	
+	output: distance
+
+dump_every: E2En 
+filename:   E2Efn
+
+extension: .e2e
+
+###################################################################################
+Energy
+	
+	Total elastic energy in the system in units of kT
+	
+	output: energy
+
+dump_every: En 
+filename:   Efn
+
+extension: .en
+
+###################################################################################
+z Extension
+	
+	Extension along the force direction
+	This can be used at every step without significant loss of efficiency. Extensions
+	are temporarily stored and then printed to file every so many steps. No worry, all
+	steps will be printed, even if the specified number of steps is not a multiple 
+	of the internet counter
+	
+	output: zext
+
+dump_every: Extn,  extn,  EXTn 
+filename:   Extfn, extfn, EXTfn
+
+extension: .zext
+
+###################################################################################
+Force Extensiom
+	
+	Force Extension along the force direction
+	This prints the statistics of force extension to file. After the simulation
+	finishes a single line will be printed to file. Its possible to specify 
+	the fraction of the chain that is taken into account for this calculation. 
+	For example if fefrac is set to 0.5, only the middle half of the monomers
+	will be taken into account. This can be used in order to avoid finite-size 
+	effects arising from the boundary terms
+	
+	output: force number_of_measurements z z_squared contour_length
+
+dump_every: fen,  FEn   
+filename:   fefn, FEfn
+fraction:   fefrac, FEfrac (default 1, should be 0 < frac <= 1)
+
+extension: .fe
+
+###################################################################################
+Full Coupling Matrix
+	
+	Prints all information about the coupling matrices
+
+flag: 		FCM,   fcm
+filename:	fcmfn, FCMfn
+
+extension: .idb_mat
+
+###################################################################################
+Hat Curve
+	
+	Measurements relevant to Hat Curve simulations. 
+	Prints running average of the collected data.
+	
+	output: force fixed_Lk contour_length avg_z avg_zsq avg_x avg_xsq avg_y avg_ysq avg_Wr avg Wrsq avg_Tw avg Twsq
+
+collect_every 	HCn
+dump_every: 	HCn2f 
+filename:   	HCfn
+
+extension: 		.hc
+
+###################################################################################
+Helicity
+	
+collect_every 	HELn
+dump_every: 	HELn2f 
+filename:   	HELfn
+
+extension: 		.helicity
+
+###################################################################################
+Linking Number
+	
+	Prints Twist and Writhe.
+	Options for writhe: 
+		exact: 	Langowski method 1a
+		fuller: Fuller single sum
+		both:   Both Langowski and Fuller (3 arguments: tw lang_wr full_wr)					
+	
+dump_every: 	LKn 
+filename:   	LKfn
+option:			LKoptn
+chain_fraction: LKfrac
+
+extension: 		.lk
+
+###################################################################################
+Mean Squared Distance
+					
+dump_every: 	MSDn 
+filename:   	MSDfn
+
+extension: 		.msd
+
+###################################################################################
+Persistence Length
+					
+dump_every: 	LBn 
+filename:   	LBfn
+maxdist: 		LBdist
+
+extension: 		.lb
+
+###################################################################################
+Plectoneme Statistics
+					
+dump_every: 	PlecStatsn 
+filename:   	PlecStatsfn
+
+extension: 		.plecstats
+
+###################################################################################
+Restart Snapshots
+					
+dump_every: 	Restartn, restartn
+filename:   	Restartfn, restartfn
+
+extension: 		.restart
+
+
+###################################################################################
+Simulation State
+					
+dump_every: 	Stn
+filename:   	Stfn
+dump_triads:	Sttriads,Sttds
+dump_omegas:	StOmegas,StOm
+
+extension: 		.state
+
+
+###################################################################################
+Stiffness matrices calculated from the covariance matrices
+					
+dump_every: 	Stiffn
+filename:   	Stifffn
+
+extension: 		.stiff
+
+###################################################################################
+Tangent Correlation Function
+					
+dump_every: 	TCn
+filename:   	TCfn
+maxdist: 		TCdist
+
+extension: 		.tancor
+
+###################################################################################
+Thetas
+					
+dump_every: 	Thetasn
+filename:   	Thetasfn
+
+extension: 		.thetas
+
+
+###################################################################################
+Average Thetas
+					
+dump_every: 	AvgThetasn
+filename:   	AvgThetasfn
+
+extension: 		.avgthetas
+
+
+###################################################################################
+Torque
+					
+dump_every: 	TRQn
+filename:   	TRQfn
+
+extension: 		.torque
+
+###################################################################################
+Effective Torsional Stiffness
+	
+	Writhe Options:
+		fuller
+		langowski	
+		both	
+
+
+dump_every: 	Ceffn
+filename:   	Cefffn
+fraction:		Cefffrac
+Writhemethod:	CeffWr 
+
+extension: 		.ceff
+
+###################################################################################
+Writhe Map
+	
+
+dump_every: 	WMn
+filename:   	WMfn
+segment_size:	WMseg
+
+extension: 		.wm
+
+###################################################################################
+XYZ
+	Translation Options:
+		first: 	First Triad always has coordinates 0,0,0 (default)
+		COM:	Center of Mass always has coordinates 0,0,0
+		last:	Last Triad always has coordinates 0,0,0
+
+	Representation Options:
+		simple: One bead for trad (default)
+		fl:		First and last monomer enphasized
+		helix:	helix representation
+		dna:	double helix representation
+		triadf: Triad representation   	
+
+dump_every: 		XYZn
+filename:   		XYZfn
+translate_option:	XYZ_translate
+representation:		XYZ_repr
+
+extension: 		.xyz
+
+
+
+
+
+
+
