@@ -43,7 +43,7 @@ Dump_Full_Coup_Matrix::Dump_Full_Coup_Matrix(Chain * ch, const std::string& file
 	std::ofstream ofstr;
 	ofstr.open(fn+".idb_mat", std::ofstream::out | std::ofstream::trunc);
 
-	int row,col;
+//	int row,col;
 
 	for (int r=0;r<dim;r++) {
         for (int c=0;c<dim-1;c++) {

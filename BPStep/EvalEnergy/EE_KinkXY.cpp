@@ -219,7 +219,7 @@ std::vector<double> EE_KinkXY::get_status_diag(const arma::colvec & Theta) {
     if (right_active && x>xcr) {
         kinked_state =  1;
     }
-    return {kinked_state,left_active,right_active};
+    return {kinked_state,double(left_active),double(right_active)};
 }
 
 

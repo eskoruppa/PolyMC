@@ -302,7 +302,7 @@ std::vector<arma::colvec> Dump_PlasmidEndpoints::find_endpoints(arma::colvec & w
     }
 
     for (unsigned i=0;i<maxima.size();i++) {
-        end_points.push_back({maxima[i],writhe(maxima[i])});
+        end_points.push_back({double(maxima[i]),writhe(maxima[i])});
     }
     return end_points;
 }
@@ -357,7 +357,7 @@ std::vector<arma::colvec> Dump_PlasmidEndpoints::find_endpoints_old(arma::colvec
         }
         if (val<PP_PEAK_THRESHOLD) {
             if (inpeak && !possible_secondary_peak) {
-                end_point_pos.push_back({pmod(last_peak_pos,num_points),last_peak});
+                end_point_pos.push_back({double(pmod(last_peak_pos,num_points)),last_peak});
             }
             inpeak=false;
             possible_secondary_peak=false;
@@ -367,7 +367,7 @@ std::vector<arma::colvec> Dump_PlasmidEndpoints::find_endpoints_old(arma::colvec
 
         if (inpeak && last_peak-val > PP_LOCAL_MIN_DIFF) {
             if (!possible_secondary_peak) {
-                end_point_pos.push_back({pmod(last_peak_pos,num_points),last_peak});
+                end_point_pos.push_back({double(pmod(last_peak_pos,num_points)),last_peak});
                 secondary_theshold = val+PP_LOCAL_MIN_DIFF;
             }
             possible_secondary_peak=true;

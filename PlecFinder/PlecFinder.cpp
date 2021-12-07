@@ -203,7 +203,7 @@ std::vector<std::vector<int>> PlecFinder::findPeaks(const arma::mat & diag) {
     }
     if (inpeak) {
         if (arma::sum(DW(arma::span(pfrom,smoothedDW.n_elem)))>WRTHRESHOLD) {
-            intervals.push_back({pfrom,smoothedDW.n_elem+1});
+            intervals.push_back({pfrom,int(smoothedDW.n_elem+1)});
         }
     }
     return intervals;
@@ -713,6 +713,6 @@ std::vector<double> PlecFinder::getPlecStats() {
     pLk = pWr + pTw;
     num_plecs = entry_bboxes_ids.size();
 
-    return {z, Lk, Wr, Tw, pLk, pTw, pWr, plecsegs, num_plecs};
+    return {z, Lk, Wr, Tw, pLk, pTw, pWr, double(plecsegs), double(num_plecs)};
 }
 

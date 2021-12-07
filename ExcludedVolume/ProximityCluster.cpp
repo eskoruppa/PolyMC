@@ -142,7 +142,7 @@ int  ProximityCluster::get_proximity_interval(std::vector<arma::ivec>** proximit
 }
 
 void ProximityCluster::get_proximity_tail(  std::vector<arma::ivec>** proximity_interval_ptr,
-                                            arma::colvec& rel_interval,
+                                            arma::ivec& rel_interval,
                                             int left_limit,
                                             int right_limit)
                                             {

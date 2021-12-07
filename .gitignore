@@ -1,0 +1,8 @@
+# ignore bin directory
+bin/
+
+# ignore obj directory
+obj/
+
+# ignore all .o files
+**.o
