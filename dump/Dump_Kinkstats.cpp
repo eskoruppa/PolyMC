@@ -67,19 +67,19 @@ void Dump_Kinkstats::prod_dump() {
 //    rkf_count += 1;
 //    std::cout << rkf_sum/rkf_count << std::endl;
 
-//    std::ofstream ofstr;
-//    ofstr.open(fn, std::ofstream::out | std::ofstream::app);
-//    ofstr  << 1.*num_kink_left/num_bps << " " << 1.*num_kink_right/num_bps << "\n";
-//    ofstr.close();
-
-    double ext            = arma::dot(chain->get_force_dir(),chain->get_bp_pos()->col(num_bp-1)-chain->get_bp_pos()->col(0));
-    double energy_elastic = chain->extract_true_energy();
-    double energy_work    = arma::dot(chain->get_beta_force_vec(),chain->get_bp_pos()->col(num_bp-1)-chain->get_bp_pos()->col(0))/chain->get_beta();
-
     std::ofstream ofstr;
     ofstr.open(fn, std::ofstream::out | std::ofstream::app);
-    ofstr  << num_bps << " " << num_kink_left << " " << num_kink_right << " " << ext << " " << energy_elastic << " " << energy_work << "\n";
+    ofstr  << 1.*num_kink_left/num_bps << " " << 1.*num_kink_right/num_bps << "\n";
     ofstr.close();
+
+//    double ext            = arma::dot(chain->get_force_dir(),chain->get_bp_pos()->col(num_bp-1)-chain->get_bp_pos()->col(0));
+//    double energy_elastic = chain->extract_true_energy();
+//    double energy_work    = arma::dot(chain->get_beta_force_vec(),chain->get_bp_pos()->col(num_bp-1)-chain->get_bp_pos()->col(0))/chain->get_beta();
+//
+//    std::ofstream ofstr;
+//    ofstr.open(fn, std::ofstream::out | std::ofstream::app);
+//    ofstr  << num_bps << " " << num_kink_left << " " << num_kink_right << " " << ext << " " << energy_elastic << " " << energy_work << "\n";
+//    ofstr.close();
 
     if (dump_fn_kinkpos) {
 
