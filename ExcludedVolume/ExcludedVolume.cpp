@@ -36,7 +36,7 @@ triads_backup(*chain->get_triads())
     /*
         If there is sufficient overlap between the excluded regions of neighboring EV_beads,
         i.e. if next nearest neighbors overlap for a 90deg angle between the two intermediate
-        tangents, excluded volume checks are skilled for the first two neighbours rather than
+        tangents, excluded volume checks are skipped for the first two neighbours rather than
         just the nearest neighbours.
     */
     neighbour_skip = 1;
