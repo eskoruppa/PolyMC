@@ -1,0 +1,91 @@
+####################################################
+### INTERACTION DETAILS ############################
+####################################################
+# Set interaction details
+#
+# type: 
+#   specifies used interaction potential
+#   Current potentials:
+#       - debye_hueckel
+#   
+# params: 
+#   set parameters specific to used 
+#    potential
+#
+# integral_dx:
+#   set discretization of numerical
+#   integral over pairs of straight 
+#   segments. If the segment size
+#    (disc_len) is not a multiple of
+#   integral_dx, the latter will be
+#   sized down to the largest divisor
+#   of disc_len.
+#
+# cutoff_dist:
+#   cutoff distance beyond which interactions
+#   are set to zero. The maximum considered 
+#   segment midpoint distance is
+#        cutoff_dist + disc_len
+#
+# neighbor_skip_dist:
+#    number of neighboring segments along the
+#    chain that are omitted from consideration
+#    for electrostatic pair interactions. Setting
+#    This to zero means that every neighbor is 
+#    considered. Note that this will not lead to
+#    diverging energies as the integration interval
+#    starts 0.5*integral_dx away from the location
+#    if the simulation beads (segment start). 
+####################################################
+
+# (see below for info)
+type        = debye_hueckel
+#             A   B
+params      = 8   1
+integral_dx = 0.1
+
+cutoff_dist        = 10
+neighbor_skip_dist = 10
+
+####################################################
+### TABULATION #####################################
+####################################################
+# Allows for the tabulation of electrostatic
+# interactions. This will generate a
+# 4 dimensional table.
+#
+# tabulate:
+#    boolian to set tabulation
+#
+# use_costheta:
+#    Ff set to true tabulation is done on equal     
+#    intervals of cos(theta). Otherwise equal 
+#    theta steps are interpolated
+#
+# table_elements:
+#    number of entries per dimension, such 
+#    that the total number of entries is
+#    table_elements^4 
+#
+# memory_limit:
+#    limits the number of table elements to
+#    not exceed specified memory limit in MB
+#    default: 1000 MB (105 entries per dim)
+####################################################
+
+tabulate           = 1
+use_costheta       = 0
+table_elements     = 50
+memory_limit       = 1000
+
+####################################################
+### INFO ###########################################
+####################################################
+# - Distances are given in nm
+#
+#
+####################################################
+# CURRENT TYPES
+#
+# Debye Hückel Integrant:
+#    intgrant = B * exp(-r/A)/r

@@ -344,6 +344,10 @@ void InputRead::read_file() {
     }
     else {
         infilefound=false;
+        std::cout << "\nERROR:" << std::endl;
+        std::cout << " Unable to find specified input file '" << filename << "'" << std::endl;
+        std::cout << "simulation terminated .. " << std::endl;
+        std::exit(0);
     }
     file.close();
 }

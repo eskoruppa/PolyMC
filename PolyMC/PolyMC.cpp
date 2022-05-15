@@ -119,6 +119,9 @@ input_given(false),nooutput(!produce_output),geninfile()
     }
 
     init_ExVol();
+
+    init_ElStat(ElStat_fn);
+
     init_constraints();
     init_constraints(constraint_fn, true);
 
@@ -181,6 +184,10 @@ PolyMC::~PolyMC() {
     if (EV_active) {
         delete EV;
     }
+    if (ES_active) {
+        delete ES;
+        delete ES_Potential;
+    }
 }
 
 
@@ -228,6 +235,11 @@ bool PolyMC::run(long long steps,std::vector<MCStep*> run_MCSteps ,const std::st
     }
     if (EV_active) {
         EV->set_current_as_backup();
+    }
+    if (ES_active) {
+        std::cout << "setting ES for run" << std::endl;
+        ES->set_current_as_backup(true);
+        std::cout << "done" << std::endl;
     }
     chain->recal_energy();
 
@@ -278,6 +290,9 @@ void PolyMC::init_external_run() {
     if (EV_active) {
         EV->set_current_as_backup();
     }
+    if (ES_active) {
+        ES->set_current_as_backup(true);
+    }
     chain->recal_energy();
     std::cout <<  "finish init" << std::endl;
 }
@@ -305,6 +320,9 @@ bool PolyMC::external_run(long long steps ,const std::string & run_name,bool dum
         }
         if (EV_active) {
             EV->set_current_as_backup();
+        }
+        if (ES_active) {
+            ES->set_current_as_backup(true);
         }
     }
     if (recal_energy) {
@@ -357,12 +375,22 @@ bool   PolyMC::exchange_configs(PolyMC * other_polymc) {
 
     chain->set_config(och->get_bp_pos(),och->get_triads(),och->topology_closed());
     chain->set_dLK(och->get_dLK());
-    EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
+//    if (EV_active) {
+        EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
+//    }
+    if (ES_active) {
+        ES->set_current_as_backup(true);
+    }
     chain->recal_energy();
 
     och->set_config(&temp_bp_pos,&temp_triads,chain->topology_closed());
     och->set_dLK(temp_dLK);
-    other_polymc->EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
+//    if (EV_active) {
+        other_polymc->EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
+//    }
+    if (ES_active) {
+        other_polymc->ES->set_current_as_backup(true);
+    }
     och->recal_energy();
 
     if (check_link && EV_active) {
@@ -431,9 +459,11 @@ void PolyMC::init_general() {
 
     print_every       = InputChoice_get_single<int>   ("print_every",input,argv,print_every);
     print_link_info   = InputChoice_get_single<bool>  ("print_link_info",input,argv,print_link_info);
+    print_elstat_info = InputChoice_get_single<bool>  ("print_elstat_info",input,argv,print_link_info);
 
     geninfile.add_entry(GENINFILE_OUTPUT,"print_every",print_every);
     geninfile.add_entry(GENINFILE_OUTPUT,"print_link_info",print_link_info);
+    geninfile.add_entry(GENINFILE_OUTPUT,"print_elstat_info",print_elstat_info);
 
 
     use_cluster_twist = InputChoice_get_single<bool>  ("use_cluster_twist",input,argv,use_cluster_twist);
@@ -473,6 +503,14 @@ void PolyMC::init_general() {
     GenForce_fn      = InputChoice_get_single<std::string>  ("genforce_fn",input,argv,GenForce_fn);
     if (GenForce_fn != "") {
         geninfile.add_entry(GENINFILE_INTERACTIONS,"GenForce_fn",GenForce_fn);
+    }
+
+    ElStat_fn       = InputChoice_get_single<std::string>  ("ElStat_fn",input,argv,ElStat_fn);
+    ElStat_fn       = InputChoice_get_single<std::string>  ("elStat_fn",input,argv,ElStat_fn);
+    ElStat_fn       = InputChoice_get_single<std::string>  ("elstat_fn",input,argv,ElStat_fn);
+    ElStat_fn       = InputChoice_get_single<std::string>  ("Electrostatics_fn",input,argv,ElStat_fn);
+    if (ElStat_fn != "") {
+        geninfile.add_entry(GENINFILE_INTERACTIONS,"ElStat_fn",ElStat_fn);
     }
 
     pair_interactions_fn      = InputChoice_get_single<std::string>  ("set_pairstyles",input,argv,pair_interactions_fn);
@@ -583,6 +621,82 @@ void PolyMC::init_ExVol() {
         }
     }
 }
+
+void PolyMC::init_ElStat(const std::string & ElStat_fn) {
+    /*
+        TODO: Check for double entries
+    */
+
+    if (ElStat_fn == "") return;
+
+
+    /*
+        Read Electrostatics
+    */
+    InputRead * input = new InputRead(ElStat_fn);
+    std::string type            = input->get_single_val<std::string> ("type");
+    std::vector<double> params  = input->get_single_vec("params");
+    double integral_dx          = input->get_single_val<double> ("integral_dx");
+
+    double neighbor_skip_dist   = input->get_single_val<double> ("neighbor_skip_dist");
+    double cutoff_dist          = input->get_single_val<double> ("cutoff_dist");
+
+    bool tabulate               = input->get_single_val<bool>   ("tabulate");
+    bool use_costheta           = input->get_single_val<bool>   ("use_costheta");
+    int  table_elems            = input->get_single_val<double> ("table_elements");
+    table_elems                 = input->get_single_val<double> ("table_elems",table_elems);
+    double memory_limit         = input->get_single_val<double> ("memory_limit",1000);
+
+    double rho_max,rho_min;
+    rho_max = cutoff_dist + chain->get_disc_len();
+    ES_active = init_electrostatic_potential(type,params,integral_dx,rho_max);
+    if (EV_active) {
+        rho_min = EV_rad;
+    }
+    else {
+        rho_min = 0;
+    }
+
+    if (tabulate) {
+        ES_Potential->tabulate_interactions(table_elems,rho_min,rho_max,memory_limit,use_costheta);
+    }
+    ElStat * elstat = new ElStat(chain,ES_Potential,rho_max,rho_min,neighbor_skip_dist );
+    ES = elstat;
+
+    std::cout << "type:                 " << type << std::endl;
+    std::cout << "integral_dx:          " << integral_dx << std::endl;
+    std::cout << "params:               " << std::endl;
+    for (unsigned i=0;i<params.size();i++) {
+        std::cout << "                      " << params[i] << std::endl;
+    }
+    std::cout << "neighbor_skip_dist:   " << neighbor_skip_dist << std::endl;
+    std::cout << "cutoff_dist:          " << cutoff_dist << std::endl;
+
+    std::cout << "tabulate:             " << tabulate << std::endl;
+    std::cout << "table_elems:          " << table_elems << std::endl;
+
+
+    std::cout << "ES_active:            " << ES_active << std::endl;
+
+    for (unsigned i=0;i<MCSteps.size();i++) {
+        MCSteps[i]->set_electrostatics(ES);
+    }
+
+
+//    std::exit(0);
+
+//    bool    ES_active=false;
+//    ExVol*  ES;
+//    double  ES_rho_max          = 0;
+//    double  ES_rho_min          = 0;
+//    double  neighbor_skip_dist  = 0;
+
+
+}
+
+
+
+
 
 void PolyMC::init_constraints(const std::string & constraint_fn, bool append) {
     /*
@@ -766,6 +880,9 @@ bool PolyMC::check_chain_consistency(long long step) {
                 EV->set_current_as_backup();
             }
         }
+        if (ES_active) {
+            ES->set_current_as_backup(true);
+        }
     }
     return true;
 }
@@ -796,6 +913,9 @@ bool PolyMC::check_link_consistency(long long step) {
         chain->set_config(&check_link_backup_bp_pos, &check_link_backup_triads, false, false);
         chain->set_dLK(check_link_backup_dLK);
         EV->set_current_as_backup();
+        if (ES_active) {
+            ES->set_current_as_backup(true);
+        }
 
         std::string lkviolatedfn = dump_dir + ".linkviolated";
         std::ofstream ofstr;
@@ -840,6 +960,13 @@ void PolyMC::print_state(long long step,long long steps,const std::string & run_
         if (tweezer_setup_id==TWEEZER_SETUP_ID_TORSIONAL_TRAP) {
             std::cout << "  Mean Torque = " << chain->get_torque_measure_accu(false)/(2*M_PI) << std::endl;
         }
+    }
+    if (print_elstat_info) {
+        std::cout << std::endl;
+        std::cout << " Electrostatics Info:" << std::endl;
+        double Ees = ES->get_current_energy(true);
+        std::cout << "  E_es = " << Ees << " (kT)" << std::endl;
+
     }
     if (print_link_info) {
         std::cout << std::endl;
@@ -948,6 +1075,13 @@ void PolyMC::copy_input_files() {
         dst_gf << src_gf.rdbuf();
     }
 
+    if (ElStat_fn != "") {
+        std::string    copy_ElStat_fn   = dump_dir+".elstat";
+        std::ifstream  src_gf(ElStat_fn,  std::ios::binary);
+        std::ofstream  dst_gf(copy_ElStat_fn, std::ios::binary);
+        dst_gf << src_gf.rdbuf();
+    }
+
     if (seq_fn != "") {
         std::string    copy_seq_fn   = dump_dir+".seq";
         std::ifstream  src_seq(seq_fn,  std::ios::binary);
@@ -966,6 +1100,9 @@ bool PolyMC::generic_slow_wind(double dLK_from, double dLK_to, double dLK_step, 
     double set_dLK = dLK_from;
     chain->set_Delta_Lk(set_dLK);
     EV->set_current_as_backup();
+    if (ES_active) {
+        ES->set_current_as_backup(true);
+    }
 
     if (check_link) {
         set_link_backup();
@@ -981,6 +1118,9 @@ bool PolyMC::generic_slow_wind(double dLK_from, double dLK_to, double dLK_step, 
         }
         chain->set_Delta_Lk(set_dLK);
         EV->set_current_as_backup();
+        if (ES_active) {
+            ES->set_current_as_backup(true);
+        }
     }
     std::cout << "dLK set to " << set_dLK << std::endl;
     run(steps_per_dLK_step,MCSteps,"winding chain",slow_wind_dump);

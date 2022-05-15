@@ -6,6 +6,7 @@
 #include "../ExtraFuncs.h"
 #include "../ExcludedVolume/ExcludedVolume.h"
 #include "../Constraints/Constraint.h"
+#include "../Electrostatics/Electrostatics.h"
 
 #include "../Unbound/Unbound.h"
 
@@ -84,6 +85,11 @@ protected:
     arma::ivec               changed_bps;
     ExVol*                   EV;
 
+    // Electro Statics members
+    bool        es_active;
+    ElStat *    ES;
+
+
     bool                     constraints_active = false;
     std::vector<Constraint*> constraints;
 
@@ -124,6 +130,11 @@ public:
     void remove_constraints();
 
     std::vector<arma::ivec>* get_moved_intervals();
+
+// ELectro Statics methods
+public:
+    void set_electrostatics(ElStat * elstat);
+
 
 // Check suitability of the move given the settings of Chain
     bool suitable();

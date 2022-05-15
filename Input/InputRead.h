@@ -138,7 +138,7 @@ T InputRead::get_single_val(unsigned elem, const std::string& identifier) {
             return singles[i].get_first<T>(elem);
         }
     }
-    std::cout << " Error identifier '" << identifier << "' not found in input file" << std::endl;
+    std::cout << " Error identifier '" << identifier << "' not found in input file '" << filename << "'" << std::endl;
     std::exit(0);
 }
 

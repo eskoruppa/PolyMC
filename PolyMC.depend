@@ -4583,7 +4583,7 @@
 	<stdexcept>
 	<vector>
 
-1608579848 /home/asen/Dev/Cpp/PolyMC/ExtraFuncs.h
+1652548320 /home/asen/Dev/Cpp/PolyMC/ExtraFuncs.h
 	<math.h>
 	<cmath>
 	<sstream>
@@ -4591,7 +4591,7 @@
 	<vector>
 	<iostream>
 
-1608579852 /home/asen/Dev/Cpp/PolyMC/SO3Methods.h
+1652534784 /home/asen/Dev/Cpp/PolyMC/SO3Methods.h
 	<armadillo>
 	<iostream>
 	<stdexcept>
@@ -4609,7 +4609,7 @@
 	<vector>
 	"../Input/InputRead.h"
 
-1616695530 /home/asen/Dev/Cpp/PolyMC/Input/InputRead.h
+1652019444 /home/asen/Dev/Cpp/PolyMC/Input/InputRead.h
 	<string>
 	<iostream>
 	<stdexcept>
@@ -4747,7 +4747,7 @@
 1616695503 source:/home/asen/Dev/Cpp/PolyMC/ChainFuncs/Chain_EvalEnergy.cpp
 	"../Chain.h"
 
-1616695503 source:/home/asen/Dev/Cpp/PolyMC/ChainFuncs/Chain_LinkAndTorque.cpp
+1652112508 source:/home/asen/Dev/Cpp/PolyMC/ChainFuncs/Chain_LinkAndTorque.cpp
 	"../Chain.h"
 
 1616695503 source:/home/asen/Dev/Cpp/PolyMC/Constraints/Constr_Orientation.cpp
@@ -4930,7 +4930,7 @@
 	"../ExcludedVolume/ExcludedVolume.h"
 	"../PlecFinder/PlecFinder.h"
 
-1616695501 /home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.h
+1652341192 /home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.h
 	"../Chain.h"
 	"../SO3Methods.h"
 	"../ExtraFuncs.h"
@@ -5096,7 +5096,7 @@
 	<vector>
 	<cassert>
 
-1616695501 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.cpp
+1649491944 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.cpp
 	"ExcludedVolume.h"
 
 1616695501 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/MagneticBead.cpp
@@ -5148,7 +5148,7 @@
 1616695530 source:/home/asen/Dev/Cpp/PolyMC/Input/InputChoice.cpp
 	"InputChoice.h"
 
-1616695529 source:/home/asen/Dev/Cpp/PolyMC/Input/InputRead.cpp
+1652019956 source:/home/asen/Dev/Cpp/PolyMC/Input/InputRead.cpp
 	"InputRead.h"
 
 1616695529 source:/home/asen/Dev/Cpp/PolyMC/Input/ManipulateArgv.cpp
@@ -5179,7 +5179,7 @@
 	"MCMethods/ReplicaExchange.h"
 	"Input/ManipulateArgv.h"
 
-1625042604 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
+1652602227 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
 	"Input/Argparse.h"
 	"Input/InputRead.h"
 	"Input/InputChoice.h"
@@ -5204,6 +5204,9 @@
 	"MCStep/MCS_Slither2d.h"
 	"dump/InitDump.h"
 	"ExcludedVolume/ExcludedVolume.h"
+	"Electrostatics/Electrostatics.h"
+	"Electrostatics/ESPotential.h"
+	"Electrostatics/Potentials/DebyeHueckel.h"
 	"Constraints/Constraint.h"
 	"Constraints/Constr_Position.h"
 	"Constraints/Constr_Orientation.h"
@@ -5230,12 +5233,13 @@
 	<cmath>
 	<vector>
 
-1625129175 /home/asen/Dev/Cpp/PolyMC/MCStep/MCStep.h
+1652352175 /home/asen/Dev/Cpp/PolyMC/MCStep/MCStep.h
 	"../Chain.h"
 	"../SO3Methods.h"
 	"../ExtraFuncs.h"
 	"../ExcludedVolume/ExcludedVolume.h"
 	"../Constraints/Constraint.h"
+	"../Electrostatics/Electrostatics.h"
 	"../Unbound/Unbound.h"
 	<armadillo>
 	<iostream>
@@ -5298,7 +5302,7 @@
 1616695502 /home/asen/Dev/Cpp/PolyMC/MCStep/MCS_ClusterTwist.h
 	"MCStep.h"
 
-1616695502 /home/asen/Dev/Cpp/PolyMC/MCStep/MCS_CSrot.h
+1652028564 /home/asen/Dev/Cpp/PolyMC/MCStep/MCS_CSrot.h
 	"MCStep.h"
 
 1616695502 /home/asen/Dev/Cpp/PolyMC/MCStep/MCS_CStrans.h
@@ -5426,7 +5430,7 @@
 1624963015 source:/home/asen/Dev/Cpp/PolyMC/MCStep/MCS_zPiv.cpp
 	"MCS_zPiv.h"
 
-1625126598 source:/home/asen/Dev/Cpp/PolyMC/MCStep/MCStep.cpp
+1652602687 source:/home/asen/Dev/Cpp/PolyMC/MCStep/MCStep.cpp
 	"MCStep.h"
 
 1616695532 source:/home/asen/Dev/Cpp/PolyMC/Observables/elasticity.cpp
@@ -5447,7 +5451,7 @@
 1616695532 source:/home/asen/Dev/Cpp/PolyMC/PlecFreeEnergy/GenPFEConf.cpp
 	"GenPFEConf.h"
 
-1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
+1652607341 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
 	"../PolyMC.h"
 
 1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Closed2d.cpp
@@ -5568,4 +5572,77 @@
 
 1633711749 /home/asen/Dev/Cpp/PolyMC/dump/Dump_Twist.h
 	"Dump.h"
+
+1652602065 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.cpp
+	"Electrostatics.h"
+
+1652601920 /home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.h
+	"../Chain.h"
+	"ESPotential.h"
+	"../SO3Methods.h"
+	"../ExtraFuncs.h"
+	"../ExcludedVolume/ExcludedVolume.h"
+	"../Input/InputRead.h"
+	<armadillo>
+	<iostream>
+	<string>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cmath>
+	<vector>
+	<cassert>
+
+1652021701 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/ES_SetPotential.cpp
+	"Electrostatics.h"
+
+1652030917 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/InitElectrostatics.cpp
+	"Electrostatics.h"
+
+1652030974 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/ES_Potential.cpp
+	"ES_Potential.h"
+
+1652030942 /home/asen/Dev/Cpp/PolyMC/Electrostatics/ES_Potential.h
+	"../Chain.h"
+	"../SO3Methods.h"
+	"../ExtraFuncs.h"
+	"../ExcludedVolume/ExcludedVolume.h"
+	<armadillo>
+	<iostream>
+	<string>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cmath>
+	<vector>
+	<cassert>
+
+1652603657 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/Potentials/DebyeHueckel.cpp
+	"DebyeHueckel.h"
+
+1652368519 /home/asen/Dev/Cpp/PolyMC/Electrostatics/Potentials/DebyeHueckel.h
+	"../ESPotential.h"
+
+1652368640 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/InitElectrostaticPotential.cpp
+	"../PolyMC.h"
+	"ESPotential.h"
+	"Potentials/DebyeHueckel.h"
+
+1652607245 /home/asen/Dev/Cpp/PolyMC/Electrostatics/ESPotential.h
+	"../Chain.h"
+	"../SO3Methods.h"
+	"../ExtraFuncs.h"
+	"../ExcludedVolume/ExcludedVolume.h"
+	<armadillo>
+	<iostream>
+	<string>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cmath>
+	<vector>
+	<cassert>
+
+1652606910 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/ESPotential.cpp
+	"ESPotential.h"
 

@@ -1,0 +1,61 @@
+################################################################################
+############### SETUP ##########################################################
+################################################################################
+#
+# - interaction-range sets the range of interactions between bps deformations.
+#   Setting it to zero means that only on-site interactions are considered.
+# - all used monomer types have to be listed without spaces. All combinations
+#   of the specified monomer types for the given interaction range have to be
+#   specified for the simulation to start, even if the particular segments
+#   are not included in the simulated sequence.
+# - monomer type x is internally used as placeholder for all possible types.
+#   Usage of the character x is therefore restricted for now.
+#
+################################################################################
+
+interaction_range  = 0
+monomer_types      = a
+discretization     = 2
+avg_inconsist      = 0
+
+################################################################################
+############ INTERACTIONS ######################################################
+################################################################################
+# - The type specifier cannot contain any spaces between monomers. 
+# - The length of type has to be (interaction-range + 1)*2
+# - Needs to contain 1+2*interaction-range sets of parameters
+#   listed from left to right to specify the couplings along the chain.
+#   The middle interaction specifies the on-site coupling and the first
+#   and the last one the longest ranging couplings
+# - The parameter definitions have to be followed by a vector
+#   definition for the ground state rotations. 
+################################################################################
+# stiffmat:
+#
+#	    / 0 1 2 \            / omega_0_1 \
+#  M =  | 3 4 5 |     vec =  | omega_0_2 |
+#	    \ 6 7 8 /            \ omega_0_3 /
+#
+################################################################################
+# kinkxy: 
+#    -> can only specified for on-site couplings!
+#
+#          Kl             |
+#           \             |                     x = Theta_2 cos(phi) - Theta_3 sin(phi)
+#            \     _      |          Kr            
+#             \   / \     |     _   /           y = Theta_2 sin(phi) + Theta_3 cos(phi)
+#    hr .....  \_/ | \    |    / \_/ ..... hr
+#              xl  |  \ Kx|   / | xr
+#                  |   \  |  /  |
+#  ----------------|------|-----|------------------
+#                 xcl          xcr
+#
+#   Order of parameters: 
+#      A1, Ay, Ax, phi, Al, xl, hl, Ar, xr, hr
+#
+# ##############################################################################
+
+aa
+    stiffmat    40 0 0 0 40 0 0 0 100
+	vec	    	0 0 0
+

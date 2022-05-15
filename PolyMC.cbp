@@ -81,6 +81,13 @@
 		<Unit filename="Constraints/Constr_Position.h" />
 		<Unit filename="Constraints/Constraint.cpp" />
 		<Unit filename="Constraints/Constraint.h" />
+		<Unit filename="Electrostatics/ESPotential.cpp" />
+		<Unit filename="Electrostatics/ESPotential.h" />
+		<Unit filename="Electrostatics/Electrostatics.cpp" />
+		<Unit filename="Electrostatics/Electrostatics.h" />
+		<Unit filename="Electrostatics/InitElectrostaticPotential.cpp" />
+		<Unit filename="Electrostatics/Potentials/DebyeHueckel.cpp" />
+		<Unit filename="Electrostatics/Potentials/DebyeHueckel.h" />
 		<Unit filename="ExcludedVolume/EV_Beads.cpp" />
 		<Unit filename="ExcludedVolume/EV_Beads.h" />
 		<Unit filename="ExcludedVolume/ExcludedVolume.cpp" />

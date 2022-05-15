@@ -60,6 +60,13 @@
 // include Excluded Volume
 #include "ExcludedVolume/ExcludedVolume.h"
 
+// include Electrostatics
+#include "Electrostatics/Electrostatics.h"
+#include "Electrostatics/ESPotential.h"
+#include "Electrostatics/Potentials/DebyeHueckel.h"
+
+
+
 // include Constraints
 #include "Constraints/Constraint.h"
 #include "Constraints/Constr_Position.h"
@@ -207,10 +214,22 @@ protected:
 /*
     Excluded Volume Members
 */
-    bool    EV_active=false;
-    bool    EV_repulsion_plane=false;
+    bool    EV_active           = false;
+    bool    EV_repulsion_plane  = false;
     ExVol*  EV;
     double  EV_rad = 0;
+
+/*
+    Electrostatics Members
+*/
+    std::string ElStat_fn   = "";
+    bool    ES_active       = false;
+    ElStat      * ES;
+    ESPotential * ES_Potential;
+
+    double  ES_rho_max          = 0;
+    double  ES_rho_min          = 0;
+    double  neighbor_skip_dist  = 0;
 
 /*
     Slow Wind
@@ -250,8 +269,8 @@ protected:
 */
 
     int  print_every             = 100000;
-
     bool print_link_info         = false;
+    bool print_elstat_info       = false;
 
     bool check_link              = false;
     int  check_link_every        = 100000;
@@ -334,6 +353,9 @@ protected:
     void init_dump();
     void copy_input_files();
     void init_ExVol();
+    void init_ElStat(const std::string & ElStat_fn);
+    bool init_electrostatic_potential(const std::string & type, std::vector<double> & params, double integral_dx, double rho_max);
+
 
     void init_constraints(const std::string & constraint_fn, bool append=false);
     void init_constraints();

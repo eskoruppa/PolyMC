@@ -90,6 +90,21 @@ void print_vector(const std::vector<T> & vec) {
     std::cout << std::endl;
 }
 
+inline bool equal_double(double x, double y, double epsilon = 1e-14){
+   if(std::abs(x - y) < epsilon) {
+        return true;
+   }
+   return false;
+}
+
+inline bool zero_double(double x, double epsilon = 1e-14){
+   if(std::abs(x) < epsilon) {
+        return true;
+   }
+   return false;
+}
+
+
 
 std::vector<double> strVec2doubleVec(const std::vector<std::string> & strvec);
 std::vector<int> strVec2intVec(const std::vector<std::string> & strvec);

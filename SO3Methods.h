@@ -127,4 +127,18 @@ inline arma::mat Rotz(const double& theta) {
     return Rz;
 }
 
+inline arma::mat Rotx(const double& theta) {
+    double c = std::cos(theta);
+    double s = std::sin(theta);
+    arma::mat Rx = {{1,0,0},{0,c,-s},{0,s,c}};
+    return Rx;
+}
+
+inline arma::mat Roty(const double& theta) {
+    double c = std::cos(theta);
+    double s = std::sin(theta);
+    arma::mat Rz = {{c,0,s},{0,1,0},{-s,0,c}};
+    return Rz;
+}
+
 #endif

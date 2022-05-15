@@ -29,7 +29,7 @@
 #define EV_TO       1
 #define EV_TYPE     2
 
-#define EV_FULLCHECK_VIOLATION 10000
+#define EV_FULLCHECK_VIOLATION 1000000
 
 #define REPULSIONPLANE_FIRST_AND_LAST 0
 #define REPULSIONPLANE_ONLY_FIRST     1
@@ -45,6 +45,7 @@
 
 /*
 Different types of moved intervals:
+
 
 TypeA:
     indicator range:        0
@@ -75,6 +76,12 @@ REMARKS:
     The moved intervals passed by the MCStep method have to be in ascending order.
 */
 
+inline bool within_EV_moved_type(int id) {
+    return (id > EV_TYPE_A);
+}
+inline bool within_EV_active_type(int id) {
+    return (id >= 0);
+}
 inline bool within_EV_typeA(int id) {
     return (id == EV_TYPE_A);
 }

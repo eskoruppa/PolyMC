@@ -13,7 +13,8 @@ disc_len(ch->get_disc_len()),
 count_step(0),
 count_accept(0),
 ev_active(false),
-requires_EV_check(true)
+requires_EV_check(true),
+es_active(false)
 {
     // set seeds for random number generators
     std::seed_seq seed(seedseq.begin(), seedseq.end());
@@ -53,6 +54,9 @@ bool MCStep::MC() {
             */
             if (requires_EV_check) {
                 accepted = EV->check(&moved_intervals);
+                /*
+                    currently EV automatically sets the backup if EV check is accepted
+                */
             }
             else {
                 /*
@@ -65,9 +69,19 @@ bool MCStep::MC() {
 
         if (accepted) {
             if (pair_interactions_active) {
+                /*
+                    Calculate Pair Interactions
+                */
                 double pair_beta_delta_E;
                 pair_beta_delta_E = chain->get_beta() * unbound->Eval_Delta_Energy(pos,&trial_backup_pos,moved_intervals);
                 beta_Delta_E     += pair_beta_delta_E;
+            }
+
+            if (es_active) {
+                /*
+                    Calculate Electrostatics
+                */
+                beta_Delta_E += ES->cal_beta_dE(&moved_intervals);
             }
 
             /*
@@ -78,10 +92,23 @@ bool MCStep::MC() {
 
                 revert_to_trial_backup();
                 if (ev_active) {
+                    /*
+                        currently EV automatically sets the backup if EV check is accepted
+                        ->  hence if move gets rejected on Metropolis step, we have to revert to
+                            previous backup
+                        TODO:
+                            THIS SHOULD BE HANDLED OUTSIDE THE FUNCTION TO AVOID UNNECESSARY COPYING!
+                    */
                     EV->set_current_as_backup();
+                }
+                if (es_active) {
+                    ES->revert_to_backup();
                 }
             }
             else {
+                if (es_active) {
+                    ES->set_current_as_backup();
+                }
                 count_accept++;
             }
         }
@@ -190,6 +217,29 @@ void MCStep::remove_constraints() {
 std::vector<arma::ivec>* MCStep::get_moved_intervals() {
     return &moved_intervals;
 }
+
+/*--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------*/
+/*
+    Electro Statics methods
+*/
+/*--------------------------------------------------------------------*/
+
+
+void MCStep::set_electrostatics(ElStat * elstat) {
+    es_active           = true;
+    ES                  = elstat;
+    if (requires_EV_check){
+        gen_full_trial_conf = true;
+    }
+}
+
+/*--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------*/
+
+
+
+
 
 bool MCStep::suitable() {
     // force_active

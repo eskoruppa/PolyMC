@@ -201,10 +201,21 @@ double Chain::propose_terminus_rotation(const arma::mat & T_newlast, double chan
     dLK_propose = ExtractTheta3(terminus_ref_triad.t() * T_newlast )*ONE_OVER_TWO_PI;
     dLK_propose = dLK_propose + std::round(dLK_check - dLK_propose);
 
+    /*
+    ---------------------------------------
+    */
     if (dLK_propose!=dLK_propose) {
         return 1e10;
         std::exit(0);
     }
+
+    if (std::abs(dLK_propose-dLK) > M_PI) {
+        return 1e10;
+    }
+    /*
+    ---------------------------------------
+    */
+
 
     /*
         Torsional Trap
@@ -219,6 +230,7 @@ double Chain::propose_terminus_rotation(const arma::mat & T_newlast, double chan
     /*
         Torque Energy
     */
+    // TODO define constant for 2pi beta torque
     if (link_const_torque) {
         return -2*M_PI*beta_torque * (dLK_propose-dLK);
     }
