@@ -80,6 +80,7 @@ public:
     bool   tabulate_interactions(int table_N,double min_dist,double max_dist,double memory_limit,bool use_costheta=true);
 
     std::string get_type();
+    bool        tabulating();
 
 public:
 

@@ -657,7 +657,9 @@ void ElStat::recal_full_energy() {
                 std::cout << e << std::endl;
                 std::cout << pair_interactions(a,b) << std::endl;
                 std::cout << " diff = " << pair_interactions(a,b) << std::endl;
-                throw std::invalid_argument("ElStat::check_full_energy(): Energy inconsistent");
+                if (!espot->tabulating()) {
+                    throw std::invalid_argument("ElStat::check_full_energy(): Energy inconsistent");
+                }
             }
             pair_interactions(a,b) = e;
             pair_interactions(b,a) = e;

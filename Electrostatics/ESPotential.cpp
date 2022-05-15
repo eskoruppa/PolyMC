@@ -203,6 +203,10 @@ std::string ESPotential::get_type() {
     return type;
 }
 
+bool        ESPotential::tabulating() {
+    return tabulate;
+}
+
 double ESPotential::set_prefactor() {
     throw std::invalid_argument("ESPotential::set_prefactor(): The base class ESPotential::set_prefactor should never be called.");
     return 0;
