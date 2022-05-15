@@ -204,13 +204,15 @@ std::string ESPotential::get_type() {
 }
 
 double ESPotential::set_prefactor() {
-    throw "ESPotential::set_prefactor(): The base class ESPotential::set_prefactor should never be called.";
+    throw std::invalid_argument("ESPotential::set_prefactor(): The base class ESPotential::set_prefactor should never be called.");
+    return 0;
 }
 double ESPotential::integrant(double r) {
     /*
         Define the integrant
     */
-    throw "ESPotential::integrant(): The base class ESPotential::integrant should never be called.";
+    throw std::invalid_argument("ESPotential::integrant(): The base class ESPotential::integrant should never be called.");
+    return 0;
 }
 
 
