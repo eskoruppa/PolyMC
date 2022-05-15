@@ -1,6 +1,6 @@
 # PolyMC
 
-Monte Carlo code for single molecule DNA simulations
+### Monte Carlo code for single molecule DNA simulations
 
 
 Installation in Linux:
