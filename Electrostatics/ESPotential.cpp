@@ -199,6 +199,7 @@ double ESPotential::eval_double_integral( const arma::colvec & r,
 }
 
 
+
 std::string ESPotential::get_type() {
     return type;
 }
