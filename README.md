@@ -3,7 +3,7 @@
 ### Monte Carlo code for single molecule DNA simulations
 
 
-Installation in Linux:
+Installation on Linux:
 
 sudo apt-get install -y liblapack-dev
 
