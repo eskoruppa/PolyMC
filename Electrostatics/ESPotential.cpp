@@ -42,19 +42,6 @@ double  ESPotential::segmentpair_energy( const arma::colvec & r,
         return 1e10;
     }
 
-//    arma::colvec cr,ct1,ct2,ct3;
-//    double cdist;
-//    cr   = {4,0,0};
-//    ct1  = {0,0,1};
-//    ct2  = {0,1,0};
-//    cdist = 4;
-//
-//
-////    eval_double_integral( cr, ct1,ct2, cdist);
-//    eval_table(cr,ct1,ct2,cdist);
-
-
-
     if (tabulate) {
         if (use_costheta) {
             return eval_table(r,t1,t2,dist);
@@ -411,7 +398,6 @@ void ESPotential::init_tabulation_costheta() {
         }
     }
     /////////////////////////////////////////
-    std::cout << std::endl << "... done!" << std::endl;
     std::cout << std::endl;
 
 }

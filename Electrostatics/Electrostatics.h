@@ -25,7 +25,7 @@
     Algorithm Flags
 */
 #define USE_STEPSKIP
-#define RECAL_FULL_EVERY 1000
+#define RECAL_FULL_EVERY 10000
 #define MAX_ENERGY_DIFF  1e-10
 
 /*
@@ -134,6 +134,13 @@ public:
     double  check_eval_pair(int a, int b);
     bool    check_midpoint_pos();
     bool    check_pair_interactions();
+
+    /*
+        DEBUG
+    */
+    arma::mat*  bp_pos_backup;
+    arma::cube* triads_backup;
+    void set_backup_pos(arma::mat*  bp_pos_backup,arma::cube* triads_backup);
 
 };
 

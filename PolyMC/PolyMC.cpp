@@ -237,9 +237,7 @@ bool PolyMC::run(long long steps,std::vector<MCStep*> run_MCSteps ,const std::st
         EV->set_current_as_backup();
     }
     if (ES_active) {
-        std::cout << "setting ES for run" << std::endl;
         ES->set_current_as_backup(true);
-        std::cout << "done" << std::endl;
     }
     chain->recal_energy();
 
@@ -627,7 +625,10 @@ void PolyMC::init_ElStat(const std::string & ElStat_fn) {
         TODO: Check for double entries
     */
 
-    if (ElStat_fn == "") return;
+    if (ElStat_fn == "") {
+        print_elstat_info = false;
+        return;
+    }
 
 
     /*
@@ -662,6 +663,7 @@ void PolyMC::init_ElStat(const std::string & ElStat_fn) {
     }
     ElStat * elstat = new ElStat(chain,ES_Potential,rho_max,rho_min,neighbor_skip_dist );
     ES = elstat;
+    ES->set_backup_pos(EV->get_bp_pos_backup(),EV->get_triads_backup());
 
     std::cout << "type:                 " << type << std::endl;
     std::cout << "integral_dx:          " << integral_dx << std::endl;

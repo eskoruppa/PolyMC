@@ -312,6 +312,15 @@ double  ElStat::cal_beta_dE(const std::vector<arma::ivec>* moved){
     check_midpoint_pos();
     #endif
 
+//    std::cout << " #################### " << std::endl;
+//    std::cout << " #################### " << std::endl;
+//    std::cout << " INTERVALS " << std::endl;
+//    for (unsigned i=0;i<midpoint_intervals.size();i++) {
+//        std::cout << midpoint_intervals[i](EV_TYPE) << " " << midpoint_intervals[i](EV_FROM) << " " << midpoint_intervals[i](EV_TO) << std::endl;
+//    }
+//    std::cout << " #################### " << std::endl;
+
+
     double dE = 0;
     for (unsigned i=0;i<midpoint_intervals.size();i++) {
         if (within_EV_typeA(midpoint_intervals[i](EV_TYPE))) {
@@ -439,6 +448,11 @@ double ElStat::eval_dE_bead_on_interval(int a, int b1, int b2) {
             #ifdef DEBUG_ELSTAT
             double rev = eval_pair(b,a, dist);
             if (std::abs(energy-rev) > 1e-10) {
+                if (espot->tabulating()) {
+                    if (std::abs(energy-rev) < 1e-1) {
+                        continue;
+                    }
+                }
                 std::cout << "rev energy inconsistent" << std::endl;
                 std::cout << energy << std::endl;
                 std::cout << rev << std::endl;
@@ -652,13 +666,19 @@ void ElStat::recal_full_energy() {
         for (unsigned b=a+1+neighbor_skip_num;b<impose_skip(a,num_midpoint);b++) {
             e = eval_pair(a, b);
             if (!equal_double(e,pair_interactions(a,b),MAX_ENERGY_DIFF)) {
+                double dist = arma::norm(midpoint_pos_backup.col(a)-midpoint_pos_backup.col(b));
+                if (equal_double(dist,rho_max),1e-10) {
+                    continue;
+                }
                 std::cout << "Energy inconsistent"  << std::endl;
                 std::cout << a << " - " << b << std::endl;
-                std::cout << e << std::endl;
-                std::cout << pair_interactions(a,b) << std::endl;
-                std::cout << " diff = " << pair_interactions(a,b) << std::endl;
+                std::cout << "current:    " << e << std::endl;
+                std::cout << "stored:     " << pair_interactions(a,b) << std::endl;
+                std::cout << "inverse:    " << eval_pair(b,a) << std::endl;
+                std::cout << " diff:      " << pair_interactions(a,b) - e << std::endl;
+                std::cout << " dist:      " << dist << std::endl;
                 if (!espot->tabulating()) {
-                    throw std::invalid_argument("ElStat::check_full_energy(): Energy inconsistent");
+                    throw std::invalid_argument("ElStat::recal_full_energy(): Energy inconsistent");
                 }
             }
             pair_interactions(a,b) = e;
@@ -745,4 +765,11 @@ bool ElStat::check_pair_interactions() {
 
     ///////
     return true;
+}
+
+
+
+void ElStat::set_backup_pos(arma::mat*  bp_pos_backup,arma::cube* triads_backup) {
+    this->bp_pos_backup = bp_pos_backup;
+    this->triads_backup = triads_backup;
 }
