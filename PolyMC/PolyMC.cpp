@@ -56,6 +56,11 @@ input_given(false),nooutput(!produce_output),geninfile()
         init_plec();
     }
     #endif
+    #ifdef INCLUDE_UMBRELLAPLASMID_MODE
+    if (mode == POLYMC_MODE_UMBRELLAPLASMID) {
+        init_umbrellaplasmid();
+    }
+    #endif
     #ifdef INCLUDE_PLASMID_MODE
     if (mode == POLYMC_MODE_PLASMID) {
         init_plasmid();
@@ -109,12 +114,13 @@ input_given(false),nooutput(!produce_output),geninfile()
             std::cout << "Error: Unknown simulation mode '" << mode << "'!" << std::endl;
         }
         std::cout << "Valid modes are:" << std::endl;
-        std::cout << " - " << POLYMC_MODE_TWEEZER  << std::endl;
-        std::cout << " - " << POLYMC_MODE_PLEC     << std::endl;
-        std::cout << " - " << POLYMC_MODE_PLASMID  << std::endl;
-        std::cout << " - " << POLYMC_MODE_OPEN     << std::endl;
-        std::cout << " - " << POLYMC_MODE_LIN2D    << std::endl;
-        std::cout << " - " << POLYMC_MODE_CLOSED2D << std::endl;
+        std::cout << " - " << POLYMC_MODE_TWEEZER           << std::endl;
+        std::cout << " - " << POLYMC_MODE_PLEC              << std::endl;
+        std::cout << " - " << POLYMC_MODE_PLASMID           << std::endl;
+        std::cout << " - " << POLYMC_MODE_UMBRELLAPLASMID   << std::endl;
+        std::cout << " - " << POLYMC_MODE_OPEN              << std::endl;
+        std::cout << " - " << POLYMC_MODE_LIN2D             << std::endl;
+        std::cout << " - " << POLYMC_MODE_CLOSED2D          << std::endl;
         std::exit(0);
     }
 

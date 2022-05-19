@@ -158,6 +158,9 @@ bool     Chain::fixed_last_orientation() {
 bool     Chain::topology_closed() {
     return closed_topology;
 }
+bool     Chain::topology_pseudo_closed() {
+    return pseudo_closed_topology;
+}
 std::string Chain::get_config_type() {
     return config_type;
 }
@@ -262,7 +265,7 @@ void Chain::fix_termini_orientation(bool fix) {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////// PRIVATE MUTATORS ////////////////////////////////////////////////////////////////////////////////
+////////////////// TOPOLOGY MUTATORS ///////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Chain::set_closed_topology(bool closed) {
@@ -289,6 +292,10 @@ void Chain::set_closed_topology(bool closed) {
         }
         change_torque(0);
     }
+}
+
+void Chain::set_pseudo_closed_topology(bool closed) {
+    pseudo_closed_topology = closed;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -368,18 +375,24 @@ bool Chain::gen_linear(unsigned number_bp, const std::string& sequence , double 
     return true;
 }
 
-bool Chain::gen_circular(unsigned number_bp, double supercoiling_density, const std::string& sequence) {
+bool Chain::gen_circular(unsigned number_bp, double supercoiling_density, const std::string& sequence, bool closed_topology) {
     std::cout << "Initializing circular chain configuration" << std::endl;
     if (conf_initialized) {
         std::cout << "Warning: Trying to generate circular configuration, but a configuration is already initialized" << std::endl;
         return false;
     }
     num_bp   = number_bp;
-    num_bps  = number_bp;
+    if (closed_topology){
+        num_bps  = number_bp;
+        set_closed_topology(true);
+    }
+    else {
+        num_bps  = number_bp-1;
+        set_closed_topology(false);
+    }
     disc_len = data.get_disc_len();
     contour_len = num_bps*disc_len;
     set_seq(sequence,num_bp);
-    set_closed_topology(true);
     config_type = "circular";
 
     // Initialize BPStep
@@ -411,7 +424,7 @@ bool Chain::gen_circular(unsigned number_bp, double supercoiling_density, const 
 	double excess_twist_per_bps = (dLK*2*M_PI)/num_bps;
 
     double phi = 0;
-	for (unsigned i=0;i<num_bp;i++) {
+	for (unsigned i=0;i<num_bps;i++) {
 		Rot = Rotz(phi);
 		triads.slice(i) = triads.slice(i)*Rot;
 		phi = phi + (*BPS[i]->get_T0())(2) + excess_twist_per_bps;

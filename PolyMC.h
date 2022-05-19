@@ -11,6 +11,7 @@
 #define INCLUDE_TWEEZER_MODE
 #define INCLUDE_PLECTONEME_MODE
 #define INCLUDE_PLASMID_MODE
+#define INCLUDE_UMBRELLAPLASMID_MODE
 #define INCLUDE_2D_MODES
 
 
@@ -96,6 +97,7 @@
 #define POLYMC_MODE_TWEEZER          "tweezer"
 #define POLYMC_MODE_PLEC             "plec"
 #define POLYMC_MODE_PLASMID          "plasmid"
+#define POLYMC_MODE_UMBRELLAPLASMID  "umbrellaplasmid"
 #define POLYMC_MODE_OPEN             "open"
 #define POLYMC_MODE_LIN2D            "lin2d"
 #define POLYMC_MODE_CLOSED2D         "closed2d"
@@ -193,6 +195,13 @@ protected:
     bool terminus_fixed_tangents = false;
     bool terminus_fixed_triads   = false;
 
+    /*
+        In terms of elastic couplings the chain is not closed, but
+        pair interactions such as electrostatics consider the chain
+        closed
+    */
+    bool pseudo_closed           = false;
+
     bool use_cluster_twist = true;
     unsigned num_twist = 0;
 
@@ -258,6 +267,15 @@ protected:
 
     double      plec_dLK            = 0;
     double      plec_trap_stiffness = 0;
+
+/*
+    UmbrellaPlasmid Members
+*/
+    int         umbrellaplasmid_setup_id       = PLEC_SETUP_ID_FREE;
+    std::string umbrellaplasmid_setup          = PLEC_SETUP_FREE;
+
+    double      umbrellaplasmid_dLK            = 0;
+    double      umbrellaplasmid_trap_stiffness = 0;
 
 /*
     Lin2d Members
@@ -375,6 +393,7 @@ protected:
     bool init_lin2d();
     bool lin2d_slither_equi_with_pivot();
     bool init_closed2d();
+    bool init_umbrellaplasmid();
 
 /*
     Slow Winds

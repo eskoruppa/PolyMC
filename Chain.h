@@ -241,7 +241,16 @@ protected:
     unsigned num_bps;
 
     // topology
-    bool  closed_topology   = false;
+    bool  closed_topology        = false;
+
+    /*
+        pseudo_closed_topology:
+            In terms of elastic couplings the chain is not closed, but
+            pair interactions such as electrostatics consider the chain
+            closed
+    */
+    bool  pseudo_closed_topology = false;
+
     std::string config_type = "unspecified";
     /*
      * closed topology controls whether the last element is connected to the
@@ -347,6 +356,7 @@ public:
     bool        fixed_first_orientation();
     bool        fixed_last_orientation();
     bool        topology_closed();
+    bool        topology_pseudo_closed();
 
     std::string get_config_type();
     std::string get_sequence();
@@ -403,11 +413,14 @@ public:
 protected:
     void set_closed_topology(bool closed);
 
+public:
+    void set_pseudo_closed_topology(bool closed = true);
+
 
 // CONF GENERATORS
 public:
     bool gen_linear  (unsigned number_bp, const std::string& sequence,double supercoiling_density=0, const arma::colvec direction={0,0,1});
-    bool gen_circular(unsigned number_bp, double supercoiling_density, const std::string& sequence);
+    bool gen_circular(unsigned number_bp, double supercoiling_density, const std::string& sequence, bool closed_topology = true);
     bool gen_conf_from_restart(std::string restart_fn, int snapshot=-1 ,std::string required_config_type="");
     bool init_custom_open_conf(arma::mat pos, arma::cube triads, const std::string& sequence);
 

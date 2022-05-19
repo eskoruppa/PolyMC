@@ -10,12 +10,18 @@ num_bp(ch->get_num_bp()),
 num_bps(ch->get_num_bps()),
 disc_len(ch->get_disc_len()),
 kT(chain->get_kT()),
-closed_topology(chain->topology_closed()),
 rho_max(rho_max),
 rho_min(rho_min),
 neighbor_skip_dist(neighbor_skip_dist),
 pending_check(false)
 {
+    if (chain->topology_closed() || chain->topology_pseudo_closed()) {
+        closed_topology = true;
+    }
+    else {
+        closed_topology = false;
+    }
+
     ///////////////////////////////////////////
     // Init matrices
     if (closed_topology) {

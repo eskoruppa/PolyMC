@@ -4700,10 +4700,10 @@
 	<cmath>
 	<armadillo>
 
-1614287184 source:/home/asen/Dev/Cpp/PolyMC/Chain.cpp
+1652997136 source:/home/asen/Dev/Cpp/PolyMC/Chain.cpp
 	"Chain.h"
 
-1635180147 /home/asen/Dev/Cpp/PolyMC/Chain.h
+1652994064 /home/asen/Dev/Cpp/PolyMC/Chain.h
 	"SO3Methods.h"
 	"ExtraFuncs.h"
 	"BPStep/BPStep.h"
@@ -5179,7 +5179,7 @@
 	"MCMethods/ReplicaExchange.h"
 	"Input/ManipulateArgv.h"
 
-1652602227 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
+1652996674 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
 	"Input/Argparse.h"
 	"Input/InputRead.h"
 	"Input/InputChoice.h"
@@ -5451,7 +5451,7 @@
 1616695532 source:/home/asen/Dev/Cpp/PolyMC/PlecFreeEnergy/GenPFEConf.cpp
 	"GenPFEConf.h"
 
-1652967701 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
+1652996674 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
 	"../PolyMC.h"
 
 1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Closed2d.cpp
@@ -5573,7 +5573,7 @@
 1633711749 /home/asen/Dev/Cpp/PolyMC/dump/Dump_Twist.h
 	"Dump.h"
 
-1652968040 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.cpp
+1652994314 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.cpp
 	"Electrostatics.h"
 
 1652968059 /home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.h
@@ -5645,4 +5645,7 @@
 
 1652968336 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/ESPotential.cpp
 	"ESPotential.h"
+
+1652997164 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_UmbrellaPlasmid.cpp
+	"../PolyMC.h"
 
