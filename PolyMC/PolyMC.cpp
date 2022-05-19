@@ -665,35 +665,9 @@ void PolyMC::init_ElStat(const std::string & ElStat_fn) {
     ES = elstat;
     ES->set_backup_pos(EV->get_bp_pos_backup(),EV->get_triads_backup());
 
-    std::cout << "type:                 " << type << std::endl;
-    std::cout << "integral_dx:          " << integral_dx << std::endl;
-    std::cout << "params:               " << std::endl;
-    for (unsigned i=0;i<params.size();i++) {
-        std::cout << "                      " << params[i] << std::endl;
-    }
-    std::cout << "neighbor_skip_dist:   " << neighbor_skip_dist << std::endl;
-    std::cout << "cutoff_dist:          " << cutoff_dist << std::endl;
-
-    std::cout << "tabulate:             " << tabulate << std::endl;
-    std::cout << "table_elems:          " << table_elems << std::endl;
-
-
-    std::cout << "ES_active:            " << ES_active << std::endl;
-
     for (unsigned i=0;i<MCSteps.size();i++) {
         MCSteps[i]->set_electrostatics(ES);
     }
-
-
-//    std::exit(0);
-
-//    bool    ES_active=false;
-//    ExVol*  ES;
-//    double  ES_rho_max          = 0;
-//    double  ES_rho_min          = 0;
-//    double  neighbor_skip_dist  = 0;
-
-
 }
 
 
