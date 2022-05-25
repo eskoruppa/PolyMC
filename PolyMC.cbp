@@ -176,6 +176,7 @@
 		<Unit filename="PolyMC/PolyMC_Plec.cpp" />
 		<Unit filename="PolyMC/PolyMC_ReadSequence.cpp" />
 		<Unit filename="PolyMC/PolyMC_Tweezer.cpp" />
+		<Unit filename="PolyMC/PolyMC_UmbrellaPlasmid.cpp" />
 		<Unit filename="SO3Methods.cpp" />
 		<Unit filename="SO3Methods.h" />
 		<Unit filename="Unbound/AtomType.cpp" />
