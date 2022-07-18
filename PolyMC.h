@@ -93,6 +93,9 @@
 #include <vector>
 //#include <random>
 
+// include electrostatic dump
+#include "dump/Dump_ESEnergy.h"
+
 
 #define POLYMC_MODE_TWEEZER          "tweezer"
 #define POLYMC_MODE_PLEC             "plec"

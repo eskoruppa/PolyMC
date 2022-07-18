@@ -16,6 +16,7 @@
 #include "Dump_Endbead.h"
 #include "Dump_EndToEndDistance.h"
 #include "Dump_Energy.h"
+#include "Dump_ESEnergy.h"
 #include "Dump_Extension.h"
 #include "Dump_ForceExtension.h"
 #include "Dump_Full_Coup_Matrix.h"

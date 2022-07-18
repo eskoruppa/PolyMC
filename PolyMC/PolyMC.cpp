@@ -597,6 +597,62 @@ void PolyMC::init_dump() {
 
     Dumps = init_dump_cmdargs(argv,&geninfile,chain,mode,EV_rad,inputfn);
 
+
+    /*
+        Dump Energy
+    */
+    /*
+        For now I placed this one here to avoid having to pass the Elstat pointer as an argument
+    */
+
+    int num_bp  = chain->get_num_bp();
+    std::string dump_dir = "";
+
+    bool inputfile_given=false;
+    InputRead input(inputfn);
+    if (input.filefound()){
+        dump_dir  = input.get_single_val<std::string>("dump_dir",dump_dir);
+        inputfile_given=true;
+    }
+    dump_dir    = parse_arg(dump_dir, "-dir"     ,argv);
+    dump_dir    = parse_arg(dump_dir, "-dump_dir",argv);
+
+    bool append_dumps = false;
+    append_dumps = parse_flag(append_dumps,"-app", argv);
+    append_dumps = InputChoice_get_single<bool>        ("app"     ,&input,argv,append_dumps);
+    append_dumps = InputChoice_get_single<bool>        ("append"  ,&input,argv,append_dumps);
+    append_dumps = InputChoice_get_single<bool>        ("append"  ,&input,argv,append_dumps);
+
+    if (ES_active) {
+
+        int    ESEnergy_dump_every      = 0;
+        std::string ESEnergy_filename   = dump_dir+".esen";
+        bool   ESENERGY_kt_units        = false;
+        bool   ESENERGY_recal           = true;
+
+        ESEnergy_dump_every  = InputChoice_get_single<int>         ("ESEn" ,&input,argv,ESEnergy_dump_every);
+        ESEnergy_dump_every  = InputChoice_get_single<int>         ("esen" ,&input,argv,ESEnergy_dump_every);
+        ESEnergy_filename    = InputChoice_get_single<std::string> ("ESEfn",&input,argv,ESEnergy_filename);
+        ESEnergy_filename    = InputChoice_get_single<std::string> ("esefn",&input,argv,ESEnergy_filename);
+
+        ESENERGY_kt_units    = InputChoice_get_single<bool>        ("ESEkt" ,&input,argv,ESENERGY_kt_units);
+        ESENERGY_kt_units    = InputChoice_get_single<bool>        ("esekt" ,&input,argv,ESENERGY_kt_units);
+
+        ESENERGY_recal       = InputChoice_get_single<bool>        ("ESErecal" ,&input,argv,ESENERGY_recal);
+        ESENERGY_recal       = InputChoice_get_single<bool>        ("eserecal" ,&input,argv,ESENERGY_recal);
+
+        if (ESEnergy_dump_every>0) {
+
+            Dump_ESEnergy* DESEnergy = new Dump_ESEnergy(chain, ESEnergy_dump_every, ESEnergy_filename ,ES,ESENERGY_kt_units, ESENERGY_recal,append_dumps);
+            Dumps.push_back(DESEnergy);
+
+            geninfile.add_entry(GENINFILE_DUMPS,"ESEn" ,ESEnergy_dump_every);
+    //        geninfile->add_entry(GENINFILE_DUMPS,"Efn",Energy_filename);
+            geninfile.add_newline(GENINFILE_DUMPS);
+        }
+    }
+
+
     std::cout << std::endl << Dumps.size() << " Dumps initialized!" << std::endl << std::endl;
 
     Dump_Restart * nlast = new Dump_Restart(chain, 0, dump_dir+".last",false,true);

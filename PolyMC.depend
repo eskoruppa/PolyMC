@@ -4998,10 +4998,10 @@
 1622324867 /home/asen/Dev/Cpp/PolyMC/dump/Dump_xyz.h
 	"Dump.h"
 
-1635098708 source:/home/asen/Dev/Cpp/PolyMC/dump/InitDump.cpp
+1658159246 source:/home/asen/Dev/Cpp/PolyMC/dump/InitDump.cpp
 	"InitDump.h"
 
-1633712018 /home/asen/Dev/Cpp/PolyMC/dump/InitDump.h
+1658159148 /home/asen/Dev/Cpp/PolyMC/dump/InitDump.h
 	<vector>
 	"../Input/Argparse.h"
 	"../Input/InputRead.h"
@@ -5013,6 +5013,7 @@
 	"Dump_Endbead.h"
 	"Dump_EndToEndDistance.h"
 	"Dump_Energy.h"
+	"Dump_ESEnergy.h"
 	"Dump_Extension.h"
 	"Dump_ForceExtension.h"
 	"Dump_Full_Coup_Matrix.h"
@@ -5179,7 +5180,7 @@
 	"MCMethods/ReplicaExchange.h"
 	"Input/ManipulateArgv.h"
 
-1652996674 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
+1658160394 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
 	"Input/Argparse.h"
 	"Input/InputRead.h"
 	"Input/InputChoice.h"
@@ -5220,6 +5221,7 @@
 	<armadillo>
 	<cmath>
 	<vector>
+	"dump/Dump_ESEnergy.h"
 
 1616695532 /home/asen/Dev/Cpp/PolyMC/PlecFreeEnergy/GenPFEConf.h
 	"../SO3Methods.h"
@@ -5451,7 +5453,7 @@
 1616695532 source:/home/asen/Dev/Cpp/PolyMC/PlecFreeEnergy/GenPFEConf.cpp
 	"GenPFEConf.h"
 
-1652996674 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
+1658160697 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
 	"../PolyMC.h"
 
 1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Closed2d.cpp
@@ -5573,7 +5575,7 @@
 1633711749 /home/asen/Dev/Cpp/PolyMC/dump/Dump_Twist.h
 	"Dump.h"
 
-1652994314 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.cpp
+1652997378 source:/home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.cpp
 	"Electrostatics.h"
 
 1652968059 /home/asen/Dev/Cpp/PolyMC/Electrostatics/Electrostatics.h
@@ -5648,4 +5650,11 @@
 
 1652997164 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_UmbrellaPlasmid.cpp
 	"../PolyMC.h"
+
+1658158797 source:/home/asen/Dev/Cpp/PolyMC/dump/Dump_ESEnergy.cpp
+	"Dump_ESEnergy.h"
+
+1658160590 /home/asen/Dev/Cpp/PolyMC/dump/Dump_ESEnergy.h
+	"Dump.h"
+	"../Electrostatics/Electrostatics.h"
 
