@@ -196,6 +196,8 @@
 		<Unit filename="dump/Dump_Conf.h" />
 		<Unit filename="dump/Dump_DistanceMap.cpp" />
 		<Unit filename="dump/Dump_DistanceMap.h" />
+		<Unit filename="dump/Dump_ESEnergy.cpp" />
+		<Unit filename="dump/Dump_ESEnergy.h" />
 		<Unit filename="dump/Dump_EndToEndDistance.cpp" />
 		<Unit filename="dump/Dump_EndToEndDistance.h" />
 		<Unit filename="dump/Dump_Endbead.cpp" />

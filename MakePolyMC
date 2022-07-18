@@ -18,8 +18,19 @@ LIBDIR =
 LIB = 
 LDFLAGS = 
 
+INC_DEBUG = $(INC)
+CFLAGS_DEBUG = $(CFLAGS) -fomit-frame-pointer -fexpensive-optimizations -O3 -std=c++11 -ftree-vectorize -DARMA_DONT_USE_WRAPPER -DARMA_USE_LAPACK -DARMA_USE_BLAS -DARMA_USE_CXX1 -DARMA_NO_DEBUG
+RESINC_DEBUG = $(RESINC)
+RCFLAGS_DEBUG = $(RCFLAGS)
+LIBDIR_DEBUG = $(LIBDIR)
+LIB_DEBUG = $(LIB)
+LDFLAGS_DEBUG = $(LDFLAGS) -s -llapack -lblas
+OBJDIR_DEBUG = obj/Debug
+DEP_DEBUG = 
+OUT_DEBUG = bin/Debug/PolyMC
+
 INC_RELEASE = $(INC)
-CFLAGS_RELEASE = $(CFLAGS) -fexpensive-optimizations -O3 -std=c++17 -ftree-vectorize -DARMA_DONT_USE_WRAPPER -DARMA_USE_LAPACK -DARMA_USE_BLAS -DARMA_NO_DEBUG
+CFLAGS_RELEASE = $(CFLAGS) -fexpensive-optimizations -O3 -std=c++11 -ftree-vectorize -DARMA_DONT_USE_WRAPPER -DARMA_USE_LAPACK -DARMA_USE_BLAS -DARMA_NO_DEBUG
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
@@ -29,8 +40,7 @@ OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/PolyMC
 
-
-OBJ_RELEASE = $(OBJDIR_RELEASE)/Unbound/InitPairStyles.o $(OBJDIR_RELEASE)/Unbound/Interactions/Interaction.o $(OBJDIR_RELEASE)/Unbound/Pair.o $(OBJDIR_RELEASE)/Unbound/PairStyles/Pair_LJ.o $(OBJDIR_RELEASE)/Unbound/Unbound.o $(OBJDIR_RELEASE)/dump/Dump.o $(OBJDIR_RELEASE)/dump/Dump_Conf.o $(OBJDIR_RELEASE)/dump/Dump_DistanceMap.o $(OBJDIR_RELEASE)/dump/Dump_EndToEndDistance.o $(OBJDIR_RELEASE)/dump/Dump_Endbead.o $(OBJDIR_RELEASE)/dump/Dump_Energy.o $(OBJDIR_RELEASE)/dump/Dump_Extension.o $(OBJDIR_RELEASE)/dump/Dump_ForceExtension.o $(OBJDIR_RELEASE)/PolyMC/PolyMC.o $(OBJDIR_RELEASE)/Observables/Link.o $(OBJDIR_RELEASE)/Observables/elasticity.o $(OBJDIR_RELEASE)/Observables/general.o $(OBJDIR_RELEASE)/PlecFinder/BranchBoxes.o $(OBJDIR_RELEASE)/PlecFinder/PlecFinder.o $(OBJDIR_RELEASE)/PlecFinder/ProximityPlecFinder.o $(OBJDIR_RELEASE)/PlecFreeEnergy/GenPFEConf.o $(OBJDIR_RELEASE)/dump/Dump_Full_Coup_Matrix.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Closed2d.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Lin2d.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Open.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Plasmid.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Plec.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_ReadSequence.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Tweezer.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_UmbrellaPlasmid.o $(OBJDIR_RELEASE)/SO3Methods.o $(OBJDIR_RELEASE)/Unbound/AtomType.o $(OBJDIR_RELEASE)/dump/Dump_TorsionalStiffness.o $(OBJDIR_RELEASE)/dump/Dump_Stiff.o $(OBJDIR_RELEASE)/dump/Dump_SupercoilingPhase.o $(OBJDIR_RELEASE)/dump/Dump_TangentCorrelation.o $(OBJDIR_RELEASE)/dump/Dump_Thetas.o $(OBJDIR_RELEASE)/dump/Dump_Torque.o $(OBJDIR_RELEASE)/dump/Dump_TorqueTrap.o $(OBJDIR_RELEASE)/dump/Dump_Twist.o $(OBJDIR_RELEASE)/dump/Dump_WritheMap.o $(OBJDIR_RELEASE)/dump/Dump_xyz.o $(OBJDIR_RELEASE)/dump/Dump_xyz_extreme_ext.o $(OBJDIR_RELEASE)/dump/InitDump.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/dump/Dump_HatCurve.o $(OBJDIR_RELEASE)/dump/Dump_Helicity.o $(OBJDIR_RELEASE)/dump/Dump_Kinkstats.o $(OBJDIR_RELEASE)/dump/Dump_Linkingnumber.o $(OBJDIR_RELEASE)/dump/Dump_MSD.o $(OBJDIR_RELEASE)/dump/Dump_PersistenceLength.o $(OBJDIR_RELEASE)/dump/Dump_PlasmidEndpoints.o $(OBJDIR_RELEASE)/dump/Dump_PlecStats.o $(OBJDIR_RELEASE)/dump/Dump_ProximityPlec.o $(OBJDIR_RELEASE)/dump/Dump_Restart.o $(OBJDIR_RELEASE)/dump/Dump_SolenoidCorrelationFunction.o $(OBJDIR_RELEASE)/dump/Dump_State.o $(OBJDIR_RELEASE)/ExcludedVolume/MagneticBead.o $(OBJDIR_RELEASE)/Electrostatics/ESPotential.o $(OBJDIR_RELEASE)/Electrostatics/Electrostatics.o $(OBJDIR_RELEASE)/Electrostatics/InitElectrostaticPotential.o $(OBJDIR_RELEASE)/Electrostatics/Potentials/DebyeHueckel.o $(OBJDIR_RELEASE)/ExcludedVolume/EV_Beads.o $(OBJDIR_RELEASE)/ExcludedVolume/ExcludedVolume.o $(OBJDIR_RELEASE)/Constraints/Constraint.o $(OBJDIR_RELEASE)/ExcludedVolume/ProximityCluster.o $(OBJDIR_RELEASE)/Extra/Seed.o $(OBJDIR_RELEASE)/ExtraArma.o $(OBJDIR_RELEASE)/ExtraFuncs.o $(OBJDIR_RELEASE)/Input/Argparse.o $(OBJDIR_RELEASE)/Input/GenInputFile.o $(OBJDIR_RELEASE)/BPStep/SelectHamiltonian.o $(OBJDIR_RELEASE)/BPStep/CalEnergy.o $(OBJDIR_RELEASE)/BPStep/CalEnergy/CalEnergy_stiffmat.o $(OBJDIR_RELEASE)/BPStep/CalEnergy_additional.o $(OBJDIR_RELEASE)/BPStep/EvalEnergy.o $(OBJDIR_RELEASE)/BPStep/EvalEnergy/EE_KinkXY.o $(OBJDIR_RELEASE)/BPStep/EvalEnergy/EE_StiffMat.o $(OBJDIR_RELEASE)/BPStep/IDB.o $(OBJDIR_RELEASE)/Calcs/LinkingNumber.o $(OBJDIR_RELEASE)/Chain.o $(OBJDIR_RELEASE)/ChainFuncs/Chain_Consistency.o $(OBJDIR_RELEASE)/ChainFuncs/Chain_EvalEnergy.o $(OBJDIR_RELEASE)/ChainFuncs/Chain_LinkAndTorque.o $(OBJDIR_RELEASE)/Constraints/Constr_Orientation.o $(OBJDIR_RELEASE)/Constraints/Constr_Position.o $(OBJDIR_RELEASE)/MCStep/MCS_Kinkxy.o $(OBJDIR_RELEASE)/MCStep/MCS_PivCon.o $(OBJDIR_RELEASE)/MCStep/MCS_Pivot.o $(OBJDIR_RELEASE)/MCStep/MCS_Pivot2d.o $(OBJDIR_RELEASE)/MCStep/MCS_Slither2d.o $(OBJDIR_RELEASE)/MCStep/MCS_Slither4.o $(OBJDIR_RELEASE)/MCStep/MCS_ClusterTwist.o $(OBJDIR_RELEASE)/MCStep/MCS_TailTwist.o $(OBJDIR_RELEASE)/MCStep/MCS_TorquePiv.o $(OBJDIR_RELEASE)/MCStep/MCS_Twist.o $(OBJDIR_RELEASE)/MCStep/MCS_Unwinder.o $(OBJDIR_RELEASE)/MCStep/MCS_zPiv.o $(OBJDIR_RELEASE)/MCStep/MCStep.o $(OBJDIR_RELEASE)/Input/WriteLoadRestart.o $(OBJDIR_RELEASE)/Input/InputChoice.o $(OBJDIR_RELEASE)/Input/InputRead.o $(OBJDIR_RELEASE)/Input/ManipulateArgv.o $(OBJDIR_RELEASE)/Input/MultiLine.o $(OBJDIR_RELEASE)/Input/ReadFunctions.o $(OBJDIR_RELEASE)/Input/SingleLine.o $(OBJDIR_RELEASE)/BPStep/BPStep.o $(OBJDIR_RELEASE)/MCMethods/ReplicaExchange.o $(OBJDIR_RELEASE)/MCStep/MCS_CSrot.o $(OBJDIR_RELEASE)/MCStep/MCS_CSrot2d.o $(OBJDIR_RELEASE)/MCStep/MCS_CSrot_2dpot.o $(OBJDIR_RELEASE)/MCStep/MCS_CStrans.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/Unbound/Pair.o $(OBJDIR_RELEASE)/Unbound/PairStyles/Pair_LJ.o $(OBJDIR_RELEASE)/Unbound/Unbound.o $(OBJDIR_RELEASE)/dump/Dump.o $(OBJDIR_RELEASE)/dump/Dump_Conf.o $(OBJDIR_RELEASE)/dump/Dump_DistanceMap.o $(OBJDIR_RELEASE)/Unbound/Interactions/Interaction.o $(OBJDIR_RELEASE)/dump/Dump_ESEnergy.o $(OBJDIR_RELEASE)/dump/Dump_EndToEndDistance.o $(OBJDIR_RELEASE)/dump/Dump_Endbead.o $(OBJDIR_RELEASE)/dump/Dump_Energy.o $(OBJDIR_RELEASE)/dump/Dump_Extension.o $(OBJDIR_RELEASE)/dump/Dump_ForceExtension.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Closed2d.o $(OBJDIR_RELEASE)/Observables/elasticity.o $(OBJDIR_RELEASE)/Observables/general.o $(OBJDIR_RELEASE)/PlecFinder/BranchBoxes.o $(OBJDIR_RELEASE)/PlecFinder/PlecFinder.o $(OBJDIR_RELEASE)/PlecFinder/ProximityPlecFinder.o $(OBJDIR_RELEASE)/PlecFreeEnergy/GenPFEConf.o $(OBJDIR_RELEASE)/PolyMC/PolyMC.o $(OBJDIR_RELEASE)/dump/Dump_Full_Coup_Matrix.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Lin2d.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Open.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Plasmid.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Plec.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_ReadSequence.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Tweezer.o $(OBJDIR_RELEASE)/PolyMC/PolyMC_UmbrellaPlasmid.o $(OBJDIR_RELEASE)/SO3Methods.o $(OBJDIR_RELEASE)/Unbound/AtomType.o $(OBJDIR_RELEASE)/Unbound/InitPairStyles.o $(OBJDIR_RELEASE)/dump/Dump_TorsionalStiffness.o $(OBJDIR_RELEASE)/dump/Dump_Stiff.o $(OBJDIR_RELEASE)/dump/Dump_SupercoilingPhase.o $(OBJDIR_RELEASE)/dump/Dump_TangentCorrelation.o $(OBJDIR_RELEASE)/dump/Dump_Thetas.o $(OBJDIR_RELEASE)/dump/Dump_Torque.o $(OBJDIR_RELEASE)/dump/Dump_TorqueTrap.o $(OBJDIR_RELEASE)/dump/Dump_Twist.o $(OBJDIR_RELEASE)/dump/Dump_WritheMap.o $(OBJDIR_RELEASE)/dump/Dump_xyz.o $(OBJDIR_RELEASE)/dump/Dump_xyz_extreme_ext.o $(OBJDIR_RELEASE)/dump/InitDump.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/dump/Dump_HatCurve.o $(OBJDIR_RELEASE)/dump/Dump_Helicity.o $(OBJDIR_RELEASE)/dump/Dump_Kinkstats.o $(OBJDIR_RELEASE)/dump/Dump_Linkingnumber.o $(OBJDIR_RELEASE)/dump/Dump_MSD.o $(OBJDIR_RELEASE)/dump/Dump_PersistenceLength.o $(OBJDIR_RELEASE)/Observables/Link.o $(OBJDIR_RELEASE)/dump/Dump_PlasmidEndpoints.o $(OBJDIR_RELEASE)/dump/Dump_PlecStats.o $(OBJDIR_RELEASE)/dump/Dump_ProximityPlec.o $(OBJDIR_RELEASE)/dump/Dump_Restart.o $(OBJDIR_RELEASE)/dump/Dump_SolenoidCorrelationFunction.o $(OBJDIR_RELEASE)/dump/Dump_State.o $(OBJDIR_RELEASE)/ExcludedVolume/MagneticBead.o $(OBJDIR_RELEASE)/Electrostatics/ESPotential.o $(OBJDIR_RELEASE)/Electrostatics/Electrostatics.o $(OBJDIR_RELEASE)/Electrostatics/InitElectrostaticPotential.o $(OBJDIR_RELEASE)/Electrostatics/Potentials/DebyeHueckel.o $(OBJDIR_RELEASE)/ExcludedVolume/EV_Beads.o $(OBJDIR_RELEASE)/ExcludedVolume/ExcludedVolume.o $(OBJDIR_RELEASE)/Constraints/Constraint.o $(OBJDIR_RELEASE)/ExcludedVolume/ProximityCluster.o $(OBJDIR_RELEASE)/Extra/Seed.o $(OBJDIR_RELEASE)/ExtraArma.o $(OBJDIR_RELEASE)/ExtraFuncs.o $(OBJDIR_RELEASE)/Input/Argparse.o $(OBJDIR_RELEASE)/Input/GenInputFile.o $(OBJDIR_RELEASE)/BPStep/SelectHamiltonian.o $(OBJDIR_RELEASE)/BPStep/CalEnergy.o $(OBJDIR_RELEASE)/BPStep/CalEnergy/CalEnergy_stiffmat.o $(OBJDIR_RELEASE)/BPStep/CalEnergy_additional.o $(OBJDIR_RELEASE)/BPStep/EvalEnergy.o $(OBJDIR_RELEASE)/BPStep/EvalEnergy/EE_KinkXY.o $(OBJDIR_RELEASE)/BPStep/EvalEnergy/EE_StiffMat.o $(OBJDIR_RELEASE)/BPStep/IDB.o $(OBJDIR_RELEASE)/Calcs/LinkingNumber.o $(OBJDIR_RELEASE)/Chain.o $(OBJDIR_RELEASE)/ChainFuncs/Chain_Consistency.o $(OBJDIR_RELEASE)/ChainFuncs/Chain_EvalEnergy.o $(OBJDIR_RELEASE)/ChainFuncs/Chain_LinkAndTorque.o $(OBJDIR_RELEASE)/Constraints/Constr_Orientation.o $(OBJDIR_RELEASE)/Constraints/Constr_Position.o $(OBJDIR_RELEASE)/MCStep/MCS_Kinkxy.o $(OBJDIR_RELEASE)/MCStep/MCS_PivCon.o $(OBJDIR_RELEASE)/MCStep/MCS_Pivot.o $(OBJDIR_RELEASE)/MCStep/MCS_Pivot2d.o $(OBJDIR_RELEASE)/MCStep/MCS_Slither2d.o $(OBJDIR_RELEASE)/MCStep/MCS_Slither4.o $(OBJDIR_RELEASE)/MCStep/MCS_ClusterTwist.o $(OBJDIR_RELEASE)/MCStep/MCS_TailTwist.o $(OBJDIR_RELEASE)/MCStep/MCS_TorquePiv.o $(OBJDIR_RELEASE)/MCStep/MCS_Twist.o $(OBJDIR_RELEASE)/MCStep/MCS_Unwinder.o $(OBJDIR_RELEASE)/MCStep/MCS_zPiv.o $(OBJDIR_RELEASE)/MCStep/MCStep.o $(OBJDIR_RELEASE)/Input/WriteLoadRestart.o $(OBJDIR_RELEASE)/Input/InputChoice.o $(OBJDIR_RELEASE)/Input/InputRead.o $(OBJDIR_RELEASE)/Input/ManipulateArgv.o $(OBJDIR_RELEASE)/Input/MultiLine.o $(OBJDIR_RELEASE)/Input/ReadFunctions.o $(OBJDIR_RELEASE)/Input/SingleLine.o $(OBJDIR_RELEASE)/BPStep/BPStep.o $(OBJDIR_RELEASE)/MCMethods/ReplicaExchange.o $(OBJDIR_RELEASE)/MCStep/MCS_CSrot.o $(OBJDIR_RELEASE)/MCStep/MCS_CSrot2d.o $(OBJDIR_RELEASE)/MCStep/MCS_CSrot_2dpot.o $(OBJDIR_RELEASE)/MCStep/MCS_CStrans.o
 
 all: release
 
@@ -39,9 +49,9 @@ clean: clean_release
 before_release: 
 	test -d bin/Release || mkdir -p bin/Release
 	test -d $(OBJDIR_RELEASE)/Unbound || mkdir -p $(OBJDIR_RELEASE)/Unbound
-	test -d $(OBJDIR_RELEASE)/Unbound/Interactions || mkdir -p $(OBJDIR_RELEASE)/Unbound/Interactions
 	test -d $(OBJDIR_RELEASE)/Unbound/PairStyles || mkdir -p $(OBJDIR_RELEASE)/Unbound/PairStyles
 	test -d $(OBJDIR_RELEASE)/dump || mkdir -p $(OBJDIR_RELEASE)/dump
+	test -d $(OBJDIR_RELEASE)/Unbound/Interactions || mkdir -p $(OBJDIR_RELEASE)/Unbound/Interactions
 	test -d $(OBJDIR_RELEASE)/PolyMC || mkdir -p $(OBJDIR_RELEASE)/PolyMC
 	test -d $(OBJDIR_RELEASE)/Observables || mkdir -p $(OBJDIR_RELEASE)/Observables
 	test -d $(OBJDIR_RELEASE)/PlecFinder || mkdir -p $(OBJDIR_RELEASE)/PlecFinder
@@ -68,12 +78,6 @@ release: before_release out_release after_release
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
 
-$(OBJDIR_RELEASE)/Unbound/InitPairStyles.o: Unbound/InitPairStyles.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Unbound/InitPairStyles.cpp -o $(OBJDIR_RELEASE)/Unbound/InitPairStyles.o
-
-$(OBJDIR_RELEASE)/Unbound/Interactions/Interaction.o: Unbound/Interactions/Interaction.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Unbound/Interactions/Interaction.cpp -o $(OBJDIR_RELEASE)/Unbound/Interactions/Interaction.o
-
 $(OBJDIR_RELEASE)/Unbound/Pair.o: Unbound/Pair.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Unbound/Pair.cpp -o $(OBJDIR_RELEASE)/Unbound/Pair.o
 
@@ -92,6 +96,12 @@ $(OBJDIR_RELEASE)/dump/Dump_Conf.o: dump/Dump_Conf.cpp
 $(OBJDIR_RELEASE)/dump/Dump_DistanceMap.o: dump/Dump_DistanceMap.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_DistanceMap.cpp -o $(OBJDIR_RELEASE)/dump/Dump_DistanceMap.o
 
+$(OBJDIR_RELEASE)/Unbound/Interactions/Interaction.o: Unbound/Interactions/Interaction.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Unbound/Interactions/Interaction.cpp -o $(OBJDIR_RELEASE)/Unbound/Interactions/Interaction.o
+
+$(OBJDIR_RELEASE)/dump/Dump_ESEnergy.o: dump/Dump_ESEnergy.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_ESEnergy.cpp -o $(OBJDIR_RELEASE)/dump/Dump_ESEnergy.o
+
 $(OBJDIR_RELEASE)/dump/Dump_EndToEndDistance.o: dump/Dump_EndToEndDistance.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_EndToEndDistance.cpp -o $(OBJDIR_RELEASE)/dump/Dump_EndToEndDistance.o
 
@@ -107,11 +117,8 @@ $(OBJDIR_RELEASE)/dump/Dump_Extension.o: dump/Dump_Extension.cpp
 $(OBJDIR_RELEASE)/dump/Dump_ForceExtension.o: dump/Dump_ForceExtension.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_ForceExtension.cpp -o $(OBJDIR_RELEASE)/dump/Dump_ForceExtension.o
 
-$(OBJDIR_RELEASE)/PolyMC/PolyMC.o: PolyMC/PolyMC.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PolyMC/PolyMC.cpp -o $(OBJDIR_RELEASE)/PolyMC/PolyMC.o
-
-$(OBJDIR_RELEASE)/Observables/Link.o: Observables/Link.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Observables/Link.cpp -o $(OBJDIR_RELEASE)/Observables/Link.o
+$(OBJDIR_RELEASE)/PolyMC/PolyMC_Closed2d.o: PolyMC/PolyMC_Closed2d.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PolyMC/PolyMC_Closed2d.cpp -o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Closed2d.o
 
 $(OBJDIR_RELEASE)/Observables/elasticity.o: Observables/elasticity.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Observables/elasticity.cpp -o $(OBJDIR_RELEASE)/Observables/elasticity.o
@@ -131,11 +138,11 @@ $(OBJDIR_RELEASE)/PlecFinder/ProximityPlecFinder.o: PlecFinder/ProximityPlecFind
 $(OBJDIR_RELEASE)/PlecFreeEnergy/GenPFEConf.o: PlecFreeEnergy/GenPFEConf.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PlecFreeEnergy/GenPFEConf.cpp -o $(OBJDIR_RELEASE)/PlecFreeEnergy/GenPFEConf.o
 
+$(OBJDIR_RELEASE)/PolyMC/PolyMC.o: PolyMC/PolyMC.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PolyMC/PolyMC.cpp -o $(OBJDIR_RELEASE)/PolyMC/PolyMC.o
+
 $(OBJDIR_RELEASE)/dump/Dump_Full_Coup_Matrix.o: dump/Dump_Full_Coup_Matrix.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_Full_Coup_Matrix.cpp -o $(OBJDIR_RELEASE)/dump/Dump_Full_Coup_Matrix.o
-
-$(OBJDIR_RELEASE)/PolyMC/PolyMC_Closed2d.o: PolyMC/PolyMC_Closed2d.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PolyMC/PolyMC_Closed2d.cpp -o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Closed2d.o
 
 $(OBJDIR_RELEASE)/PolyMC/PolyMC_Lin2d.o: PolyMC/PolyMC_Lin2d.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PolyMC/PolyMC_Lin2d.cpp -o $(OBJDIR_RELEASE)/PolyMC/PolyMC_Lin2d.o
@@ -163,6 +170,9 @@ $(OBJDIR_RELEASE)/SO3Methods.o: SO3Methods.cpp
 
 $(OBJDIR_RELEASE)/Unbound/AtomType.o: Unbound/AtomType.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Unbound/AtomType.cpp -o $(OBJDIR_RELEASE)/Unbound/AtomType.o
+
+$(OBJDIR_RELEASE)/Unbound/InitPairStyles.o: Unbound/InitPairStyles.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Unbound/InitPairStyles.cpp -o $(OBJDIR_RELEASE)/Unbound/InitPairStyles.o
 
 $(OBJDIR_RELEASE)/dump/Dump_TorsionalStiffness.o: dump/Dump_TorsionalStiffness.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_TorsionalStiffness.cpp -o $(OBJDIR_RELEASE)/dump/Dump_TorsionalStiffness.o
@@ -220,6 +230,9 @@ $(OBJDIR_RELEASE)/dump/Dump_MSD.o: dump/Dump_MSD.cpp
 
 $(OBJDIR_RELEASE)/dump/Dump_PersistenceLength.o: dump/Dump_PersistenceLength.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_PersistenceLength.cpp -o $(OBJDIR_RELEASE)/dump/Dump_PersistenceLength.o
+
+$(OBJDIR_RELEASE)/Observables/Link.o: Observables/Link.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Observables/Link.cpp -o $(OBJDIR_RELEASE)/Observables/Link.o
 
 $(OBJDIR_RELEASE)/dump/Dump_PlasmidEndpoints.o: dump/Dump_PlasmidEndpoints.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dump/Dump_PlasmidEndpoints.cpp -o $(OBJDIR_RELEASE)/dump/Dump_PlasmidEndpoints.o
@@ -408,9 +421,9 @@ clean_release:
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
 	rm -rf bin/Release
 	rm -rf $(OBJDIR_RELEASE)/Unbound
-	rm -rf $(OBJDIR_RELEASE)/Unbound/Interactions
 	rm -rf $(OBJDIR_RELEASE)/Unbound/PairStyles
 	rm -rf $(OBJDIR_RELEASE)/dump
+	rm -rf $(OBJDIR_RELEASE)/Unbound/Interactions
 	rm -rf $(OBJDIR_RELEASE)/PolyMC
 	rm -rf $(OBJDIR_RELEASE)/Observables
 	rm -rf $(OBJDIR_RELEASE)/PlecFinder
