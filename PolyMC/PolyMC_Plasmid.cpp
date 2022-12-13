@@ -71,9 +71,18 @@ bool PolyMC::init_plasmid() {
     MCSteps.clear();
 
     std::cout << std::endl << "Initializing MC Moves" << std::endl;
-    MCS_CSrot* rot = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/2));
+
+    if (InputChoice_get_single<int> ("dynamics",input,argv,0) > 0) {
+        int dyn_dist = InputChoice_get_single<int> ("dynamics",input,argv,0);
+        std::cout << " Dynamic moves set to " << dyn_dist << std::endl;
+        MCS_CSrot* rot = new MCS_CSrot(chain,seedseq,2,larger(2,smaller(dyn_dist,num_bp/2)));
+        MCSteps.push_back(rot);
+    }
+    else {
+        MCS_CSrot* rot = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/2));
+        MCSteps.push_back(rot);
+    }
 //    MCS_CSrot* rot = new MCS_CSrot(chain,2,100);
-    MCSteps.push_back(rot);
     std::cout << " Added CSrot to MC Moves .. " << std::endl;
 
     if (use_cluster_twist) {

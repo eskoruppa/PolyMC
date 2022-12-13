@@ -304,6 +304,23 @@ double Chain::cal_langowski_writhe_1a(double density) {
     return Wr/(2*M_PI);
 }
 
+double Chain::cal_langowski_writhe_1a(int front_extend, int back_extend) {
+    arma::mat extended_bp_pos = arma::zeros(3,num_bp+front_extend+back_extend);
+
+    arma::colvec fdir = get_force_dir();
+
+    for (int i=0;i<num_bp;i++) {
+        extended_bp_pos.col(front_extend+i) = bp_pos.col(i);
+    }
+    for (int i=1;i<=front_extend;i++) {
+        extended_bp_pos.col(front_extend-i) = bp_pos.col(0)-i*fdir*disc_len;
+    }
+    for (int i=0;i<back_extend;i++) {
+        extended_bp_pos.col(front_extend+num_bp+i) = bp_pos.col(num_bp-1)+(i+1)*fdir*disc_len;
+    }
+    return cal_langowski_writhe_1a(extended_bp_pos, false);
+}
+
 double Chain::cal_langowski_writhe_1a(const arma::mat& pos, bool closed) {
     int segs = pos.n_cols;
     double Wr   = 0;

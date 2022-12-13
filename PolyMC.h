@@ -98,6 +98,7 @@
 
 
 #define POLYMC_MODE_TWEEZER          "tweezer"
+#define POLYMC_MODE_TWEEZER          "tweezer"
 #define POLYMC_MODE_PLEC             "plec"
 #define POLYMC_MODE_PLASMID          "plasmid"
 #define POLYMC_MODE_UMBRELLAPLASMID  "umbrellaplasmid"
@@ -114,6 +115,9 @@
 #define TWEEZER_SETUP_ID_LINKFIX        1
 #define TWEEZER_SETUP_ID_TORSIONAL_TRAP 2
 #define TWEEZER_SETUP_ID_TORQUE         3
+
+#define TWEEZER_SETUP_LINKFIX_DYNAMICS      "fix_link_dyn"
+#define TWEEZER_SETUP_ID_LINKFIX_DYNAMICS   4
 
 
 #define PLEC_SETUP_FREE                 "free"
@@ -228,6 +232,12 @@ protected:
 */
     bool    EV_active           = false;
     bool    EV_repulsion_plane  = false;
+    bool    EV_line_closure     = false;
+
+    std::string tweezer_boundary_front = "surface";
+    std::string tweezer_boundary_back  = "surface";
+    bool bf_surface,bb_surface,bf_line,bb_line;
+
     ExVol*  EV;
     double  EV_rad = 0;
 

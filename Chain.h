@@ -460,6 +460,7 @@ public:
 
     double gauss_writhe(double density);
     double cal_langowski_writhe_1a();
+    double cal_langowski_writhe_1a(int front_extend, int back_extend);
     double cal_langowski_writhe_1a(double density);
     double cal_langowski_writhe_1a(const arma::mat& pos,bool closed);
 

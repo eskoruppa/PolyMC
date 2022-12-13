@@ -88,6 +88,8 @@
 		<Unit filename="Electrostatics/InitElectrostaticPotential.cpp" />
 		<Unit filename="Electrostatics/Potentials/DebyeHueckel.cpp" />
 		<Unit filename="Electrostatics/Potentials/DebyeHueckel.h" />
+		<Unit filename="ExcludedVolume/ClosureCrossings.cpp" />
+		<Unit filename="ExcludedVolume/ClosureCrossings.h" />
 		<Unit filename="ExcludedVolume/EV_Beads.cpp" />
 		<Unit filename="ExcludedVolume/EV_Beads.h" />
 		<Unit filename="ExcludedVolume/ExcludedVolume.cpp" />
@@ -102,6 +104,8 @@
 		<Unit filename="ExtraArma.h" />
 		<Unit filename="ExtraFuncs.cpp" />
 		<Unit filename="ExtraFuncs.h" />
+		<Unit filename="Geometry/Geometry.cpp" />
+		<Unit filename="Geometry/Geometry.h" />
 		<Unit filename="Input/Argparse.cpp" />
 		<Unit filename="Input/Argparse.h" />
 		<Unit filename="Input/GenInputFile.cpp" />

@@ -4583,7 +4583,7 @@
 	<stdexcept>
 	<vector>
 
-1652548320 /home/asen/Dev/Cpp/PolyMC/ExtraFuncs.h
+1661122486 /home/asen/Dev/Cpp/PolyMC/ExtraFuncs.h
 	<math.h>
 	<cmath>
 	<sstream>
@@ -4591,7 +4591,7 @@
 	<vector>
 	<iostream>
 
-1652534784 /home/asen/Dev/Cpp/PolyMC/SO3Methods.h
+1661122486 /home/asen/Dev/Cpp/PolyMC/SO3Methods.h
 	<armadillo>
 	<iostream>
 	<stdexcept>
@@ -4695,15 +4695,15 @@
 	<iostream>
 	<stdexcept>
 
-1620488708 /home/asen/Dev/Cpp/PolyMC/ExtraArma.h
+1661122486 /home/asen/Dev/Cpp/PolyMC/ExtraArma.h
 	<math.h>
 	<cmath>
 	<armadillo>
 
-1652997136 source:/home/asen/Dev/Cpp/PolyMC/Chain.cpp
+1661122486 source:/home/asen/Dev/Cpp/PolyMC/Chain.cpp
 	"Chain.h"
 
-1652994064 /home/asen/Dev/Cpp/PolyMC/Chain.h
+1670961277 /home/asen/Dev/Cpp/PolyMC/Chain.h
 	"SO3Methods.h"
 	"ExtraFuncs.h"
 	"BPStep/BPStep.h"
@@ -4930,10 +4930,12 @@
 	"../ExcludedVolume/ExcludedVolume.h"
 	"../PlecFinder/PlecFinder.h"
 
-1652341192 /home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.h
+1670956695 /home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.h
 	"../Chain.h"
 	"../SO3Methods.h"
 	"../ExtraFuncs.h"
+	"../Geometry/Geometry.h"
+	"ClosureCrossings.h"
 	<armadillo>
 	<iostream>
 	<string>
@@ -5097,7 +5099,7 @@
 	<vector>
 	<cassert>
 
-1649491944 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.cpp
+1670966398 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ExcludedVolume.cpp
 	"ExcludedVolume.h"
 
 1616695501 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/MagneticBead.cpp
@@ -5134,10 +5136,10 @@
 	<vector>
 	<random>
 
-1620489043 source:/home/asen/Dev/Cpp/PolyMC/ExtraArma.cpp
+1661122486 source:/home/asen/Dev/Cpp/PolyMC/ExtraArma.cpp
 	"ExtraArma.h"
 
-1608579848 source:/home/asen/Dev/Cpp/PolyMC/ExtraFuncs.cpp
+1661122486 source:/home/asen/Dev/Cpp/PolyMC/ExtraFuncs.cpp
 	"ExtraFuncs.h"
 
 1616695530 source:/home/asen/Dev/Cpp/PolyMC/Input/Argparse.cpp
@@ -5173,14 +5175,14 @@
 1616695530 source:/home/asen/Dev/Cpp/PolyMC/Input/WriteLoadRestart.cpp
 	"WriteLoadRestart.h"
 
-1623314266 source:/home/asen/Dev/Cpp/PolyMC/main.cpp
+1661122486 source:/home/asen/Dev/Cpp/PolyMC/main.cpp
 	"Input/Argparse.h"
 	"Input/InputRead.h"
 	"PolyMC.h"
 	"MCMethods/ReplicaExchange.h"
 	"Input/ManipulateArgv.h"
 
-1658160394 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
+1670966712 /home/asen/Dev/Cpp/PolyMC/PolyMC.h
 	"Input/Argparse.h"
 	"Input/InputRead.h"
 	"Input/InputChoice.h"
@@ -5441,7 +5443,7 @@
 1616695532 source:/home/asen/Dev/Cpp/PolyMC/Observables/general.cpp
 	"../Chain.h"
 
-1616695532 source:/home/asen/Dev/Cpp/PolyMC/Observables/Link.cpp
+1670966655 source:/home/asen/Dev/Cpp/PolyMC/Observables/Link.cpp
 	"../Chain.h"
 
 1616695503 source:/home/asen/Dev/Cpp/PolyMC/PlecFinder/BranchBoxes.cpp
@@ -5453,7 +5455,7 @@
 1616695532 source:/home/asen/Dev/Cpp/PolyMC/PlecFreeEnergy/GenPFEConf.cpp
 	"GenPFEConf.h"
 
-1658160697 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
+1670967180 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC.cpp
 	"../PolyMC.h"
 
 1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Closed2d.cpp
@@ -5465,7 +5467,7 @@
 1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Open.cpp
 	"../PolyMC.h"
 
-1616695499 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Plasmid.cpp
+1669656057 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Plasmid.cpp
 	"../PolyMC.h"
 
 1616695499 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Plec.cpp
@@ -5474,10 +5476,10 @@
 1616695498 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_ReadSequence.cpp
 	"../PolyMC.h"
 
-1625064153 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Tweezer.cpp
+1670966547 source:/home/asen/Dev/Cpp/PolyMC/PolyMC/PolyMC_Tweezer.cpp
 	"../PolyMC.h"
 
-1608579852 source:/home/asen/Dev/Cpp/PolyMC/SO3Methods.cpp
+1661122486 source:/home/asen/Dev/Cpp/PolyMC/SO3Methods.cpp
 	"SO3Methods.h"
 
 1616695499 source:/home/asen/Dev/Cpp/PolyMC/Unbound/AtomType.cpp
@@ -5657,4 +5659,24 @@
 1658160590 /home/asen/Dev/Cpp/PolyMC/dump/Dump_ESEnergy.h
 	"Dump.h"
 	"../Electrostatics/Electrostatics.h"
+
+1670945352 source:/home/asen/Dev/Cpp/PolyMC/Geometry/geometry.cpp
+	"geometry.h"
+
+1670945292 /home/asen/Dev/Cpp/PolyMC/Geometry/geometry.h
+	<armadillo>
+
+1670968955 source:/home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ClosureCrossings.cpp
+	"ClosureCrossings.h"
+
+1670957720 /home/asen/Dev/Cpp/PolyMC/ExcludedVolume/ClosureCrossings.h
+	<armadillo>
+	"../Geometry/Geometry.h"
+
+1670968930 source:/home/asen/Dev/Cpp/PolyMC/Geometry/Geometry.cpp
+	"Geometry.h"
+
+1670968905 /home/asen/Dev/Cpp/PolyMC/Geometry/Geometry.h
+	<armadillo>
+	<cmath>
 

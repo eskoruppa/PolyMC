@@ -5,6 +5,10 @@
 #include "../SO3Methods.h"
 #include "../ExtraFuncs.h"
 
+#include "../Geometry/Geometry.h"
+#include "ClosureCrossings.h"
+
+
 #define _USE_MATH_DEFINES
 
 #include <armadillo> // armadillo
@@ -220,6 +224,26 @@ protected:
 
     bool RP_interval_first(int A, int B);
     bool RP_interval_last(int A, int B);
+
+/*
+    Line Closure
+*/
+protected:
+    bool line_closure_active = false;
+    bool line_closure_check_front = true;
+    bool line_closure_check_back  = true;
+    arma::colvec line_closure_direction =  {0,0,1};
+
+public:
+    void set_line_closure(bool active=true);
+    void set_line_closure(bool check_front, bool check_back);
+
+protected:
+//    bool LC_check_intervals(const std::vector<arma::ivec>& EV_typeB,
+//                            const std::vector<arma::ivec>& EV_typeC,
+//                            const std::vector<arma::ivec>& EV_typeD,
+//                            const std::vector<arma::ivec>& EV_typeE);
+    bool LC_interval(int A, int B);
 
 
 // Debug Methods

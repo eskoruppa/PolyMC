@@ -13,6 +13,21 @@ bool PolyMC::init_tweezer() {
     terminus_fixed_triads   = false;
     EV_repulsion_plane      = true;
 
+    tweezer_boundary_front  = InputChoice_get_single<std::string>  ("tweezer_boundary_front",input,argv,tweezer_boundary_front);
+    tweezer_boundary_back   = InputChoice_get_single<std::string>  ("tweezer_boundary_back" ,input,argv,tweezer_boundary_back);
+    geninfile.add_entry(GENINFILE_SIMSETUP,"tweezer_boundary_front",tweezer_boundary_front);
+    geninfile.add_entry(GENINFILE_SIMSETUP,"tweezer_boundary_back",tweezer_boundary_back);
+
+
+//    EV_line_closure         = false;
+//
+//    EV_line_closure         = InputChoice_get_single<bool>  ("tweezer_boundary_line",input,argv,EV_line_closure);
+//    if (EV_line_closure) EV_repulsion_plane  = false;
+//
+//    EV_repulsion_plane      = InputChoice_get_single<bool>  ("tweezer_boundary_surface",input,argv,EV_repulsion_plane);
+//    if (EV_repulsion_plane) EV_line_closure = false;
+
+
 
     /*
         Tweezer Settings
@@ -36,6 +51,17 @@ bool PolyMC::init_tweezer() {
         std::cout << "Warning: Tweezer setup Torque requires the initial supercoiling" << std::endl;
         std::cout << "density to be set to zero. (sigma was set to 0)" << std::endl;
     }
+
+    /*
+        For vids
+    */
+    bool dynamics = false;
+    if (tweezer_setup==TWEEZER_SETUP_LINKFIX_DYNAMICS) {
+        tweezer_setup_id        = TWEEZER_SETUP_ID_LINKFIX;
+        terminus_fixed_triads   = true;
+        dynamics                = true;
+    }
+
     if (tweezer_setup_id<0) {
         std::cout << "Error: '" << tweezer_setup << "' is not a valid tweezer setup!" << std::endl;
         std::cout << " Valid setups:" << std::endl;
@@ -45,6 +71,11 @@ bool PolyMC::init_tweezer() {
         std::cout << "   - " << TWEEZER_SETUP_TORQUE << std::endl;
         std::exit(0);
     }
+
+
+
+
+
     std::cout << "Tweezer setup: " << tweezer_setup << std::endl << std::endl;
 
 
@@ -117,6 +148,9 @@ bool PolyMC::init_tweezer() {
         chain->impose_torque(torque);
     }
 
+
+
+
     /*
         MCStep Initialization
     */
@@ -125,13 +159,36 @@ bool PolyMC::init_tweezer() {
     }
     MCSteps.clear();
 
-    std::cout << std::endl << "Initializing MC Moves" << std::endl;
-    MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp/10);
-    MCSteps.push_back(pivcon);
-    std::cout << " Added PivCon to MC Moves .. " << std::endl;
-    MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/4));
-    MCSteps.push_back(rot);
-    std::cout << " Added CSrot to MC Moves .. " << std::endl;
+    if (dynamics) {
+        std::cout << std::endl << "Initializing MC Moves" << std::endl;
+//        MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp/10);
+        MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,15,larger(2,num_bp-15),num_bp);
+
+        MCSteps.push_back(pivcon);
+        std::cout << " Added PivCon to MC Moves .. " << std::endl;
+        MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,10));
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        MCSteps.push_back(rot);
+        std::cout << " Added CSrot to MC Moves .. " << std::endl;
+    }
+    else {
+        std::cout << std::endl << "Initializing MC Moves" << std::endl;
+        MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp/10);
+        MCSteps.push_back(pivcon);
+        std::cout << " Added PivCon to MC Moves .. " << std::endl;
+        MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/4));
+        MCSteps.push_back(rot);
+        std::cout << " Added CSrot to MC Moves .. " << std::endl;
+    }
+
     if (use_cluster_twist) {
         MCS_ClusterTwist* cltwist = new MCS_ClusterTwist(chain,seedseq,2,larger(2,num_bp/4));
         MCSteps.push_back(cltwist);

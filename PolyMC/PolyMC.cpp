@@ -668,7 +668,48 @@ void PolyMC::init_ExVol() {
         EV_active=true;
         ExVol * exvol = new ExVol(chain,EV_rad);
         EV = exvol;
-        EV->set_repulsion_plane(EV_repulsion_plane);
+
+        if (EV_repulsion_plane) {
+            bf_surface  = false;
+            bb_surface  = false;
+            bf_line     = false;
+            bb_line     = false;
+
+            if (tweezer_boundary_front == "surface") {
+                bf_surface = true;
+            }
+            if (tweezer_boundary_back  == "surface") {
+                bb_surface = true;
+            }
+            if (tweezer_boundary_front == "line") {
+                bf_line = true;
+            }
+            if (tweezer_boundary_back  == "line") {
+                bb_line = true;
+            }
+
+            if (bf_surface || bb_surface) {
+                EV_repulsion_plane = true;
+                EV->set_repulsion_plane(bf_surface,bb_surface);
+            }
+            else {
+                EV_repulsion_plane = false;
+            }
+
+            if (bf_line || bb_line) {
+                EV_line_closure = true;
+                EV->set_line_closure(bf_line,bb_line);
+            }
+            else {
+                EV_line_closure = false;
+            }
+        }
+
+//        EV->set_repulsion_plane(EV_repulsion_plane);
+//        EV->set_line_closure(EV_line_closure);
+//        EV->set_repulsion_plane(false,false);
+//        EV->set_line_closure(true,true);
+
 
         for (unsigned i=0;i<MCSteps.size();i++) {
             MCSteps[i]->set_excluded_volume(EV);
@@ -680,6 +721,7 @@ void PolyMC::init_ExVol() {
             std::exit(0);
         }
     }
+    std::cout << std::endl;
 }
 
 void PolyMC::init_ElStat(const std::string & ElStat_fn) {
@@ -980,7 +1022,22 @@ void PolyMC::print_state(long long step,long long steps,const std::string & run_
 
     double Wr,Tw;
     if (print_link_info) {
-        Wr = chain->cal_langowski_writhe_1a();
+
+        if (EV_line_closure) {
+            int frontadd = 0;
+            int backadd  = 0;
+
+            if (bf_line) {
+                frontadd = int(num_bp/2);
+            }
+            if (bb_line) {
+                backadd = int(num_bp/2);
+            }
+            Wr = chain->Chain::cal_langowski_writhe_1a(frontadd, backadd);
+        }
+        else {
+            Wr = chain->cal_langowski_writhe_1a();
+        }
         Tw = chain->cal_twist(0,num_bp);
     }
 

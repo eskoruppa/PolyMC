@@ -81,7 +81,6 @@ triads_backup(*chain->get_triads())
     std::cout << "   Effective size:     " << eff_size_EV_bead << std::endl;
     std::cout << "   Exclusion distance: " << EV_dist << std::endl;
     std::cout << "######################################" << std::endl;
-    std::cout << std::endl;
 }
 
 ExVol::~ExVol() {
@@ -262,6 +261,10 @@ bool ExVol::check(const std::vector<arma::ivec>* moved) {
         else {
             check = RP_interval_last(0,num_EV-2);
         }
+    }
+
+    if (line_closure_active && check) {
+        check = LC_interval(0,num_EV-1);
     }
 
     #ifdef DEBUG_EXVOL
@@ -1237,6 +1240,8 @@ void ExVol::set_repulsion_plane(bool active) {
         repulsion_plane_active=active;
         if (active) {
             first_last = REPULSIONPLANE_FIRST_AND_LAST;
+            std::cout << "   Front Boundary: Surface" << std::endl;
+            std::cout << "   Back Boundary:  Surface" << std::endl;
         }
     }
 }
@@ -1250,15 +1255,19 @@ void ExVol::set_repulsion_plane(bool plane_at_first, bool plane_at_last) {
             repulsion_plane_active=true;
             if (plane_at_last) {
                 first_last = REPULSIONPLANE_FIRST_AND_LAST;
+                std::cout << "   Front Boundary: Surface" << std::endl;
+                std::cout << "   Back Boundary:  Surface" << std::endl;
             }
             else {
                 first_last = REPULSIONPLANE_ONLY_FIRST;
+                std::cout << "   Front Boundary: Surface" << std::endl;
             }
         }
         else {
             if (plane_at_last) {
                 repulsion_plane_active=true;
                 first_last = REPULSIONPLANE_ONLY_LAST;
+                std::cout << "   Back Boundary:  Surface" << std::endl;
             }
             else {
                 repulsion_plane_active=false;
@@ -1266,6 +1275,7 @@ void ExVol::set_repulsion_plane(bool plane_at_first, bool plane_at_last) {
         }
     }
 }
+
 
 bool ExVol::RP_check_intervals( const std::vector<arma::ivec>& EV_typeB,
                                 const std::vector<arma::ivec>& EV_typeC,
@@ -1381,6 +1391,124 @@ bool ExVol::RP_interval_last(int A, int B) {
     }
     return true;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////// Line Closure /////////////////////////////////////////////////////////
+
+void ExVol::set_line_closure(bool active) {
+    if (chain->topology_closed()) {
+        line_closure_active = false;
+    }
+    else {
+        line_closure_active=active;
+        if (active) {
+            line_closure_check_front    = true;
+            line_closure_check_back     = true;
+            line_closure_direction      = chain->get_force_dir();
+            std::cout << "   Front Boundary: Line" << std::endl;
+            std::cout << "   Back Boundary:  Line" << std::endl;
+        }
+    }
+}
+
+void ExVol::set_line_closure(bool check_front, bool check_back) {
+    if (chain->topology_closed()) {
+        line_closure_active = false;
+    }
+    else {
+        if (!check_front && !check_back) {
+            line_closure_active = false;
+        }
+        else {
+            line_closure_active         = true;
+            line_closure_check_front    = check_front;
+            line_closure_check_back     = check_back;
+            line_closure_direction      = chain->get_force_dir();
+
+            if (line_closure_check_front) {
+                std::cout << "   Front Boundary: Line" << std::endl;
+            }
+            if (line_closure_check_back) {
+                std::cout << "   Back Boundary:  Line" << std::endl;
+            }
+        }
+    }
+}
+
+bool ExVol::LC_interval(int A, int B) {
+
+    arma::colvec r0  = bp_pos        -> col(0);
+    arma::colvec rl1 = bp_pos_backup .  col(num_bp-1);
+    arma::colvec rl2 = bp_pos        -> col(num_bp-1);
+
+//    if (rl2(2)<=r0(2)) return false;
+
+    arma::colvec p1,p2;
+
+    double dist;
+    int b;
+
+    int Af,Bf,Ab,Bb;
+    /*
+        Front
+    */
+    if (line_closure_check_front) {
+
+        if (A<2) Af = 2;
+        else     Af = A;
+        if (B>num_EV-1) Bf = num_EV-1;
+        else     Bf = B;
+
+        b = Af;
+        while (b<=Bf) {
+            p1 = bp_pos_backup . col(EV_beads(b));
+            p2 = bp_pos       -> col(EV_beads(b));
+            dist = front_closure(   p1,
+                                    p2,
+                                    r0,
+                                    -line_closure_direction);
+            if (dist < EV_dist) {
+                return false;
+            }
+            b++;
+//            b += (dist-EV_dist)/eff_size_EV_bead+1;
+        }
+
+    }
+
+    /*
+        Back
+    */
+    if (line_closure_check_back) {
+
+        if (A<0) Ab = 0;
+        else     Ab = A;
+        if (B>num_EV-3) Bb = num_EV-3;
+        else     Bb = B;
+
+        b = Ab;
+        while (b<=Bb) {
+            p1 = bp_pos_backup . col(EV_beads(b));
+            p2 = bp_pos       -> col(EV_beads(b));
+            dist = back_closure( p1,
+                                    p2,
+                                    rl1,
+                                    rl2,
+                                    line_closure_direction
+                                    );
+            if (dist < EV_dist) {
+                return false;
+            }
+            b++;
+//            b += (dist-EV_dist)/eff_size_EV_bead+1;
+        }
+
+    }
+    return true;
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
