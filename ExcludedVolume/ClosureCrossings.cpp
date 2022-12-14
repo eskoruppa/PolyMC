@@ -38,18 +38,16 @@ double front_closure(   const arma::colvec p1,
     /*
         Evaluate different cases
     */
-    if (mu0 < 0) {
-        return distance_point_lineseg(r0,p1,p2);
-    }
-
     if (lam0 < 0) {
         return distance_point_semi_infinite_lineseg(p1,r0,y);
     }
-
     if (lam0 > 1) {
         return distance_point_semi_infinite_lineseg(p2,r0,y);
     }
 
+    if (mu0 < 0) {
+        return distance_point_lineseg(r0,p1,p2);
+    }
     arma::colvec plam0 = p1 + lam0*v;
     arma::colvec lmu0  = r0 + mu0*y;
     return arma::norm(plam0-lmu0);

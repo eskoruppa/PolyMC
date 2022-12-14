@@ -36,7 +36,7 @@ subtract_T0 = 0
 
 steps          = 10000000
 equi           = 0
-num_bp         = 500
+num_bp         = 400
 T              = 300
 sigma          = 0.02
 force          = 0.01

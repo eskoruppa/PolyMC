@@ -1463,6 +1463,7 @@ bool ExVol::LC_interval(int A, int B) {
 
         b = Af;
         while (b<=Bf) {
+
             p1 = bp_pos_backup . col(EV_beads(b));
             p2 = bp_pos       -> col(EV_beads(b));
             dist = front_closure(   p1,
@@ -1472,8 +1473,8 @@ bool ExVol::LC_interval(int A, int B) {
             if (dist < EV_dist) {
                 return false;
             }
-            b++;
-//            b += (dist-EV_dist)/eff_size_EV_bead+1;
+//            b++;
+            b += (dist-EV_dist)/eff_size_EV_bead+1;
         }
 
     }
@@ -1501,8 +1502,8 @@ bool ExVol::LC_interval(int A, int B) {
             if (dist < EV_dist) {
                 return false;
             }
-            b++;
-//            b += (dist-EV_dist)/eff_size_EV_bead+1;
+//            b++;
+            b += (dist-EV_dist)/eff_size_EV_bead+1;
         }
 
     }
