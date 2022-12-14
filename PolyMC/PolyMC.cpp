@@ -670,6 +670,30 @@ void PolyMC::init_ExVol() {
         EV = exvol;
 
         if (EV_repulsion_plane) {
+
+            if (tweezer_boundary_front != "surface" && tweezer_boundary_front != "line" && tweezer_boundary_front != "none") {
+                std::cout << "Error: Unknown tweezer_boundary_front setting '" << tweezer_boundary_front << "'!" << std::endl;
+                std::cout << " Valid settings: " << std::endl;
+                std::cout << "  - 'surface'" << std::endl;
+                std::cout << "       -> Repulsion planes" << std::endl;
+                std::cout << "  - 'line'" << std::endl;
+                std::cout << "       -> Ghost closure to infinity" << std::endl;
+                std::cout << "  - 'none'" << std::endl;
+                std::cout << "       -> No boundary closure" << std::endl;
+                std::exit(0);
+            }
+            if (tweezer_boundary_back != "surface" && tweezer_boundary_back != "line" && tweezer_boundary_back != "none") {
+                std::cout << "Error: Unknown tweezer_boundary_back setting '" << tweezer_boundary_back << "'!" << std::endl;
+                std::cout << " Valid settings: " << std::endl;
+                std::cout << "  - 'surface'" << std::endl;
+                std::cout << "       -> Repulsion planes" << std::endl;
+                std::cout << "  - 'line'" << std::endl;
+                std::cout << "       -> Ghost closure to infinity" << std::endl;
+                std::cout << "  - 'none'" << std::endl;
+                std::cout << "       -> No boundary closure" << std::endl;
+                std::exit(0);
+            }
+
             bf_surface  = false;
             bb_surface  = false;
             bf_line     = false;

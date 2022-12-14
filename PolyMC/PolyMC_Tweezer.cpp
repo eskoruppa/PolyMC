@@ -15,6 +15,7 @@ bool PolyMC::init_tweezer() {
 
     tweezer_boundary_front  = InputChoice_get_single<std::string>  ("tweezer_boundary_front",input,argv,tweezer_boundary_front);
     tweezer_boundary_back   = InputChoice_get_single<std::string>  ("tweezer_boundary_back" ,input,argv,tweezer_boundary_back);
+
     geninfile.add_entry(GENINFILE_SIMSETUP,"tweezer_boundary_front",tweezer_boundary_front);
     geninfile.add_entry(GENINFILE_SIMSETUP,"tweezer_boundary_back",tweezer_boundary_back);
 
