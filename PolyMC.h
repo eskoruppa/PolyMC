@@ -174,6 +174,7 @@ protected:
 
     std::string restart_file     = "";
     int         restart_snapshot = -1;
+    bool        restart_set_link = false;
 
 /*
     Chain Members

@@ -150,7 +150,12 @@ bool PolyMC::init_tweezer() {
     }
 
 
-
+    /*
+        Set link if configuration was loaded from restart
+    */
+    if (restart_file!="" && restart_set_link) {
+        chain->set_sigma(sigma);
+    }
 
     /*
         MCStep Initialization

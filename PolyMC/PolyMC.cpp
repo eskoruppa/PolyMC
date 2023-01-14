@@ -492,10 +492,14 @@ void PolyMC::init_general() {
 
     restart_file     = InputChoice_get_single<std::string>  ("restart",input,argv,restart_file);
     restart_snapshot = InputChoice_get_single<int>          ("restart_snapshot",input,argv,restart_snapshot);
+    restart_set_link = InputChoice_get_single<bool>         ("restart_set_link",input,argv,restart_set_link);
     if (restart_file != "") {
         geninfile.add_entry(GENINFILE_SIMSETUP,"restart",restart_file);
         geninfile.add_entry(GENINFILE_SIMSETUP,"restart_snapshot",restart_snapshot);
+        geninfile.add_entry(GENINFILE_SIMSETUP,"restart_set_link",restart_set_link);
     }
+
+
 
     constraint_fn    = InputChoice_get_single<std::string>  ("constraint_fn",input,argv,constraint_fn);
     if (constraint_fn != "") {
