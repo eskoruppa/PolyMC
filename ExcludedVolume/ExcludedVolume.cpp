@@ -1,6 +1,6 @@
 #include "ExcludedVolume.h"
 
-ExVol::ExVol(Chain * ch, double EV_distance) :
+ExVol::ExVol(Chain * ch, double EV_distance, bool check_crossings) :
 chain(ch),
 BPS(*ch->get_BPS()),
 bp_pos(ch->get_bp_pos()),
@@ -15,7 +15,8 @@ counter_RP_reject(0),
 repulsion_plane_active(false),
 EV_dist(EV_distance),
 bp_pos_backup(*chain->get_bp_pos()),
-triads_backup(*chain->get_triads())
+triads_backup(*chain->get_triads()),
+check_crossings(check_crossings)
 {
 
 
@@ -246,7 +247,14 @@ bool ExVol::check(const std::vector<arma::ivec>* moved) {
     std::vector<arma::ivec> EV_typeE;
     cal_EV_intervals(moved,EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
 
-    bool check = check_intervals(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
+    bool check = true;
+    if (check_crossings) {
+        check = check_intervals(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
+    }
+    else {
+        check = check_intervals_simpleoverlap(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
+    }
+
     if (repulsion_plane_active && check) {
 //        check = RP_interval(0,num_EV-2);
 //        This function doesn't work for now
@@ -1226,6 +1234,288 @@ double ExVol::singleMove(int id1, int id2) {
     return arma::norm( w1-n_com*v );
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////// SIMPLE EV CHECK //////////////////////////////////////////////////////
+
+bool ExVol::check_intervals_simpleoverlap(  const std::vector<arma::ivec>& EV_typeA,
+                                            const std::vector<arma::ivec>& EV_typeB,
+                                            const std::vector<arma::ivec>& EV_typeC,
+                                            const std::vector<arma::ivec>& EV_typeD,
+                                            const std::vector<arma::ivec>& EV_typeE) {
+
+    // Check EV_typeC
+    for (unsigned tC=0;tC<EV_typeC.size();tC++) {
+        // Check with all EV_typeA with singleMove check
+        for (int tA=EV_typeA.size()-1;tA>=0;tA--) {
+//        for (unsigned tA=0;tA<EV_typeA.size();tA++) {
+            if (!check_interval_EVoverlap(EV_typeC[tC](EV_FROM),EV_typeC[tC](EV_TO),EV_typeA[tA](EV_FROM),EV_typeA[tA](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all EV_typeB with doubleMove check
+        for (unsigned tB=0;tB<EV_typeB.size();tB++) {
+            if (!check_interval_EVoverlap(EV_typeC[tC](EV_FROM),EV_typeC[tC](EV_TO),EV_typeB[tB](EV_FROM),EV_typeB[tB](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all EV_typeD with doubleMove check
+        for (unsigned tD=0;tD<EV_typeD.size();tD++) {
+            if (!check_interval_EVoverlap(EV_typeC[tC](EV_FROM),EV_typeC[tC](EV_TO),EV_typeD[tD](EV_FROM),EV_typeD[tD](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all EV_typeE with doubleMove check
+        for (unsigned tE=0;tE<EV_typeE.size();tE++) {
+            if (!check_interval_EVoverlap(EV_typeC[tC](EV_FROM),EV_typeC[tC](EV_TO),EV_typeE[tE](EV_FROM),EV_typeE[tE](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all other EV_typeC
+        for (unsigned tC2=tC+1;tC2<EV_typeC.size();tC2++) {
+            /*
+                A single interval can be split into two intervals when it crosses the periodic boundary. For typeC intervals
+                these intervals should not be mutually checked
+            */
+            if ( EV_typeC[tC](EV_TYPE) != EV_typeC[tC2](EV_TYPE) ) {
+                if (!check_interval_EVoverlap(EV_typeC[tC](EV_FROM),EV_typeC[tC](EV_TO),EV_typeC[tC2](EV_FROM),EV_typeC[tC2](EV_TO))) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    // Check EV_typeD
+    for (unsigned tD=0;tD<EV_typeD.size();tD++) {
+        // Check with all EV_typeA with singleMove check
+        for (unsigned tA=0;tA<EV_typeA.size();tA++) {
+            if (!check_interval_EVoverlap(EV_typeD[tD](EV_FROM),EV_typeD[tD](EV_TO),EV_typeA[tA](EV_FROM),EV_typeA[tA](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all EV_typeB with doubleMove check
+        for (unsigned tB=0;tB<EV_typeB.size();tB++) {
+            if (!check_interval_EVoverlap(EV_typeD[tD](EV_FROM),EV_typeD[tD](EV_TO),EV_typeB[tB](EV_FROM),EV_typeB[tB](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all EV_typeE with doubleMove check
+        for (unsigned tE=0;tE<EV_typeE.size();tE++) {
+            if (!check_interval_EVoverlap(EV_typeD[tD](EV_FROM),EV_typeD[tD](EV_TO),EV_typeE[tE](EV_FROM),EV_typeE[tE](EV_TO))) {
+                return false;
+            }
+        }
+
+        // Check with all other EV_typeD
+        for (unsigned tD2=tD+1;tD2<EV_typeD.size();tD2++) {
+            /*
+                A single interval can be split into two intervals when it crosses the periodic boundary. For typeD intervals
+                these intervals SHOULD be mutally checked regardless!
+            */
+            if (!check_interval_EVoverlap(EV_typeD[tD](EV_FROM),EV_typeD[tD](EV_TO),EV_typeD[tD2](EV_FROM),EV_typeD[tD2](EV_TO))) {
+                return false;
+            }
+        }
+
+        // Check within the interval itself
+        if (!check_within_interval(EV_typeD[tD](EV_FROM),EV_typeD[tD](EV_TO))) {
+            return false;
+        }
+    }
+
+    // Check EV_typeB
+    for (unsigned tB=0;tB<EV_typeB.size();tB++) {
+        // Check with all EV_typeA with singleMove check
+        for (unsigned tA=0;tA<EV_typeA.size();tA++) {
+            if (!check_interval_EVoverlap(EV_typeB[tB](EV_FROM),EV_typeB[tB](EV_TO),EV_typeA[tA](EV_FROM),EV_typeA[tA](EV_TO))) {
+                return false;
+            }
+        }
+        // Check with all EV_typeE with doubleMove check
+        for (unsigned tE=0;tE<EV_typeE.size();tE++) {
+            if (!check_interval_EVoverlap(EV_typeB[tB](EV_FROM),EV_typeB[tB](EV_TO),EV_typeE[tE](EV_FROM),EV_typeE[tE](EV_TO))) {
+                return false;
+            }
+        }
+    }
+
+    /*
+        Check additional Boundary pairs. These will always be checked regardless on whether the constituent monomers
+        are within one of the moved intervals.
+    */
+    if (additional_boundcheck) {
+        double dist;
+        for (unsigned i=0;i<addboundpairs.size();i++) {
+            dist = beadoverlap(addboundpairs[i](0),addboundpairs[i](1));
+            if (dist < EV_dist) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+bool ExVol::check_interval_EVoverlap(int A1, int A2, int B1, int B2) {
+/*
+    Checks for overlap between EV beads in the new configuration within the two intervals limited by
+    A1,A2 and B1,B2 respectively. This method does not consider topology violations introduced between
+    the old and new configurations.
+*/
+
+    #ifdef DEBUG_EXVOL
+    if (!(A2<B1 || B2 < A1)) {
+        std::cout << "Check Intervals " << A1 << " " << A2 << " " << B1 << " " << B2 << std::endl;
+        throw std::invalid_argument("ExVol::check_interval_singleMove(): Invalid Intervals! The invervals are not allowed to cross the periodic boundary!");
+    }
+    #endif
+
+    double dist;
+    int a1,a2;
+
+    if (closed_topology) {
+    /*
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+        PERIODIC BOUNDARY CONDITION
+    */
+
+        /*
+            Left to right order: A - B
+        */
+        if (A2<B1) {
+            a1 = larger(A1,B2-num_EV+neighbour_skip_boundary_plus_one);
+            a2 = smaller(A2,B1-neighbour_skip_plus_one);
+            /*
+                Check for overlaps within the boundary region of A and region B. Pairs within neighbour skip region are omitted.
+            */
+            int a = A1;
+            while (a<=A2) {
+                if ( a1<=a && a<=a2) {
+                    a=a2+1;
+                    continue;
+                }
+                int b  = larger (B1,a+neighbour_skip_plus_one);
+                int b2 = smaller(B2,a+num_EV-neighbour_skip_boundary_plus_one);
+                while (b<=b2) {
+                    dist = beadoverlap(EV_beads(a),EV_beads(b));
+                    if (dist < EV_dist) {
+                        return false;
+                    }
+                    //b++;
+                    b += (dist-EV_dist)/eff_size_EV_bead+1;
+                }
+                a++;
+            }
+        }
+        /*
+            Left to right order: B - A
+        */
+        else {
+            a1 = larger(A1,B2+neighbour_skip_plus_one);
+            a2 = smaller(A2,B1+num_EV-neighbour_skip_boundary_plus_one);
+            /*
+                Check for overlaps within the boundary region of A and region B. Pairs within neighbour skip region are omitted.
+            */
+            int a = A1;
+            while (a<=A2) {
+                if ( a1<=a && a<=a2) {
+                    a=a2+1;
+                    continue;
+                }
+                int b  = larger (B1,a-num_EV+neighbour_skip_boundary_plus_one);
+                int b2 = smaller(B2,a-neighbour_skip_plus_one);
+                while (b<=b2) {
+                    dist = beadoverlap(EV_beads(a),EV_beads(b));
+                    if (dist < EV_dist) {
+                        return false;
+                    }
+                    //b++;
+                    b += (dist-EV_dist)/eff_size_EV_bead+1;
+                }
+                a++;
+            }
+        }
+    }
+    else {
+    /*
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+        NON-PERIODIC BOUNDARY CONDITION
+    */
+        /*
+            Left to right order: A - B
+        */
+        if (A2<B1) {
+            /*
+                Define the boundary regions in which pairchecking potentially has to be omitted due to proximity along the chain.
+                In this case this region is only at the right boundary of the interval A.
+            */
+            a1 = A1;
+            a2 = smaller(A2,B1-neighbour_skip_plus_one);
+            /*
+                Check for overlaps within this boundary region of A and region B. Pairs within neighbour skip region are omitted
+            */
+            for (int a=a2+1;a<=A2;a++) {
+                int b = larger(B1,a+neighbour_skip_plus_one);
+                while (b<=B2) {
+                    dist = beadoverlap(EV_beads(a),EV_beads(b));
+                    if (dist < EV_dist) {
+                        return false;
+                    }
+                    //b++;
+                    b += (dist-EV_dist)/eff_size_EV_bead+1;
+                }
+            }
+        }
+        /*
+            Left to right order: B - A
+        */
+        else {
+            /*
+                Define the boundary regions in which pairchecking potentially has to be omitted due to proximity along the chain.
+                In this case this region is only at the left boundary of the interval A.
+            */
+            a1 = larger(A1,B2+neighbour_skip_plus_one);
+            a2 = A2;
+            /*
+                Check for overlaps within this boundary region of A and region B. Pairs within neighbour skip region are omitted
+            */
+            for (int a=A1;a<a1;a++) {
+                int b  = B1;
+                int b2 = smaller(B2,a-neighbour_skip_plus_one);
+                while (b<=b2) {
+                    dist = beadoverlap(EV_beads(a),EV_beads(b));
+                    if (dist < EV_dist) {
+                        return false;
+                    }
+                    //b++;
+                    b += (dist-EV_dist)/eff_size_EV_bead+1;
+                }
+            }
+        }
+    }
+    /*
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+        Finally check all pairs outside the range of potential neighbour skips. I.e. the bulk of the intervals.
+    */
+    for (int a=a1;a<=a2;a++) {
+        int b = B1;
+        while (b<=B2) {
+            dist = beadoverlap(EV_beads(a),EV_beads(b));
+            if (dist < EV_dist) {
+                return false;
+            }
+            //b++;
+            b += (dist-EV_dist)/eff_size_EV_bead+1;
+        }
+    }
+    return true;
+}
+
+double ExVol::beadoverlap(int id1, int id2) {
+    return  arma::norm(bp_pos->col(id1)-bp_pos->col(id2));
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////

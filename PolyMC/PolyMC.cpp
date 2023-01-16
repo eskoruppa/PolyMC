@@ -430,8 +430,11 @@ void PolyMC::init_general() {
     force       = InputChoice_get_single<double>      (input_force_keys,input,argv,force);
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);
+
     std::vector<std::string> input_EV_keys = {"EV","EV_rad","ExVol"};
-    EV_rad      = InputChoice_get_single<double>      (input_EV_keys,input,argv,EV_rad);
+    EV_rad              = InputChoice_get_single<double>    (input_EV_keys,input,argv,EV_rad);
+    EV_check_crossings  = InputChoice_get_single<bool>      ("EV_check_crossings",input,argv,EV_check_crossings);
+
     std::vector<std::string> input_hel_rep_len_keys = {"hel_rep_len","hel_rep","helical_repeat","helical_repeat_length"};
     hel_rep_len = InputChoice_get_single<double>      (input_hel_rep_len_keys,input,argv,hel_rep_len);
 
@@ -443,6 +446,7 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"force",force);
     geninfile.add_entry(GENINFILE_PARAMS,"torque",torque);
     geninfile.add_entry(GENINFILE_PARAMS,"EV",EV_rad);
+    geninfile.add_entry(GENINFILE_PARAMS,"EV_check_crossings",EV_check_crossings);
     geninfile.add_entry(GENINFILE_PARAMS,"helical_repeat",hel_rep_len);
 
 
@@ -670,7 +674,7 @@ void PolyMC::init_ExVol() {
     }
     if (EV_rad >= chain->get_disc_len()) {
         EV_active=true;
-        ExVol * exvol = new ExVol(chain,EV_rad);
+        ExVol * exvol = new ExVol(chain,EV_rad,EV_check_crossings);
         EV = exvol;
 
         if (EV_repulsion_plane) {

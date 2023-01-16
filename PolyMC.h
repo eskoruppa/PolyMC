@@ -241,6 +241,7 @@ protected:
 
     ExVol*  EV;
     double  EV_rad = 0;
+    bool    EV_check_crossings = true;
 
 /*
     Electrostatics Members

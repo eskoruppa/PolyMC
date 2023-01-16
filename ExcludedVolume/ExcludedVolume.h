@@ -121,6 +121,8 @@ protected:
 
     bool closed_topology;
 
+    bool check_crossings = true;
+
     int counter;
     int counter_reject;
     int counter_RP_reject;
@@ -146,7 +148,7 @@ protected:
 
 public:
 
-    ExVol(Chain * ch, double EV_distance);
+    ExVol(Chain * ch, double EV_distance, bool check_crossings = true);
     ~ExVol();
 
     arma::mat*  get_bp_pos_backup();
@@ -194,6 +196,15 @@ protected:
     bool    check_within_interval(int A1, int A2);
     double  doubleMove(int id1, int id2);
     double  singleMove(int id1, int id2);
+
+
+    bool    check_intervals_simpleoverlap(  const std::vector<arma::ivec>& EV_typeA,
+                                            const std::vector<arma::ivec>& EV_typeB,
+                                            const std::vector<arma::ivec>& EV_typeC,
+                                            const std::vector<arma::ivec>& EV_typeD,
+                                            const std::vector<arma::ivec>& EV_typeE);
+    bool    check_interval_EVoverlap(int A1, int A2, int B1, int B2);
+    double  beadoverlap(int id1, int id2);
 
     void    transfer_config(const std::vector<arma::ivec>* moved, arma::mat* bp_pos_from, arma::mat* bp_pos_to, arma::cube* triads_from, arma::cube* triads_to );
 
