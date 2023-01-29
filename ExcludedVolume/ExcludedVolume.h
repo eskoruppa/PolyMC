@@ -140,6 +140,7 @@ protected:
     int    neighbour_skip_plus_one;
     int    neighbour_skip_boundary;
     int    neighbour_skip_boundary_plus_one;
+    bool   check_beads;
 
     arma::ivec EV_beads;
 

@@ -18,70 +18,97 @@ bp_pos_backup(*chain->get_bp_pos()),
 triads_backup(*chain->get_triads()),
 check_crossings(check_crossings)
 {
+    if (EV_dist == 0) {
 
-
-    if (EV_dist < disc_len) {
-        throw std::invalid_argument("ExVol::ExVol(): Radius of excluded volume needs to be larger than discretization length!");
-    }
-
-    ///////////////////////////////////////////
-    // Init EV_beads
-    num_bp_per_EV    = int((double)EV_dist/disc_len);
-    upper_shift      = num_bp_per_EV-1;
-    eff_size_EV_bead = num_bp_per_EV*disc_len;
-    num_EV           = int(ceil((double)num_bp/num_bp_per_EV));
-    EV_beads         = arma::zeros<arma::ivec>(num_EV);
-    for (int i=0;i<num_EV;i++) {
-        EV_beads(i) = i*num_bp_per_EV;
-    }
-    /*
-        If there is sufficient overlap between the excluded regions of neighboring EV_beads,
-        i.e. if next nearest neighbors overlap for a 90deg angle between the two intermediate
-        tangents, excluded volume checks are skipped for the first two neighbours rather than
-        just the nearest neighbours.
-    */
-    neighbour_skip = 1;
-    if (2*disc_len*disc_len*num_bp_per_EV*num_bp_per_EV < EV_dist*EV_dist) {
-        neighbour_skip = 2;
-    }
-    neighbour_skip_plus_one          = neighbour_skip+1;
-    neighbour_skip_boundary          = neighbour_skip;
-    neighbour_skip_boundary_plus_one = neighbour_skip_boundary+1;
-
-    /*
-        If the total number of bp is not a multiple of the number of bp per EV_bead and the
-        chain has a closed topology, i.e. the first bead is connected to the last, overlap
-        between beads displaced by less than (neighbour_skip+1), which can occure around the
-        periodic boundary, will be discarded. This is done to prevent false overlap detections.
-        Instead, additional static pair checks will be conducted to prevent potential crossings
-        in this region.
-    */
-
-//    std::cout << neighbour_skip << std::endl;
-//    std::cout << num_bp%num_bp_per_EV << std::endl;
-
-    additional_boundcheck=false;
-    if (num_bp%num_bp_per_EV!=0 && chain->topology_closed()) {
-        std::cout << "mismatch" << std::endl;
-        additional_boundcheck=true;
-        for (int i=0;i<=neighbour_skip;i++) {
-            addboundpairs.push_back({i*num_bp_per_EV,num_bp-(neighbour_skip+1-i)*num_bp_per_EV});
-            std::cout << addboundpairs[i].t();
+        float default_size = 4;
+        if (disc_len > default_size) {
+            default_size = disc_len;
         }
-        neighbour_skip_boundary++;
-        neighbour_skip_boundary_plus_one++;
-    }
 
-    std::cout << std::endl;
-    std::cout << "######################################" << std::endl;
-    std::cout << "#### INITIALIZING EXCLUDED VOLUME ####" << std::endl;
-    std::cout << "######################################" << std::endl;
-    std::cout << " Excluded Volume Beads: " << std::endl;
-    std::cout << "   number of EV beads: " << num_EV << std::endl;
-    std::cout << "   bp per EV bead:     " << num_bp_per_EV << std::endl;
-    std::cout << "   Effective size:     " << eff_size_EV_bead << std::endl;
-    std::cout << "   Exclusion distance: " << EV_dist << std::endl;
-    std::cout << "######################################" << std::endl;
+        num_bp_per_EV    = int((double)default_size/disc_len);
+        upper_shift      = num_bp_per_EV-1;
+        eff_size_EV_bead = num_bp_per_EV*disc_len;
+        num_EV           = int(ceil((double)num_bp/num_bp_per_EV));
+        EV_beads         = arma::zeros<arma::ivec>(num_EV);
+        for (int i=0;i<num_EV;i++) {
+            EV_beads(i) = i*num_bp_per_EV;
+        }
+
+        check_beads = false;
+        std::cout << std::endl;
+        std::cout << "######################################" << std::endl;
+        std::cout << "#### INITIALIZING EXCLUDED VOLUME ####" << std::endl;
+        std::cout << "######################################" << std::endl;
+        std::cout << "# Deactivated Excluded Volume Beads! #" << std::endl;
+        std::cout << "######################################" << std::endl;
+    }
+    else {
+        if (EV_dist < disc_len) {
+            throw std::invalid_argument("ExVol::ExVol(): Radius of excluded volume needs to be larger than discretization length!");
+        }
+
+        ///////////////////////////////////////////
+        // Init EV_beads
+        num_bp_per_EV    = int((double)EV_dist/disc_len);
+        upper_shift      = num_bp_per_EV-1;
+        eff_size_EV_bead = num_bp_per_EV*disc_len;
+        num_EV           = int(ceil((double)num_bp/num_bp_per_EV));
+        EV_beads         = arma::zeros<arma::ivec>(num_EV);
+        for (int i=0;i<num_EV;i++) {
+            EV_beads(i) = i*num_bp_per_EV;
+        }
+
+        check_beads = true;
+        /*
+            If there is sufficient overlap between the excluded regions of neighboring EV_beads,
+            i.e. if next nearest neighbors overlap for a 90deg angle between the two intermediate
+            tangents, excluded volume checks are skipped for the first two neighbours rather than
+            just the nearest neighbours.
+        */
+        neighbour_skip = 1;
+        if (2*disc_len*disc_len*num_bp_per_EV*num_bp_per_EV < EV_dist*EV_dist) {
+            neighbour_skip = 2;
+        }
+        neighbour_skip_plus_one          = neighbour_skip+1;
+        neighbour_skip_boundary          = neighbour_skip;
+        neighbour_skip_boundary_plus_one = neighbour_skip_boundary+1;
+
+        /*
+            If the total number of bp is not a multiple of the number of bp per EV_bead and the
+            chain has a closed topology, i.e. the first bead is connected to the last, overlap
+            between beads displaced by less than (neighbour_skip+1), which can occure around the
+            periodic boundary, will be discarded. This is done to prevent false overlap detections.
+            Instead, additional static pair checks will be conducted to prevent potential crossings
+            in this region.
+        */
+
+    //    std::cout << neighbour_skip << std::endl;
+    //    std::cout << num_bp%num_bp_per_EV << std::endl;
+
+        additional_boundcheck=false;
+        if (num_bp%num_bp_per_EV!=0 && chain->topology_closed()) {
+            std::cout << "mismatch" << std::endl;
+            additional_boundcheck=true;
+            for (int i=0;i<=neighbour_skip;i++) {
+                addboundpairs.push_back({i*num_bp_per_EV,num_bp-(neighbour_skip+1-i)*num_bp_per_EV});
+                std::cout << addboundpairs[i].t();
+            }
+            neighbour_skip_boundary++;
+            neighbour_skip_boundary_plus_one++;
+        }
+
+        std::cout << std::endl;
+        std::cout << "######################################" << std::endl;
+        std::cout << "#### INITIALIZING EXCLUDED VOLUME ####" << std::endl;
+        std::cout << "######################################" << std::endl;
+        std::cout << " Excluded Volume Beads: " << std::endl;
+        std::cout << "   number of EV beads: " << num_EV << std::endl;
+        std::cout << "   bp per EV bead:     " << num_bp_per_EV << std::endl;
+        std::cout << "   Effective size:     " << eff_size_EV_bead << std::endl;
+        std::cout << "   Exclusion distance: " << EV_dist << std::endl;
+        std::cout << "######################################" << std::endl;
+
+    }
 }
 
 ExVol::~ExVol() {
@@ -248,11 +275,14 @@ bool ExVol::check(const std::vector<arma::ivec>* moved) {
     cal_EV_intervals(moved,EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
 
     bool check = true;
-    if (check_crossings) {
-        check = check_intervals(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
-    }
-    else {
-        check = check_intervals_simpleoverlap(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
+
+    if (check_beads) {
+        if (check_crossings) {
+            check = check_intervals(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
+        }
+        else {
+            check = check_intervals_simpleoverlap(EV_typeA,EV_typeB,EV_typeC,EV_typeD,EV_typeE);
+        }
     }
 
     if (repulsion_plane_active && check) {

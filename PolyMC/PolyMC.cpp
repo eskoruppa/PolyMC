@@ -434,6 +434,8 @@ void PolyMC::init_general() {
     std::vector<std::string> input_EV_keys = {"EV","EV_rad","ExVol"};
     EV_rad              = InputChoice_get_single<double>    (input_EV_keys,input,argv,EV_rad);
     EV_check_crossings  = InputChoice_get_single<bool>      ("EV_check_crossings",input,argv,EV_check_crossings);
+    EV_force_repulsion_plane = InputChoice_get_single<bool> ("EV_force_repulsion_plane",input,argv,EV_force_repulsion_plane);
+
 
     std::vector<std::string> input_hel_rep_len_keys = {"hel_rep_len","hel_rep","helical_repeat","helical_repeat_length"};
     hel_rep_len = InputChoice_get_single<double>      (input_hel_rep_len_keys,input,argv,hel_rep_len);
@@ -668,11 +670,13 @@ void PolyMC::init_dump() {
 }
 
 void PolyMC::init_ExVol() {
-    if (EV_rad <= 0) {
-        EV_active=false;
-        return;
-    }
-    if (EV_rad >= chain->get_disc_len()) {
+
+//    if (EV_rad <= 0) {
+//        EV_active=false;
+//        return;
+//    }
+
+    if (EV_rad >= chain->get_disc_len() || (EV_force_repulsion_plane && EV_rad == 0)) {
         EV_active=true;
         ExVol * exvol = new ExVol(chain,EV_rad,EV_check_crossings);
         EV = exvol;
@@ -751,6 +755,9 @@ void PolyMC::init_ExVol() {
         if (EV_rad >= 0) {
             std::cout << "Excluded Volume radius is smaller than discretization length. Simulation terminated!" << std::endl;
             std::exit(0);
+        }
+        else {
+            EV_active=false;
         }
     }
     std::cout << std::endl;

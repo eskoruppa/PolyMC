@@ -241,7 +241,8 @@ protected:
 
     ExVol*  EV;
     double  EV_rad = 0;
-    bool    EV_check_crossings = true;
+    bool    EV_check_crossings       = true;
+    bool    EV_force_repulsion_plane = false; // activates repulsion plane even if EV = 0;
 
 /*
     Electrostatics Members
