@@ -11,11 +11,6 @@
 #include "PairStyles/Pair_LJ.h"
 
 
-
-
-
-
-
 #define PAIR_TYPE_IDENFIER_LENNARD_JONES "LJ"
 
 /* --------------------------------------------*/
@@ -26,7 +21,6 @@
 
 #define INIT_TYPE_RANGE_SET_IDENFIER    "type_set_range"
 #define INIT_TYPE_SET_IDENFIER          "type_set"
-
 
 
 #define TYPE_CHANGE_MONOMER_ID 0
@@ -84,7 +78,6 @@ protected:
 //    double  disc_len;
 
 
-
     std::vector<TypeGroup*>  type_groups;
     std::vector<Pair*>       pairs;
 
@@ -99,9 +92,6 @@ protected:
 
     std::vector<std::vector<int>>   type_changes;
     bool                            type_change_acceptance_pending = false;
-
-
-
 
 
 public:

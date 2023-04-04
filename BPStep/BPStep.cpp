@@ -1192,12 +1192,15 @@ EvalEnergy * BPStep::get_eval_energy_right(int nr) {
 }
 
 bool BPStep::same_EvalEnergy(EvalEnergy * eval1,EvalEnergy * eval2) {
-    if (eval1->get_method() != eval2->get_method()) {
+    if (*(eval1->get_method()) != *(eval2->get_method())) {
+        std::cout << "'" << *(eval1->get_method()) << "' - '" << *(eval2->get_method()) << "'" << std::endl;
+        std::cout << "inconsistent method" << std::endl;
         return false;
     }
     std::vector<double> params1 = eval1->get_params();
     std::vector<double> params2 = eval2->get_params();
     if (params1.size() != params2.size()) {
+        std::cout << "inconsistent size" << std::endl;
         return false;
     }
     for (unsigned i=0;i<params1.size();i++) {

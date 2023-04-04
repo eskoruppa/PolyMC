@@ -752,8 +752,9 @@ void PolyMC::init_ExVol() {
         }
     }
     else {
-        if (EV_rad >= 0) {
-            std::cout << "Excluded Volume radius is smaller than discretization length. Simulation terminated!" << std::endl;
+        if (EV_rad > 0) {
+
+            std::cout << "Excluded Volume radius (" << EV_rad << ") is smaller than discretization length. Simulation terminated!" << std::endl;
             std::exit(0);
         }
         else {
