@@ -6,3 +6,6 @@ obj/
 
 # ignore all .o files
 **.o
+
+# ignore vscode
+.vscode
