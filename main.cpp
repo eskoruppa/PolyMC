@@ -49,6 +49,13 @@ int main(int argc, const char **argcv) {
 
     std::string inputfn = "";
     inputfn  = parse_arg(inputfn, "-in",argv);
+
+    // terminate if no input file given
+    if (inputfn == "") {
+        std::cout << "Error: No input file provided." << std::endl;
+        std::exit(0);
+    }
+
     InputRead * input = new InputRead(inputfn);
 
     if (input->contains_multi("replica_exchange")) {
