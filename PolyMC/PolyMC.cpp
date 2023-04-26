@@ -19,6 +19,13 @@ input_given(false),nooutput(!produce_output),geninfile()
 
     inputfn  = "";
     inputfn  = parse_arg(inputfn, "-in",argv);
+
+    // terminate if no input file given
+    if (inputfn == "") {
+        std::cout << "Error: No input file provided." << std::endl;
+        std::exit(0);
+    }
+
     InputRead * inputread = new InputRead(inputfn);
     input = inputread;
 
