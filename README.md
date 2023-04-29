@@ -202,8 +202,7 @@ Constraints used in [4].
 
 4. W. Vanderlinden, E. Skoruppa , P. Kolbeck, E. Carlon, and J. Lipfert. [DNA fluctuations reveal the size and dynamics of topological domains](https://doi.org/10.1093/pnasnexus/pgac268). *PNAS Nexus*, 1:pgac268, 2022
 
-<a name="es_phd"></a>
-5. E. Skoruppa, E. Carlon [Physical Modeling of DNA and DNA-Protein Interactions](https://kuleuven.limo.libis.be/discovery/fulldisplay?docid=lirias3955698&context=SearchWebhook&vid=32KUL_KUL:Lirias&lang=en&search_scope=lirias_profile&adaptor=SearchWebhook&tab=LIRIAS&query=creator%2Cexact%2CU0118787%2CAND&facet=creator%2Cexact%2CU0118787&mode=advanced). PhD thesis, KU Leuven, 2020
+5. <a name="es_phd"></a>E. Skoruppa, E. Carlon [Physical Modeling of DNA and DNA-Protein Interactions](https://kuleuven.limo.libis.be/discovery/fulldisplay?docid=lirias3955698&context=SearchWebhook&vid=32KUL_KUL:Lirias&lang=en&search_scope=lirias_profile&adaptor=SearchWebhook&tab=LIRIAS&query=creator%2Cexact%2CU0118787%2CAND&facet=creator%2Cexact%2CU0118787&mode=advanced). PhD thesis, KU Leuven, 2020
 
  
 
