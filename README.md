@@ -2,7 +2,9 @@
 
 ### Monte Carlo code for single molecule DNA simulations
 
-Generates equilibrium configrations within a variety of different canonical ensembles (e.g. fixed linking number, constant stretching force).
+Generates equilibrium configrations within a variety of different canonical ensembles (e.g. fixed linking number, constant stretching force). 
+
+For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix of [Ref 3](#skor22).
 
 ----
 ----
@@ -55,7 +57,7 @@ The minimal command to run PolyMC is
 Example input, IDB and sequence files are provided in the directory RunScripts.
 
 ----
-## Input File and commandline arguments
+## Input File and command line arguments
 
 Most arguments may be passed either via the command line or via the input file. Exceptions will be discussed below. 
 In the input file, arguments have to be assigned as
@@ -95,8 +97,6 @@ If an arguments are provided both on via command line and input file **command l
 - subtract_T0 (default: 0)
 
     If set to 1, excess rotational strains are defined as the deviation of the euler vector from the static vector defined by the sequence dependent argument vec in the IDB file. Setting this argument to zero will account for static components in the rotation group prior to defining the euler vector. (for more info see [Ref 5](#es_phd))
-
-
 
 
 
@@ -198,7 +198,7 @@ Constraints used in [Ref 4](#vand22).
 
 2. M. Segers, E. Skoruppa, J. A. Stevens, M. Vangilbergen, A. Voorspoels, and E. Carlon. [Comment on “Flexibility of short DNA helices with finite-length effect: From base pairs to tens of base pairs” [J. Chem. Phys. 142, 125103 (2015)]](https://doi.org./10.1063/5.0055349). *J. Chem. Phys.*, 155(2):027101, 2021
 
-3. E. Skoruppa and E. Carlon. [Equilibrium fluctuations of DNA plectonemes](https://doi.org/10.1103/PhysRevE.106.024412). *Phys. Rev. E*, 106:024412, 2022
+3. <a name="skor22"></a>E. Skoruppa and E. Carlon. [Equilibrium fluctuations of DNA plectonemes](https://doi.org/10.1103/PhysRevE.106.024412). *Phys. Rev. E*, 106:024412, 2022
 
 4. <a name="vand22"></a>W. Vanderlinden, E. Skoruppa , P. Kolbeck, E. Carlon, and J. Lipfert. [DNA fluctuations reveal the size and dynamics of topological domains](https://doi.org/10.1093/pnasnexus/pgac268). *PNAS Nexus*, 1:pgac268, 2022
 
