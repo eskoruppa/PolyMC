@@ -31,7 +31,7 @@ check_consistency_every = 100000
 ## Interaction Database ################################
 ########################################################
 
-IDB         = TWLW_10bp.idb
+IDB         = TWLC.idb
 sequence    = seq
 subtract_T0 = 0
 

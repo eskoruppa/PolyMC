@@ -348,13 +348,44 @@ Prints the writhe map, the pairwise components of the double sum (see Ref [3](#s
 ----
 ## Interaction Database (IDB)
 ----
+The interaction database file specifies the hamiltonian of the polymer chain as well as the ground state configuration or static rotational structure. Every hamiltonian is expressed in terms of the rotational strain fields, i.e. the rotational deformations away from the ground state.
 
+The first few arguments specify the general setup:
+
+```
+interaction_range  = 0
+monomer_types      = a
+discretization     = 0.34
+avg_inconsist      = 0
+```
+The argument 'interaction_range' sets the range of the couplings of the rotational deformations. If set to zero, interactions are strictly local. In this case the energy is fully determined by all possible dimers. For non-zero interacrtion range, larger oligomers have to be considered. In general the size of the oligomers to be specified is 
+$$
+2\times(\mathrm{interaction \; range}+1).
+$$
+
+
+In the remainder of the file all possible oligomers have to be specified. The form of the energy of the diagonal and off-diagonal terms may be specified via the leading indicator. For example 'stiffmat' indicates a 3x3 stiffness matrix. 
+
+Example: If the interaction range is 1 and the chain consists only of type 'a' monomers only one interaction has to be specified:
+
+```
+aaaa
+    stiffmat    5  0 0 0 5  0 0 0 10
+    stiffmat    40 0 0 0 40 0 0 0 100
+    stiffmat    5  0 0 0 5  0 0 0 10
+    vec	    	0 0 36
+```
+
+To operate this system, three stiffness matrices must be specified: The first matrix represents the coupling of the middle step to the left neighbor, the second matrix specifies the diagonal component of the middle step, and the third matrix represents the couplings of the middle step to the right neighbor.
+The nine numbers following the 'stiffmat' indicator correspond to the nine entries of a 3x3 matrix, specified row-wise (i.e., filling the first, second, and third row consecutively).
+
+If not carefully chosen, left couplings may not match right couplings. Such inconsistencies may be averaged over if the avg_inconsist argument is set to 1. Otherwise the simulation will teminate upon detection of such an inconsistency.
 
 ----
 ----
 ## Sequence File
 ----
-The sequence file may either specify the full used sequence in the letters specified in the IDB file or repeating pattern. The full sequence needs to be given in a single line. Repeating patters may be specified if the first line is 'repead' followed by the repeating patter. For example for a PolyA sequence use
+The sequence file can specify either the complete sequence using the letters specified in the IDB file, or a repeating pattern. If the full sequence is provided, it must be given in a single line. In case of a repeating pattern, the first line of the sequence file must begin with the word 'repeat', followed by the repeating pattern. For instance, to represent a PolyA sequence, use the following format:
 ```
 repeat
 a
@@ -373,8 +404,10 @@ a
 Constraints used in [Ref 4](#vand22).
 ---- -->
 
-
+----
+----
 ## Publications
+----
 
 1. E. Skoruppa, A. Voorspoels, J. Vreede, and E. Carlon. [Length-scale-dependent elasticity in DNA from coarse-grained and all-atom models](https://doi.org/10.1103/PhysRevE.103.042408).
 *Phys. Rev. E*, 103:042408, 2021
@@ -387,8 +420,10 @@ Constraints used in [Ref 4](#vand22).
 
 5. <a name="es_phd"></a>E. Skoruppa, E. Carlon [Physical Modeling of DNA and DNA-Protein Interactions](https://kuleuven.limo.libis.be/discovery/fulldisplay?docid=lirias3955698&context=SearchWebhook&vid=32KUL_KUL:Lirias&lang=en&search_scope=lirias_profile&adaptor=SearchWebhook&tab=LIRIAS&query=creator%2Cexact%2CU0118787%2CAND&facet=creator%2Cexact%2CU0118787&mode=advanced). PhD thesis, KU Leuven, 2020
 
- 
+----
+----
 ## References
+----
 
 6. <a name="klen00"></a>K. Klenin and J. Langowski. [Computation of writhe in modeling of supercoiled DNA](https://doi.org/10.1002/1097-0282(20001015)54:5<307::AID-BIP20>3.0.CO;2-Y). *Biopolymers*, 54(5):307–317, 2000.
 

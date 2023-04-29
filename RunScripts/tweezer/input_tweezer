@@ -2,22 +2,31 @@
 ## Simulation Mode #####################################
 ########################################################
 
-mode = plasmid
+#replica_exchange
+#	temps      = 300 350 410 480 560 650 750 870 1000   
+#	sweeps     = 500000
+#	sweepsteps = 100
+#	equi       = 0
+#	output_all = 1
 
-use_cluster_twist  = 1
-num_twist     	   = 0
 
+mode = tweezer
+
+#slow_wind ##########
+# dLK_step = 1
+# steps    = 50000
+# dump     = 0
+####################
+
+
+tweezer_setup 		= free
+use_torpiv    		= 0
+num_twist           = 0
+use_cluster_twist   = 1
 
 check_link              = 1
 check_consistency_every = 100000
    
-
-#slow_wind ##########
-# dLK_step = 1
-# steps    = 100000
-# dump     = 1
-#####################
-
 
 ########################################################
 ## Interaction Database ################################
@@ -27,47 +36,43 @@ IDB         = TWLC.idb
 sequence    = seq
 subtract_T0 = 0
 
-elstat_fn   = electrostatics
-
 ########################################################
 ## Simulation Parameters ###############################
 ########################################################
 
+# restart          = last
+# restart_snapshot = 1
+
+#Constraints:
+#    fix_pos 0 10 10 10 10 10 10
+#    #fix_ori 50 740
+
+
 T      = 300
-num_bp = 340
-sigma  = 0.12
+num_bp = 400
+sigma  = 0.00
 torque = 0 
-EV     = 2.0
+force  = 1
+EV     = 4.0
 
-steps  = 50000000
+steps  = 1000000
 equi   = 0
-
-
-########################################################
-## Pair Interactions ###################################
-########################################################
-
 
 ########################################################
 ## Output ##############################################
 ########################################################
 
-print_every       = 1000
-print_link_info   = 1
-print_elstat_info = 1
+print_every     = 10000
+print_link_info = 10000
 
 ########################################################
 ## Dump Setup ##########################################
 ########################################################
 
 copy_input = 1
-dump_dir   = dump/plasmid
+dump_dir   = dump/test
 
 
-## XYZ ##
-XYZn          = 100
-XYZ_translate = COM
-
-
-	
+XYZn          = 1000
+XYZ_translate = first
 
