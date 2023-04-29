@@ -21,7 +21,7 @@ mode = tweezer
 ####################
 
 
-tweezer_setup 		= open
+tweezer_setup 		= free
 use_torpiv    		= 0
 num_twist              = 0
 use_cluster_twist   	= 1

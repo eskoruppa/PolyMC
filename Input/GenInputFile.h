@@ -16,6 +16,7 @@
 #define GENINFILE_INTERACTIONS  "Interactions"
 #define GENINFILE_PARAMS        "Simulation Parameters"
 #define GENINFILE_OUTPUT        "Output"
+#define GENINFILE_DUMPS_SETUP   "Dump Setup"
 #define GENINFILE_DUMPS         "Dumps"
 
 #define GENINPUTFILE_SEPERATOR_LENGTH 60

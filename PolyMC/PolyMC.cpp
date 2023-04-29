@@ -492,7 +492,7 @@ void PolyMC::init_general() {
 
 
     copy_input        = InputChoice_get_single<bool>  ("copy_input",input,argv,copy_input);
-    geninfile.add_entry(GENINFILE_DUMPS,"copy_input",copy_input);
+    geninfile.add_entry(GENINFILE_DUMPS_SETUP,"copy_input",copy_input);
 
 
     restart_file     = InputChoice_get_single<std::string>  ("restart",input,argv,restart_file);
@@ -591,6 +591,7 @@ void PolyMC::init_geninfile() {
     geninfile.add_category(GENINFILE_INTERACTIONS);
     geninfile.add_category(GENINFILE_PARAMS);
     geninfile.add_category(GENINFILE_OUTPUT);
+    geninfile.add_category(GENINFILE_DUMPS_SETUP);
     geninfile.add_category(GENINFILE_DUMPS);
 }
 
@@ -601,8 +602,8 @@ void PolyMC::init_dump() {
     }
     dump_dir = parse_arg(dump_dir, "-dir"      ,argv);
     dump_dir = parse_arg(dump_dir, "-dump_dir" ,argv);
-    geninfile.add_entry(GENINFILE_DUMPS,"dump_dir",dump_dir);
-    geninfile.add_newline(GENINFILE_DUMPS);
+    geninfile.add_entry(GENINFILE_DUMPS_SETUP,"dump_dir",dump_dir);
+    geninfile.add_newline(GENINFILE_DUMPS_SETUP);
 
     Dumps = init_dump_cmdargs(argv,&geninfile,chain,mode,EV_rad,inputfn);
 

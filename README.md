@@ -4,12 +4,12 @@
 
 Generates equilibrium configrations within a variety of different canonical ensembles (e.g. fixed linking number, constant stretching force). 
 
-For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix of [Ref 3](#skor22).
+For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix of [Ref 3](#skor22). Note that in these references most algorithmic details are ommitted. More detailed information will be provided in the future. 
 
 ----
 ----
 ## Installation
-
+----
 
 ### Linux
 ----
@@ -44,6 +44,7 @@ The executable can be found in
 ----
 ----
 ## How to run
+----
 
 Running a simulation requires an **input file**, an interaction **database file (IDB)** and a **sequence file**. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
 
@@ -57,7 +58,9 @@ The minimal command to run PolyMC is
 Example input, IDB and sequence files are provided in the directory RunScripts.
 
 ----
+----
 ## Input File and command line arguments
+----
 
 Most arguments may be passed either via the command line or via the input file. Exceptions will be discussed below. 
 In the input file, arguments have to be assigned as
@@ -72,8 +75,27 @@ Via command line, the argument name has to be given as a flag
 If an arguments are provided both on via command line and input file **command line arguments take precedence**.
 
 ----
-### Simulation Setup
+### Simulation Modes
 
+- mode:
+
+    Specify simulation mode
+    Currently implemented modes are:
+
+    - open: Linear molecule without any linking contraints. 
+    - tweezer: linear molecule emulating the the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
+        - free: allows for free fluctuations of the total linking number
+        - fix_link: fixed linking number ensemble
+        - torsional_trap: traps the linking number in quadratic potential to allow for the torque to be measured. Corresponds to quasi fixed linking number ensemble.
+        - torque: constant torque ensemble 
+    - plasmid: circular molecule. Linking number remains contraint if excluded volumes are active and EV_check_crossings=1 (see below)
+    - umbrellaplasmid: circular molecule with variable linking number to allow for umbrella sampling the plecotneme free energy
+    - plec: pure plectoneme simulation as used in Ref [3](#skor22). 
+    - lin2d: linear molecule in 2 dimensions
+    - closed2d: circular molecule in 2 dimensions
+
+
+    Each mode has additional mode-specific arguments. See example files in RunScripts directory.
 
 ----
 ### Interactions
@@ -99,22 +121,8 @@ If an arguments are provided both on via command line and input file **command l
     If set to 1, excess rotational strains are defined as the deviation of the euler vector from the static vector defined by the sequence dependent argument vec in the IDB file. Setting this argument to zero will account for static components in the rotation group prior to defining the euler vector. (for more info see [Ref 5](#es_phd))
 
 
-
 ----
 ### Simulation Parameters
-
-
-----
-### Output
-
-
-----
-### Dumps
-
-
-
-
-
 
 - steps: (default: 0)
 
@@ -132,7 +140,7 @@ If an arguments are provided both on via command line and input file **command l
     
     Supercoiling density 
     $$\sigma = \Delta Lk / Lk_0 = (Lk - Lk_0) / Lk_0$$ 
-of the intial configuration. Lk_0 is determined by the specified intrinsic twist (via the vec argument in the IDB file). If no static twist is defined intrinsic twist is defined by helical_repeat (see next).
+    of the intial configuration. Lk_0 is determined by the specified intrinsic twist (via the vec argument in the IDB file). If no static twist is defined intrinsic twist is defined by helical_repeat (see next).
 
 - helical_repeat (default: 3.57)
 
@@ -155,6 +163,22 @@ of the intial configuration. Lk_0 is determined by the specified intrinsic twist
 
     Seed for random number generator. If set to -1 a random seed will be generated.
 
+
+----
+### Output
+Configure command line output.
+
+- print_every (default: 100000)
+
+    Prints the status of the simulation every so many iteration steps.
+
+- print_link_info (default: 0)
+
+    Specifies whether writhe, twist and linking number shall be displayed. This may slow down the simulation if printing frequently to command line.
+
+----
+### Dumps
+
 - dump_dir:
 
     Path and basename for output files. All output files will share this basename complemented with the appropriate extension. Make sure that the specified directory exists as **the directory will not be created**.
@@ -163,31 +187,41 @@ of the intial configuration. Lk_0 is determined by the specified intrinsic twist
 
     If set to 1 all input files are included in the outfiles specified by dump_dir. The input file will be generated based on arguments provided in input file and command line. 
 
-- 3.57
 
- 
+
+
+
+----
 ----
 ## Excluded Volumes
+----
 
 If EV is set to zero no excluded volume will be considered. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV. The number of excluded volume beads does not necessarily equal the 
 
 IF EV is smaller or equal to EV/2 not every monomers will be associated with an excluded 
 
 ----
+----
 ## Interaction Database (IDB)
+----
 
 
+----
 ----
 ## Sequence File
-
+----
 
 ----
+----
 ## Electrostatics
+----
 
-
+----
 ----
 ## Holonomic constraints
 Constraints used in [Ref 4](#vand22).
+----
+
 
 
 
