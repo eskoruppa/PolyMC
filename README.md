@@ -332,16 +332,16 @@ Restart files allow the simulation to be resumed from a previously generated sna
     dump_every: 	Restartn, restartn
     filename:   	Restartfn, restartfn
 
-    extension: 		.restart
+    extension:      .restart
 
 #### Writhe Map
 Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
 
-    dump_every: 	WMn
-    filename:   	WMfn
-    segment_size:	WMseg
+    dump_every:     WMn
+    filename:       WMfn
+    segment_size:   WMseg
 
-    extension: 		.wm
+    extension:      .wm
 
 
 ----
