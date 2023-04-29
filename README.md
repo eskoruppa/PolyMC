@@ -286,7 +286,7 @@ extension: .en
 ```
 
 #### Linking number
-Prints Twist and Writhe.
+Prints Writhe and Twist.
 
 Options for writhe: 
 - exact:  Langowski method 1a (see [Klenin 2000](#klen00))
@@ -302,6 +302,15 @@ chain fraction: LKfrac
 
 extension:      .lk
 ```
+
+#### Writhe Map
+Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
+
+    dump_every:     WMn
+    filename:       WMfn
+    segment_size:   WMseg
+
+    extension:      .wm
 
 #### Persistence Length
 Calculates the persistence length via the tangent-tangent correlation function using the inversion (see Ref [5](#es_phd))
@@ -333,15 +342,6 @@ Restart files allow the simulation to be resumed from a previously generated sna
     filename:       Restartfn, restartfn
 
     extension:      .restart
-
-#### Writhe Map
-Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
-
-    dump_every:     WMn
-    filename:       WMfn
-    segment_size:   WMseg
-
-    extension:      .wm
 
 
 ----
