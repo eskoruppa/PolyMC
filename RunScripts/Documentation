@@ -45,7 +45,7 @@ append (or app)
 #	the one specified in dump_dir with the respective extension
 #
 ###################################################################################
-Spacial Configuration
+Spatial Configuration
 
 	Dumps the positions of all triads.
 
@@ -143,7 +143,7 @@ filename:   Extfn, extfn, EXTfn
 extension: .zext
 
 ###################################################################################
-Force Extensiom
+Force Extension
 	
 	Force Extension along the force direction
 	This prints the statistics of force extension to file. After the simulation

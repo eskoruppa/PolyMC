@@ -110,7 +110,7 @@ If an arguments are provided both on via command line and input file **command l
 
 - EV: (default: 0)
     
-    Excluded volume diameter of the chain. Deactivated if set to zero. For more information see below.
+    Excluded volume diameter of the chain. Deactivated if set to zero. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV (See Supporting of [Ref 4](#vand2022)). Note that the number of excluded volume beads does not necessarily equal the number of chain monomers, if the discretiation length is smaller than the bead diameter. To improve performance as few excluded volume beads as possible are considered.
 
 - EV_check_crossings (default: 1)
 
@@ -177,7 +177,7 @@ Configure command line output.
     Specifies whether writhe, twist and linking number shall be displayed. This may slow down the simulation if printing frequently to command line.
 
 ----
-### Dumps
+### Dump Setup
 
 - dump_dir:
 
@@ -187,18 +187,162 @@ Configure command line output.
 
     If set to 1 all input files are included in the outfiles specified by dump_dir. The input file will be generated based on arguments provided in input file and command line. 
 
+- app (detault: 0)
+
+    Specifies whether output is appended to existing files or whether existing files are overwritten.
+
+---
+### Dumps
+PolyMC offers several different types of dumps that enable configurations and observables to be saved to a file.
+
+To activate most dumps, set the corresponding "dump_every" parameter to a positive value. This will cause the corresponding output to be saved to a file after a certain number of Monte Carlo (MC) steps. If no additional filename is specified, the dump filename will be the one specified in the "dump_dir" parameter, with the appropriate extension.
+
+#### XYZ
+Dumps configuration in xyz format.
+
+- Translation Options:
+    - first: 	First Triad always has coordinates 0,0,0 (default)
+    - COM:	Center of Mass always has coordinates 0,0,0
+    - last:	Last Triad always has coordinates 0,0,0
+
+- Representation Options:
+    - simple: One bead for trad (default)
+    - fl:		First and last monomer enphasized
+    - helix:	helix representation
+    - dna:	double helix representation
+    - triadf: Triad representation   	
+
+```
+dump_every: 		XYZn
+filename:   		XYZfn
+translate_option:	XYZ_translate
+representation:		XYZ_repr
+
+extension: 		.xyz
+```
+
+#### Simulation State
+Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
+					
+    dump_every: 	Stn
+    filename:   	Stfn
+    dump_triads:	Sttriads,Sttds
+    dump_omegas:	StOmegas,StOm
+
+    extension: 		.state
 
 
+#### Thetas
+Prints euler vectors (Thetas) connecting consecutive triads to file
+					
+    dump_every: 	Thetasn
+    filename:   	Thetasfn
+
+    extension: 		.thetas
 
 
-----
-----
-## Excluded Volumes
-----
+#### End-to-End Distance
+Distance between first and last monomer
+	
+    output: distance
 
-If EV is set to zero no excluded volume will be considered. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV. The number of excluded volume beads does not necessarily equal the 
+    dump_every: E2En 
+    filename:   E2Efn
 
-IF EV is smaller or equal to EV/2 not every monomers will be associated with an excluded 
+    extension: .e2e
+
+#### z Extension
+Extension along the force direction. This dump can be used at every step without significant loss of efficiency. 
+	
+	output: zext
+
+    dump_every: Extn,  extn,  EXTn 
+    filename:   Extfn, extfn, EXTfn
+
+    extension: .zext
+
+#### Force Extension
+	
+Calculates the force extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
+	
+	output: force number_of_measurements z z_squared contour_length
+
+    dump_every: fen,  FEn   
+    filename:   fefn, FEfn
+    fraction:   fefrac, FEfrac (default 1, should be 0 < frac <= 1)
+
+    extension: .fe
+
+#### Energy	
+Total elastic energy in the system in units of kT
+	
+```
+output: energy
+
+dump_every: En 
+filename:   Efn
+
+extension: .en
+```
+
+#### Linking number
+Prints Twist and Writhe.
+
+Options for writhe: 
+- exact:  Langowski method 1a (see [Klenin 2000](#klen00))
+- fuller: Fuller single sum (see [Fuller 1978](#full78))
+- both:   Both Langowski and Fuller (3 arguments: tw lang_wr full_wr)
+fsdfsdf
+
+```
+dump_every: 	LKn 
+filename:   	LKfn
+writhe option:	LKoptn
+chain fraction: LKfrac
+
+extension: 		.lk
+```
+
+#### Persistence Length
+Calculates the persistence length via the tangent-tangent correlation function using the inversion (see Ref [5](#es_phd))
+$$
+l_b(m) = \frac{-am}{\log\langle \hat{\mathbf{t}}_i \cdot \hat{\mathbf{t}}_ {i+m} \rangle}
+$$
+In this method, 'm' denotes the number of monomers by which the tangents are displaced, and 'a' represents the discretization length. The 'maxdist' argument sets the maximum value of 'm' that is considered.
+					
+    dump_every: 	LBn 
+    filename:   	LBfn
+    maxdist: 		LBdist
+
+    extension: 		.lb
+
+#### Tangent-tangent Correlation Function
+Analogous to persistence length
+					
+    dump_every: 	TCn
+    filename:   	TCfn
+    maxdist: 		TCdist
+
+    extension: 		.tancor
+
+
+#### Restart Snapshots
+Restart files allow the simulation to be resumed from a previously generated snapshot.
+					
+    dump_every: 	Restartn, restartn
+    filename:   	Restartfn, restartfn
+
+    extension: 		.restart
+
+#### Writhe Map
+Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
+
+    dump_every: 	WMn
+    filename:   	WMfn
+    segment_size:	WMseg
+
+    extension: 		.wm
+
 
 ----
 ----
@@ -210,19 +354,24 @@ IF EV is smaller or equal to EV/2 not every monomers will be associated with an 
 ----
 ## Sequence File
 ----
+The sequence file may either specify the full used sequence in the letters specified in the IDB file or repeating pattern. The full sequence needs to be given in a single line. Repeating patters may be specified if the first line is 'repead' followed by the repeating patter. For example for a PolyA sequence use
+```
+repeat
+a
+``` 
 
-----
+
+<!-- ----
 ----
 ## Electrostatics
-----
+---- -->
 
-----
+
+<!-- ----
 ----
 ## Holonomic constraints
 Constraints used in [Ref 4](#vand22).
-----
-
-
+---- -->
 
 
 ## Publications
@@ -239,6 +388,9 @@ Constraints used in [Ref 4](#vand22).
 5. <a name="es_phd"></a>E. Skoruppa, E. Carlon [Physical Modeling of DNA and DNA-Protein Interactions](https://kuleuven.limo.libis.be/discovery/fulldisplay?docid=lirias3955698&context=SearchWebhook&vid=32KUL_KUL:Lirias&lang=en&search_scope=lirias_profile&adaptor=SearchWebhook&tab=LIRIAS&query=creator%2Cexact%2CU0118787%2CAND&facet=creator%2Cexact%2CU0118787&mode=advanced). PhD thesis, KU Leuven, 2020
 
  
+## References
 
+6. <a name="klen00"></a>K. Klenin and J. Langowski. [Computation of writhe in modeling of supercoiled DNA](https://doi.org/10.1002/1097-0282(20001015)54:5<307::AID-BIP20>3.0.CO;2-Y). *Biopolymers*, 54(5):307–317, 2000.
 
+7. <a name="full78"></a>F. B. Fuller. [Decomposition of the linking number of a closed ribbon: A problem from molecular biology](https://doi.org/10.1073/pnas.75.8.3557). Proc. Natl. Acad. Sci. U.S.A., 75:3557–3561, 1978.
 

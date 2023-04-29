@@ -603,7 +603,7 @@ void PolyMC::init_dump() {
     dump_dir = parse_arg(dump_dir, "-dir"      ,argv);
     dump_dir = parse_arg(dump_dir, "-dump_dir" ,argv);
     geninfile.add_entry(GENINFILE_DUMPS_SETUP,"dump_dir",dump_dir);
-    geninfile.add_newline(GENINFILE_DUMPS_SETUP);
+
 
     Dumps = init_dump_cmdargs(argv,&geninfile,chain,mode,EV_rad,inputfn);
 
@@ -632,6 +632,9 @@ void PolyMC::init_dump() {
     append_dumps = InputChoice_get_single<bool>        ("app"     ,&input,argv,append_dumps);
     append_dumps = InputChoice_get_single<bool>        ("append"  ,&input,argv,append_dumps);
     append_dumps = InputChoice_get_single<bool>        ("append"  ,&input,argv,append_dumps);
+
+    geninfile.add_entry(GENINFILE_DUMPS_SETUP,"app",append_dumps);
+    geninfile.add_newline(GENINFILE_DUMPS_SETUP);
 
     if (ES_active) {
 
