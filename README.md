@@ -213,32 +213,32 @@ Dumps configuration in xyz format.
     - triadf: Triad representation   	
 
 ```
-dump_every: 		XYZn
-filename:   		XYZfn
-translate_option:	XYZ_translate
-representation:		XYZ_repr
+dump_every:         XYZn
+filename:           XYZfn
+translate_option:   XYZ_translate
+representation:     XYZ_repr
 
-extension: 		.xyz
+extension:          .xyz
 ```
 
 #### Simulation State
 Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
 					
-    dump_every: 	Stn
-    filename:   	Stfn
-    dump_triads:	Sttriads,Sttds
-    dump_omegas:	StOmegas,StOm
+    dump_every:     Stn
+    filename:       Stfn
+    dump_triads:    Sttriads,Sttds
+    dump_omegas:    StOmegas,StOm
 
-    extension: 		.state
+    extension:      .state
 
 
 #### Thetas
 Prints euler vectors (Thetas) connecting consecutive triads to file
 					
-    dump_every: 	Thetasn
-    filename:   	Thetasfn
+    dump_every:     Thetasn
+    filename:       Thetasfn
 
-    extension: 		.thetas
+    extension:      .thetas
 
 
 #### End-to-End Distance
@@ -246,10 +246,10 @@ Distance between first and last monomer
 	
     output: distance
 
-    dump_every: E2En 
-    filename:   E2Efn
+    dump_every:     E2En 
+    filename:       E2Efn
 
-    extension: .e2e
+    extension:      .e2e
 
 #### z Extension
 Extension along the force direction. This dump can be used at every step without significant loss of efficiency. 
@@ -295,12 +295,12 @@ Options for writhe:
 fsdfsdf
 
 ```
-dump_every: 	LKn 
-filename:   	LKfn
+dump_every:     LKn 
+filename:       LKfn
 writhe option:	LKoptn
 chain fraction: LKfrac
 
-extension: 		.lk
+extension:      .lk
 ```
 
 #### Persistence Length
@@ -310,27 +310,27 @@ l_b(m) = \frac{-am}{\log\langle \hat{\mathbf{t}}_i \cdot \hat{\mathbf{t}}_ {i+m}
 $$
 In this method, 'm' denotes the number of monomers by which the tangents are displaced, and 'a' represents the discretization length. The 'maxdist' argument sets the maximum value of 'm' that is considered.
 					
-    dump_every: 	LBn 
-    filename:   	LBfn
-    maxdist: 		LBdist
+    dump_every:     LBn 
+    filename:       LBfn
+    maxdist:        LBdist
 
-    extension: 		.lb
+    extension:      .lb
 
 #### Tangent-tangent Correlation Function
 Analogous to persistence length
 					
-    dump_every: 	TCn
-    filename:   	TCfn
-    maxdist: 		TCdist
+    dump_every:     TCn
+    filename:       TCfn
+    maxdist:        TCdist
 
-    extension: 		.tancor
+    extension:      .tancor
 
 
 #### Restart Snapshots
 Restart files allow the simulation to be resumed from a previously generated snapshot.
 					
-    dump_every: 	Restartn, restartn
-    filename:   	Restartfn, restartfn
+    dump_every:     Restartn, restartn
+    filename:       Restartfn, restartfn
 
     extension:      .restart
 
