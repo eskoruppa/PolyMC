@@ -35,7 +35,7 @@ make -f MakePolyMC -j N
 ```
 
 
-The executable can be found in 
+After compiling the executable can be found at 
 ```console
 ./bin/Release/PolyMC
 ```
