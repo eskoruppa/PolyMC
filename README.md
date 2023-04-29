@@ -79,8 +79,7 @@ If an arguments are provided both on via command line and input file **command l
 
 - mode:
 
-    Specify simulation mode
-    Currently implemented modes are:
+    Specify simulation mode. Currently implemented modes are:
 
     - open: Linear molecule without any linking contraints. 
     - tweezer: linear molecule emulating the the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
