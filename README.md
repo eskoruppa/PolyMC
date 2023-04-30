@@ -64,7 +64,7 @@ In the input file, arguments have to be assigned as
 argument_name = value
 ```
 Via command line, the argument name has to be given as a flag
-```console
+```
 -argument_name value
 ```
 
