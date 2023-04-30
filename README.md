@@ -207,6 +207,7 @@ PolyMC offers several different types of dumps that enable configurations and ob
 
 To activate most dumps, set the corresponding "dump_every" parameter to a positive value. This will cause the corresponding output to be saved to a file after a certain number of Monte Carlo (MC) steps. If no additional filename is specified, the dump filename will be the one specified in the "dump_dir" parameter, with the appropriate extension.
 
+---
 ### XYZ
 Dumps configuration in xyz format.
 
@@ -253,7 +254,7 @@ dump/xyzout
 
 Note that only one xyz dump can be active at a time. 
 
-
+---
 ### Simulation State
 Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
 					
