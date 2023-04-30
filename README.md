@@ -2,9 +2,9 @@
 
 ### Monte Carlo code for single molecule DNA simulations
 
-Generates equilibrium configrations within a variety of different canonical ensembles (e.g. fixed linking number, constant stretching force). 
+Generates equilibrium configurations within a variety of different canonical ensembles (e.g. fixed linking number, constant stretching force). 
 
-For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix of [Ref 3](#skor22). Note that in these references most algorithmic details are ommitted. More detailed information will be provided in the future. 
+For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix of [Ref 3](#skor22). Note that in these references, most algorithmic details are omitted. More detailed information will be provided in the future. 
 
 ----
 ----
@@ -33,7 +33,7 @@ make -f MakePolyMC -j N
 ```
 
 
-After compiling the executable can be found at 
+After compiling, the executable can be found at 
 ```console
 ./bin/Release/PolyMC
 ```
@@ -43,16 +43,16 @@ After compiling the executable can be found at
 ----
 # How to run
 
-Running a simulation requires an **input file**, an interaction **database file (IDB)** and a **sequence file**. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
+Running a simulation requires an **input file**, an interaction **database file (IDB)**, and a **sequence file**. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
 
-The input file has to be passed as a commandline argument via the flag -in.
+The input file has to be passed as a command line argument via the flag -in.
 
 The minimal command to run PolyMC is
 ```console
 ./PolyMC -in input_file
 ```
 
-Example input, IDB and sequence files are provided in the directory RunScripts.
+Example input, IDB, and sequence files are provided in the directory RunScripts.
 
 ----
 ----
@@ -68,7 +68,7 @@ Via command line, the argument name has to be given as a flag
 -argument_name value
 ```
 
-If an arguments are provided both on via command line and input file **command line arguments take precedence**.
+If arguments are provided both via the command line and input file, **command line arguments take precedence**.
 
 ----
 ## Simulation Setup
@@ -78,17 +78,17 @@ If an arguments are provided both on via command line and input file **command l
 
 - mode:
 
-    Specify simulation mode. Currently implemented modes are:
+    Specify simulation mode. Currently, implemented modes are:
 
-    - open: Linear molecule without any linking contraints. 
-    - tweezer: linear molecule emulating the the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
+    - open: Linear molecule without any linking constraints. 
+    - tweezer: linear molecule emulating the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned, and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
         - free: allows for free fluctuations of the total linking number
         - fix_link: fixed linking number ensemble
-        - torsional_trap: traps the linking number in quadratic potential to allow for the torque to be measured. Corresponds to quasi fixed linking number ensemble.
+        - torsional_trap: traps the linking number in a quadratic potential to allow for the torque to be measured. Corresponds to quasi-fixed linking number ensemble.
         - torque: constant torque ensemble 
-    - plasmid: circular molecule. Linking number remains contraint if excluded volumes are active and EV_check_crossings=1 (see below)
-    - umbrellaplasmid: circular molecule with variable linking number to allow for umbrella sampling the plecotneme free energy
-    - plec: pure plectoneme simulation as used in Ref [3](#skor22). 
+    - plasmid: circular molecule. Linking number remains conserved if excluded volumes are active and EV_check_crossings=1 (see below)
+    - umbrellaplasmid: circular molecule with variable linking number to allow for umbrella sampling the plectoneme free energy
+    - plec: pure plectoneme simulation used in Ref [3](#skor22). 
     - lin2d: linear molecule in 2 dimensions
     - closed2d: circular molecule in 2 dimensions
 
@@ -96,8 +96,15 @@ If an arguments are provided both on via command line and input file **command l
     Each mode has additional mode-specific arguments. See example files in RunScripts directory.
 
 ### Restart files
-Simulations may be initiated from previously generated snapshots, if during these simulations restart files were dumped ([see in section on dumps](#dump_restart)). This requires a restart file generated during said preivous run. 
+Simulations may be initiated from previously generated snapshots if during these simulations restart files were dumped ([see in the section on dumps](#dump_restart)). Initiation from restart file is controlled by two arguments:
 
+- restart: 
+
+    The filename of the restart file
+
+- restart_snapshot: (default: -1 -> last snapshot in file)
+
+    The index of the selected snapshot.
 
 
 ----
@@ -105,7 +112,7 @@ Simulations may be initiated from previously generated snapshots, if during thes
 
 - IDB: 
 
-    Filename of provided interaction database file. For more information on IDB files see below
+    The filename of the provided interaction database file. For more information on IDB files, see below
 
 - sequence:
 
@@ -113,15 +120,15 @@ Simulations may be initiated from previously generated snapshots, if during thes
 
 - EV: (default: 0)
     
-    Excluded volume diameter of the chain. Deactivated if set to zero. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV (See Supporting of [Ref 4](#vand2022)). Note that the number of excluded volume beads does not necessarily equal the number of chain monomers, if the discretiation length is smaller than the bead diameter. To improve performance as few excluded volume beads as possible are considered.
+    Excluded volume diameter of the chain. Deactivated if set to zero. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV (See Supporting of [Ref 4](#vand2022)). Note that the number of excluded volume beads does not necessarily equal the number of chain monomers if the discretization length is smaller than the bead diameter. To improve performance, as few excluded volume beads as possible are considered.
 
 - EV_check_crossings (default: 1)
 
-    If true (1) moves that requires chain crossings are disallowed. This allows for fixed linking number simulations.
+    If true (1), moves that lead to effective chain crossings are disallowed. This allows for fixed linking number simulations.
 
 - subtract_T0 (default: 0)
 
-    If set to 1, excess rotational strains are defined as the deviation of the euler vector from the static vector defined by the sequence dependent argument vec in the IDB file. Setting this argument to zero will account for static components in the rotation group prior to defining the euler vector. (for more info see [Ref 5](#es_phd))
+    If set to 1, excess rotational strains are defined as the deviation of the Euler vector from the static vector defined by the sequence-dependent argument 'vec' in the IDB file. Setting this argument to zero will account for static components in the rotation group prior to defining the Euler vector. (for more info see [Ref 5](#es_phd))
 
 
 ----
@@ -133,7 +140,7 @@ Simulations may be initiated from previously generated snapshots, if during thes
 
 - equi: (default: 0)
 
-    Number of Monte Carlo equilibration steps. During these steps the output is disabled.
+    Number of Monte Carlo equilibration steps. During these steps, the output is disabled.
 
 - num_bp: (default: 0)
 
@@ -143,7 +150,7 @@ Simulations may be initiated from previously generated snapshots, if during thes
     
     Supercoiling density 
     $$\sigma = \Delta Lk / Lk_0 = (Lk - Lk_0) / Lk_0$$ 
-    of the intial configuration. Lk_0 is determined by the specified intrinsic twist (via the vec argument in the IDB file). If no static twist is defined intrinsic twist is defined by helical_repeat (see next).
+    of the initial configuration. Lk_0 is determined by the specified intrinsic twist (via the 'vec' argument in the IDB file). If no static twist is defined, the intrinsic twist is defined by helical_repeat (see next).
 
 - helical_repeat (default: 3.57)
 
@@ -177,20 +184,20 @@ Configure command line output.
 
 - print_link_info (default: 0)
 
-    Specifies whether writhe, twist and linking number shall be displayed. This may slow down the simulation if printing frequently to command line.
+    Specifies whether writhe, twist, and linking number shall be displayed. This may slow down the simulation if printing frequently to command line.
 
 ----
 ## Dump Setup
 
 - dump_dir:
 
-    Path and basename for output files. All output files will share this basename complemented with the appropriate extension. Make sure that the specified directory exists as **the directory will not be created**.
+    Path and base name for output files. All output files will share this base name, complemented with the appropriate extension. Make sure that the specified directory exists, as **the directory will not be created**.
 
 - copy_input (default: 1)
 
     If set to 1 all input files are included in the outfiles specified by dump_dir. The input file will be generated based on arguments provided in input file and command line. 
 
-- app (detault: 0)
+- app (default: 0)
 
     Specifies whether output is appended to existing files or whether existing files are overwritten.
 
@@ -204,16 +211,16 @@ To activate most dumps, set the corresponding "dump_every" parameter to a positi
 Dumps configuration in xyz format.
 
 - Translation Options:
-    - first: 	First Triad always has coordinates 0,0,0 (default)
-    - COM:	Center of Mass always has coordinates 0,0,0
-    - last:	Last Triad always has coordinates 0,0,0
+    - first:    First Triad always has coordinates 0,0,0 (default)
+    - COM:      Center of Mass always has coordinates 0,0,0
+    - last:     Last Triad always has coordinates 0,0,0
 
 - Representation Options:
-    - simple: One bead for trad (default)
-    - fl:		First and last monomer enphasized
-    - helix:	helix representation
-    - dna:	double helix representation
-    - triadf: Triad representation   	
+    - simple:   One bead per triad (default)
+    - fl:       First and last monomer emphasized
+    - helix:    helix representation
+    - dna:      double helix representation
+    - triadf:   Triad representation   	
 
 ```
 dump_every:         XYZn
@@ -236,7 +243,7 @@ Prints the state of the simulation to file. Monomer positions are printed by def
 
 
 ### Thetas
-Prints euler vectors (Thetas) connecting consecutive triads to file
+Prints Euler vectors (Thetas) connecting consecutive triads to file
 					
     dump_every:     Thetasn
     filename:       Thetasfn
@@ -266,7 +273,7 @@ Extension along the force direction. This dump can be used at every step without
 
 ### Force Extension
 	
-Calculates the force extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
+Calculates the force-extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
 	
 	output: force number_of_measurements z z_squared contour_length
 
@@ -289,7 +296,7 @@ extension: .en
 ```
 
 ### Linking number
-Prints Writhe and Twist.
+Prints writhe and twist.
 
 Options for writhe: 
 - exact:  Langowski method 1a (see [Klenin 2000](#klen00))
@@ -350,7 +357,7 @@ Restart files allow the simulation to be resumed from a previously generated sna
 ----
 ----
 # Interaction Database (IDB)
-The interaction database file specifies the hamiltonian of the polymer chain as well as the ground state configuration or static rotational structure. Every hamiltonian is expressed in terms of the rotational strain fields, i.e. the rotational deformations away from the ground state.
+The interaction database file specifies the Hamiltonian of the polymer chain as well as the ground state configuration or static rotational structure. Every Hamiltonian is expressed in terms of the rotational strain fields, i.e. the rotational deformations away from the ground state.
 
 The first few arguments specify the general setup:
 
@@ -360,15 +367,15 @@ monomer_types      = a
 discretization     = 0.34
 avg_inconsist      = 0
 ```
-The argument 'interaction_range' sets the range of the couplings of the rotational deformations. If set to zero, interactions are strictly local. In this case the energy is fully determined by all possible dimers. For non-zero interacrtion range, larger oligomers have to be considered. In general the size of the oligomers to be specified is 
+The argument 'interaction_range' sets the range of the couplings of the rotational deformations. If set to zero, interactions are strictly local. In this case, the energy is fully determined by all possible dimers. For non-zero interaction range, larger oligomers have to be considered. In general, the size of the oligomers to be specified is 
 $$
 2\times(\mathrm{interaction \; range}+1).
 $$
 
 
-In the remainder of the file all possible oligomers have to be specified. The form of the energy of the diagonal and off-diagonal terms may be specified via the leading indicator. For example 'stiffmat' indicates a 3x3 stiffness matrix. 
+In the remainder of the file, all possible oligomers have to be specified. The form of the energy of the diagonal and off-diagonal terms may be specified via the leading indicator. For example, 'stiffmat' indicates a 3x3 stiffness matrix. 
 
-Example: If the interaction range is 1 and the chain consists only of type 'a' monomers only one interaction has to be specified:
+Example: If the interaction range is 1 and the chain consists only of type 'a' monomers, only one interaction has to be specified:
 
 ```
 aaaa
@@ -381,7 +388,8 @@ aaaa
 To operate this system, three stiffness matrices must be specified: The first matrix represents the coupling of the middle step to the left neighbor, the second matrix specifies the diagonal component of the middle step, and the third matrix represents the couplings of the middle step to the right neighbor.
 The nine numbers following the 'stiffmat' indicator correspond to the nine entries of a 3x3 matrix, specified row-wise (i.e., filling the first, second, and third row consecutively).
 
-If not carefully chosen, left couplings may not match right couplings. Such inconsistencies may be averaged over if the avg_inconsist argument is set to 1. Otherwise the simulation will teminate upon detection of such an inconsistency.
+If not carefully chosen, the left couplings may not match the right couplings. Such inconsistencies may be averaged over if the avg_inconsist argument is set to 1. Otherwise, the simulation will terminate upon detection of such an inconsistency.
+
 
 ----
 ----
