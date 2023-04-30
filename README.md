@@ -271,7 +271,7 @@ Stn = 1000
 dump_triads = 1
 dump_omegas = 1
 ```
-Prints state including monomer positions, triads and angles to file every 1000 steps. Generates a file of name specified by the dump_dir flag with the extension complemented by the '.state' extension.
+Prints state including monomer positions, triads, and angles to file every 1000 steps. Generates a file with name specified by the dump_dir flag with the extension complemented by the '.state' extension.
 
 ----
 ### Thetas
