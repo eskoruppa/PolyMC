@@ -48,7 +48,7 @@ Running a simulation requires an **input file**, an interaction **database file 
 The input file has to be passed as a command line argument via the flag -in.
 
 The minimal command to run PolyMC is
-```console
+```
 ./PolyMC -in input_file
 ```
 
