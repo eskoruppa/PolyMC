@@ -231,6 +231,29 @@ representation:     XYZ_repr
 extension:          .xyz
 ```
 
+Example for input file arguments: 
+```
+dump_dir = dump/test
+XYZn     = 10000
+XYZ_translate = COM
+``` 
+This command will initiate the configuration to be printed to file in xyz format every 10000 steps and the center of mass of the configuration to be shifted to the origin of the coordinate system. The resulting output files will be 
+```
+dump/test.xyz
+``` 
+
+The same can be achieved via command line
+```
+- dump_dir dump/test -XYZn 10000 -XYZ_translate COM -XYZfn dump/xyzout
+```
+This command will generate the same output as the input file command. Except in this case, we don't want to use the colloquial filename given by the dump_dir argument, but instead use the unique file name specified by -XYZfn. Generates the output file 
+```
+dump/xyzout
+``` 
+
+Note that only one xyz dump can be active at a time. 
+
+
 ### Simulation State
 Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
 					
