@@ -267,7 +267,7 @@ Prints the state of the simulation to file. Monomer positions are printed by def
 
 Example (input file)
 ```
-Stn = 1000
+Stn         = 1000
 dump_triads = 1
 dump_omegas = 1
 ```
