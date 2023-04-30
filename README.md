@@ -233,9 +233,9 @@ extension:          .xyz
 
 Example for input file arguments: 
 ```
-dump_dir = dump/test
-XYZn     = 10000
-XYZ_translate = COM
+dump_dir        = dump/test
+XYZn            = 10000
+XYZ_translate   = COM
 ``` 
 This command will initiate the configuration to be printed to file in xyz format every 10000 steps and the center of mass of the configuration to be shifted to the origin of the coordinate system. The resulting output files will be 
 ```
@@ -244,7 +244,7 @@ dump/test.xyz
 
 The same can be achieved via command line
 ```
-- dump_dir dump/test -XYZn 10000 -XYZ_translate COM -XYZfn dump/xyzout
+-dump_dir dump/test -XYZn 10000 -XYZ_translate COM -XYZfn dump/xyzout
 ```
 This command will generate the same output as the input file command. Except in this case, we don't want to use the colloquial filename given by the dump_dir argument, but instead use the unique file name specified by -XYZfn. Generates the output file (this will not automatically add the .xyz extension)
 ```
