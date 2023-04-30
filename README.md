@@ -8,11 +8,9 @@ For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix 
 
 ----
 ----
-## Installation
-----
+# Installation
 
 ### Linux
-----
 
 Compiling PolyMC requires make and a few c++ libraries.
 
@@ -43,8 +41,7 @@ After compiling the executable can be found at
 
 ----
 ----
-## How to run
-----
+# How to run
 
 Running a simulation requires an **input file**, an interaction **database file (IDB)** and a **sequence file**. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
 
@@ -59,8 +56,7 @@ Example input, IDB and sequence files are provided in the directory RunScripts.
 
 ----
 ----
-## Input File and command line arguments
-----
+# Input File and command line arguments
 
 Most arguments may be passed either via the command line or via the input file. Exceptions will be discussed below. 
 In the input file, arguments have to be assigned as
@@ -75,6 +71,9 @@ Via command line, the argument name has to be given as a flag
 If an arguments are provided both on via command line and input file **command line arguments take precedence**.
 
 ----
+## Simulation Setup
+
+
 ### Simulation Modes
 
 - mode:
@@ -96,8 +95,13 @@ If an arguments are provided both on via command line and input file **command l
 
     Each mode has additional mode-specific arguments. See example files in RunScripts directory.
 
+### Restart files
+Simulations may be initiated from previously generated snapshots, if during these simulations restart files were dumped ([see in section on dumps](#dump_restart)). This requires a restart file generated during said preivous run. 
+
+
+
 ----
-### Interactions
+## Interaction Setup
 
 - IDB: 
 
@@ -121,7 +125,7 @@ If an arguments are provided both on via command line and input file **command l
 
 
 ----
-### Simulation Parameters
+## Simulation Parameters
 
 - steps: (default: 0)
 
@@ -164,7 +168,7 @@ If an arguments are provided both on via command line and input file **command l
 
 
 ----
-### Output
+## Output
 Configure command line output.
 
 - print_every (default: 100000)
@@ -176,7 +180,7 @@ Configure command line output.
     Specifies whether writhe, twist and linking number shall be displayed. This may slow down the simulation if printing frequently to command line.
 
 ----
-### Dump Setup
+## Dump Setup
 
 - dump_dir:
 
@@ -191,12 +195,12 @@ Configure command line output.
     Specifies whether output is appended to existing files or whether existing files are overwritten.
 
 ---
-### Dumps
+## Dumps
 PolyMC offers several different types of dumps that enable configurations and observables to be saved to a file.
 
 To activate most dumps, set the corresponding "dump_every" parameter to a positive value. This will cause the corresponding output to be saved to a file after a certain number of Monte Carlo (MC) steps. If no additional filename is specified, the dump filename will be the one specified in the "dump_dir" parameter, with the appropriate extension.
 
-#### XYZ
+### XYZ
 Dumps configuration in xyz format.
 
 - Translation Options:
@@ -220,7 +224,7 @@ representation:     XYZ_repr
 extension:          .xyz
 ```
 
-#### Simulation State
+### Simulation State
 Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
 					
     dump_every:     Stn
@@ -231,7 +235,7 @@ Prints the state of the simulation to file. Monomer positions are printed by def
     extension:      .state
 
 
-#### Thetas
+### Thetas
 Prints euler vectors (Thetas) connecting consecutive triads to file
 					
     dump_every:     Thetasn
@@ -240,7 +244,7 @@ Prints euler vectors (Thetas) connecting consecutive triads to file
     extension:      .thetas
 
 
-#### End-to-End Distance
+### End-to-End Distance
 Distance between first and last monomer
 	
     output: distance
@@ -250,7 +254,7 @@ Distance between first and last monomer
 
     extension:      .e2e
 
-#### z Extension
+### z Extension
 Extension along the force direction. This dump can be used at every step without significant loss of efficiency. 
 	
 	output: zext
@@ -260,7 +264,7 @@ Extension along the force direction. This dump can be used at every step without
 
     extension: .zext
 
-#### Force Extension
+### Force Extension
 	
 Calculates the force extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
 	
@@ -272,7 +276,7 @@ Calculates the force extension statistics in the direction of the force and prin
 
     extension: .fe
 
-#### Energy	
+### Energy	
 Total elastic energy in the system in units of kT
 	
 ```
@@ -284,7 +288,7 @@ filename:   Efn
 extension: .en
 ```
 
-#### Linking number
+### Linking number
 Prints Writhe and Twist.
 
 Options for writhe: 
@@ -302,7 +306,7 @@ chain fraction: LKfrac
 extension:      .lk
 ```
 
-#### Writhe Map
+### Writhe Map
 Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
 
     dump_every:     WMn
@@ -311,7 +315,7 @@ Prints the writhe map, the pairwise components of the double sum (see Ref [3](#s
 
     extension:      .wm
 
-#### Persistence Length
+### Persistence Length
 Calculates the persistence length via the tangent-tangent correlation function using the inversion (see Ref [5](#es_phd))
 $$
 l_b(m) = \frac{-am}{\log\langle \hat{\mathbf{t}}_i \cdot \hat{\mathbf{t}}_ {i+m} \rangle}
@@ -324,7 +328,7 @@ In this method, 'm' denotes the number of monomers by which the tangents are dis
 
     extension:      .lb
 
-#### Tangent-tangent Correlation Function
+### Tangent-tangent Correlation Function
 Analogous to persistence length
 					
     dump_every:     TCn
@@ -333,9 +337,9 @@ Analogous to persistence length
 
     extension:      .tancor
 
-
-#### Restart Snapshots
-Restart files allow the simulation to be resumed from a previously generated snapshot.
+<a name="dump_restart"></a>
+### Restart Snapshots
+Restart files allow the simulation to be resumed from a previously generated snapshots. 
 					
     dump_every:     Restartn, restartn
     filename:       Restartfn, restartfn
@@ -345,8 +349,7 @@ Restart files allow the simulation to be resumed from a previously generated sna
 
 ----
 ----
-## Interaction Database (IDB)
-----
+# Interaction Database (IDB)
 The interaction database file specifies the hamiltonian of the polymer chain as well as the ground state configuration or static rotational structure. Every hamiltonian is expressed in terms of the rotational strain fields, i.e. the rotational deformations away from the ground state.
 
 The first few arguments specify the general setup:
@@ -382,13 +385,27 @@ If not carefully chosen, left couplings may not match right couplings. Such inco
 
 ----
 ----
-## Sequence File
-----
+# Sequence File
 The sequence file can specify either the complete sequence using the letters specified in the IDB file, or a repeating pattern. If the full sequence is provided, it must be given in a single line. In case of a repeating pattern, the first line of the sequence file must begin with the word 'repeat', followed by the repeating pattern. For instance, to represent a PolyA sequence, use the following format:
 ```
 repeat
 a
 ``` 
+
+----
+----
+# IOPolyMC
+
+Many 
+
+[IOPolyMC](https://github.com/eskoruppa/IOPolyMC) is a python module for reading PolyMC output files in python as well as generating various PolyMC input files. 
+Current functionality inclues:
+- reading and writing IDB files
+- reading and writing restart files 
+
+
+-   
+
 
 
 <!-- ----
