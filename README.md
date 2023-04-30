@@ -374,6 +374,7 @@ Analogous to persistence length
 
     extension:      .tancor
 
+----
 <a name="dump_restart"></a>
 ### Restart Snapshots
 Restart files allow the simulation to be resumed from a previously generated snapshots. 
