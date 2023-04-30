@@ -207,7 +207,7 @@ PolyMC offers several different types of dumps that enable configurations and ob
 
 To activate most dumps, set the corresponding "dump_every" parameter to a positive value. This will cause the corresponding output to be saved to a file after a certain number of Monte Carlo (MC) steps. If no additional filename is specified, the dump filename will be the one specified in the "dump_dir" parameter, with the appropriate extension.
 
----
+----
 ### XYZ
 Dumps configuration in xyz format.
 
@@ -254,7 +254,7 @@ dump/xyzout
 
 Note that only one xyz dump can be active at a time. 
 
----
+----
 ### Simulation State
 Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
 					
@@ -265,7 +265,7 @@ Prints the state of the simulation to file. Monomer positions are printed by def
 
     extension:      .state
 
-
+----
 ### Thetas
 Prints Euler vectors (Thetas) connecting consecutive triads to file
 					
@@ -274,7 +274,7 @@ Prints Euler vectors (Thetas) connecting consecutive triads to file
 
     extension:      .thetas
 
-
+----
 ### End-to-End Distance
 Distance between first and last monomer
 	
@@ -285,6 +285,7 @@ Distance between first and last monomer
 
     extension:      .e2e
 
+----
 ### z Extension
 Extension along the force direction. This dump can be used at every step without significant loss of efficiency. 
 	
@@ -295,8 +296,8 @@ Extension along the force direction. This dump can be used at every step without
 
     extension: .zext
 
+----
 ### Force Extension
-	
 Calculates the force-extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
 	
 	output: force number_of_measurements z z_squared contour_length
@@ -307,6 +308,7 @@ Calculates the force-extension statistics in the direction of the force and prin
 
     extension: .fe
 
+----
 ### Energy	
 Total elastic energy in the system in units of kT
 	
@@ -319,6 +321,7 @@ filename:   Efn
 extension: .en
 ```
 
+----
 ### Linking number
 Prints writhe and twist.
 
@@ -337,6 +340,7 @@ chain fraction: LKfrac
 extension:      .lk
 ```
 
+----
 ### Writhe Map
 Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
 
@@ -346,6 +350,7 @@ Prints the writhe map, the pairwise components of the double sum (see Ref [3](#s
 
     extension:      .wm
 
+----
 ### Persistence Length
 Calculates the persistence length via the tangent-tangent correlation function using the inversion (see Ref [5](#es_phd))
 $$
@@ -359,6 +364,7 @@ In this method, 'm' denotes the number of monomers by which the tangents are dis
 
     extension:      .lb
 
+----
 ### Tangent-tangent Correlation Function
 Analogous to persistence length
 					
