@@ -256,7 +256,7 @@ Note that only one xyz dump can be active at a time.
 
 ----
 ### Simulation State
-Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. 
+Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. The arguments dump_triads and dump_omegas are booling flags (valid values 0 and 1)
 					
     dump_every:     Stn
     filename:       Stfn
@@ -264,6 +264,14 @@ Prints the state of the simulation to file. Monomer positions are printed by def
     dump_omegas:    StOmegas,StOm
 
     extension:      .state
+
+Example (input file)
+```
+Stn = 1000
+dump_triads = 1
+dump_omegas = 1
+```
+Prints state including monomer positions, triads and angles to file every 1000 steps. Generates a file of name specified by the dump_dir flag with the extension complemented by the '.state' extension.
 
 ----
 ### Thetas
