@@ -15,7 +15,7 @@ For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix 
 Compiling PolyMC requires make and a few c++ libraries.
 
 Install c++ libraries 
-```console
+```
 sudo apt install -y liblapack-dev
 sudo apt install -y libblas-dev
 sudo apt install -y libboost-dev
@@ -23,18 +23,18 @@ sudo apt install -y libarmadillo-dev
 ```
 
 Compile via make
-```console
+```
 make -f MakePolyMC
 ```
 
 To compile using N cores run 
-```console
+```
 make -f MakePolyMC -j N
 ```
 
 
 After compiling, the executable can be found at 
-```console
+```
 ./bin/Release/PolyMC
 ```
 
@@ -100,11 +100,11 @@ Simulations may be initiated from previously generated snapshots if during these
 
 - restart: 
 
-    The filename of the restart file
+    Specifies the restart file.
 
 - restart_snapshot: (default: -1 -> last snapshot in file)
 
-    The index of the selected snapshot.
+    Index of chosen snapshot within restart file.
 
 
 ----
@@ -403,18 +403,19 @@ a
 ----
 ----
 # IOPolyMC
-
-Many 
-
 [IOPolyMC](https://github.com/eskoruppa/IOPolyMC) is a python module for reading PolyMC output files in python as well as generating various PolyMC input files. 
 Current functionality inclues:
-- reading and writing IDB files
-- reading and writing restart files 
-
-
--   
-
-
+- reading state files (load_state, read_state, read_spec)
+- reading and writing xyz files (load_xyz, read_xyz, read_xyz_atomtypes, write_xyz)
+- reading and writing IDB files (read_idb,write_idb)
+- reading and writing restart files (read_restart, write_restart)
+- reading theta files (load_thetas, read_thetas)
+- converting state to pdb (state2pdb)
+    - This requires base pair discretization with the appropriate intrinsic twist
+- reading, writing, and querying input files (read_input, write_input, querysims,simfiles)
+- generating a PolyMC configuration by interpolating between given points (pts2config, config2triads, pts2xyz, pts2restart)
+    - For now spline interpolation is not included in the package
+- finding all unique DNA oligomers of given length N (dna_oligomers)
 
 <!-- ----
 ----
@@ -428,10 +429,9 @@ Current functionality inclues:
 Constraints used in [Ref 4](#vand22).
 ---- -->
 
+
 ----
-----
-## Publications
-----
+# Publications
 
 1. E. Skoruppa, A. Voorspoels, J. Vreede, and E. Carlon. [Length-scale-dependent elasticity in DNA from coarse-grained and all-atom models](https://doi.org/10.1103/PhysRevE.103.042408).
 *Phys. Rev. E*, 103:042408, 2021
@@ -442,12 +442,11 @@ Constraints used in [Ref 4](#vand22).
 
 4. <a name="vand22"></a>W. Vanderlinden, E. Skoruppa , P. Kolbeck, E. Carlon, and J. Lipfert. [DNA fluctuations reveal the size and dynamics of topological domains](https://doi.org/10.1093/pnasnexus/pgac268). *PNAS Nexus*, 1:pgac268, 2022
 
-5. <a name="es_phd"></a>E. Skoruppa, E. Carlon [Physical Modeling of DNA and DNA-Protein Interactions](https://kuleuven.limo.libis.be/discovery/fulldisplay?docid=lirias3955698&context=SearchWebhook&vid=32KUL_KUL:Lirias&lang=en&search_scope=lirias_profile&adaptor=SearchWebhook&tab=LIRIAS&query=creator%2Cexact%2CU0118787%2CAND&facet=creator%2Cexact%2CU0118787&mode=advanced). PhD thesis, KU Leuven, 2020
+5. <a name="es_phd"></a>E. Skoruppa, E. Carlon [Physical Modeling of DNA and DNA-Protein Interactions](https://kuleuven.limo.libis.be/discovery/fulldisplay?docid=lirias3955698&context=SearchWebhook&vid=32KUL_KUL:Lirias&lang=en&search_scope=lirias_profile&adaptor=SearchWebhook&tab=LIRIAS&query=creator%2Cexact%2CU0118787%2CAND&facet=creator%2Cexact%2CU0118787&mode=advanced). PhD thesis, KU Leuven, 2022
+
 
 ----
-----
-## References
-----
+# References
 
 6. <a name="klen00"></a>K. Klenin and J. Langowski. [Computation of writhe in modeling of supercoiled DNA](https://doi.org/10.1002/1097-0282(20001015)54:5<307::AID-BIP20>3.0.CO;2-Y). *Biopolymers*, 54(5):307–317, 2000.
 
