@@ -246,7 +246,7 @@ The same can be achieved via command line
 ```
 - dump_dir dump/test -XYZn 10000 -XYZ_translate COM -XYZfn dump/xyzout
 ```
-This command will generate the same output as the input file command. Except in this case, we don't want to use the colloquial filename given by the dump_dir argument, but instead use the unique file name specified by -XYZfn. Generates the output file 
+This command will generate the same output as the input file command. Except in this case, we don't want to use the colloquial filename given by the dump_dir argument, but instead use the unique file name specified by -XYZfn. Generates the output file (this will not automatically add the .xyz extension)
 ```
 dump/xyzout
 ``` 
