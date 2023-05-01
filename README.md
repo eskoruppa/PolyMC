@@ -467,7 +467,7 @@ avg_inconsist      = 0
 The argument 'interaction_range' sets the range of the couplings of the rotational deformations. If set to zero, interactions are strictly local. In this case, the energy is fully determined by all possible dimers. For non-zero interaction range, larger oligomers have to be considered. In general, the size of the oligomers to be specified is 
 
 $$
-2\times(\mathrm{interaction \; range}+1).
+2\times(\mathrm{interaction} \; \mathrm{range}+1).
 $$
 
 
