@@ -43,7 +43,7 @@ After compiling, the executable can be found at
 ----
 # How to run
 
-Running a simulation requires an `input file`, an interaction `database file (IDB)`, and a `sequence file`. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
+Running a simulation requires an `input file`, an `interaction database file (IDB)`, and a `sequence file`. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
 
 The input file has to be passed as a command line argument via the flag -in.
 
