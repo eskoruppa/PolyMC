@@ -224,10 +224,10 @@ Dumps configuration in xyz format.
     - triadf:   Triad representation   	
 
 ```
-dump_every:         `XYZn`
-filename:           `XYZfn`
-translate_option:   `XYZ_translate`
-representation:     `XYZ_repr`
+dump_every:         XYZn
+filename:           XYZfn
+translate_option:   XYZ_translate
+representation:     XYZ_repr
 
 extension:          .xyz
 ```
