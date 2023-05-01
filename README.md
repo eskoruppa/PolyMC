@@ -76,21 +76,21 @@ If arguments are provided both via the command line and input file, **command li
 
 ### Simulation Modes
 
-- mode:
+- `mode`:
 
     Specify simulation mode. Currently, implemented modes are:
 
-    - open: Linear molecule without any linking constraints. 
-    - tweezer: linear molecule emulating the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned, and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
-        - free: allows for free fluctuations of the total linking number
-        - fix_link: fixed linking number ensemble
-        - torsional_trap: traps the linking number in a quadratic potential to allow for the torque to be measured. Corresponds to quasi-fixed linking number ensemble.
-        - torque: constant torque ensemble 
-    - plasmid: circular molecule. Linking number remains conserved if excluded volumes are active and EV_check_crossings=1 (see below)
-    - umbrellaplasmid: circular molecule with variable linking number to allow for umbrella sampling the plectoneme free energy
-    - plec: pure plectoneme simulation used in Ref [3](#skor22). 
-    - lin2d: linear molecule in 2 dimensions
-    - closed2d: circular molecule in 2 dimensions
+    - `open`: Linear molecule without any linking constraints. 
+    - `tweezer`: linear molecule emulating the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned, and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
+        - `free`: allows for free fluctuations of the total linking number
+        - `fix_link`: fixed linking number ensemble
+        - `torsional_trap`: traps the linking number in a quadratic potential to allow for the torque to be measured. Corresponds to quasi-fixed linking number ensemble.
+        - `torque`: constant torque ensemble 
+    - `plasmid`: circular molecule. Linking number remains conserved if excluded volumes are active and EV_check_crossings=1 (see below)
+    - `umbrellaplasmid`: circular molecule with variable linking number to allow for umbrella sampling the plectoneme free energy
+    - `plec`: pure plectoneme simulation used in Ref [3](#skor22). 
+    - `lin2d`: linear molecule in 2 dimensions
+    - `closed2d`: circular molecule in 2 dimensions
 
 
     Each mode has additional mode-specific arguments. See example files in RunScripts directory.
@@ -98,11 +98,11 @@ If arguments are provided both via the command line and input file, **command li
 ### Restart files
 Simulations may be initiated from previously generated snapshots if during these simulations restart files were dumped ([see in the section on dumps](#dump_restart)). Initiation from restart file is controlled by two arguments:
 
-- restart: 
+- `restart`: 
 
     Specifies the restart file.
 
-- restart_snapshot: (default: -1 -> last snapshot in file)
+- `restart_snapshot`: (default: -1 -> last snapshot in file)
 
     Index of chosen snapshot within restart file.
 
@@ -110,23 +110,23 @@ Simulations may be initiated from previously generated snapshots if during these
 ----
 ## Interaction Setup
 
-- IDB: 
+- `IDB`: 
 
     The filename of the provided interaction database file. For more information on IDB files, see below
 
-- sequence:
+- `sequence`:
 
     Provided sequence file. See below.
 
-- EV: (default: 0)
+- `EV`: (default: 0)
     
     Excluded volume diameter of the chain. Deactivated if set to zero. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV (See Supporting of [Ref 4](#vand2022)). Note that the number of excluded volume beads does not necessarily equal the number of chain monomers if the discretization length is smaller than the bead diameter. To improve performance, as few excluded volume beads as possible are considered.
 
-- EV_check_crossings (default: 1)
+- `EV_check_crossings` (default: 1)
 
     If true (1), moves that lead to effective chain crossings are disallowed. This allows for fixed linking number simulations.
 
-- subtract_T0 (default: 0)
+- `subtract_T0` (default: 0)
 
     If set to 1, excess rotational strains are defined as the deviation of the Euler vector from the static vector defined by the sequence-dependent argument 'vec' in the IDB file. Setting this argument to zero will account for static components in the rotation group prior to defining the Euler vector. (for more info see [Ref 5](#es_phd))
 
@@ -134,42 +134,42 @@ Simulations may be initiated from previously generated snapshots if during these
 ----
 ## Simulation Parameters
 
-- steps: (default: 0)
+- `steps`: (default: 0)
 
     Number of Monte Carlo step iterations.
 
-- equi: (default: 0)
+- `equi`: (default: 0)
 
     Number of Monte Carlo equilibration steps. During these steps, the output is disabled.
 
-- num_bp: (default: 0)
+- `num_bp`: (default: 0)
 
     Number of monomers
 
-- sigma: (default: 0)
+- `sigma`: (default: 0)
     
     Supercoiling density 
     $$\sigma = \Delta Lk / Lk_0 = (Lk - Lk_0) / Lk_0$$ 
     of the initial configuration. Lk_0 is determined by the specified intrinsic twist (via the 'vec' argument in the IDB file). If no static twist is defined, the intrinsic twist is defined by helical_repeat (see next).
 
-- helical_repeat (default: 3.57)
+- `helical_repeat` (default: 3.57)
 
     Helical repeat length (in nm). Used for initiating configurations with intensive topological strain sigma. 
 
-- force: (default: 0)
+- `force`: (default: 0)
 
     Linear stretching force (in units of pN). Will be ignored if a closed molecule is considered
 
-- torque: (default: 0)
+- `torque`: (default: 0)
 
     Torque (in units of pN.nm) applied to the terminal triad. 
 
-- T: (default: 300)
+- `T`: (default: 300)
     
     Temperature in Kelvin
 
 
-- seed: (default: -1)
+- `seed`: (default: -1)
 
     Seed for random number generator. If set to -1 a random seed will be generated.
 
@@ -178,26 +178,26 @@ Simulations may be initiated from previously generated snapshots if during these
 ## Output
 Configure command line output.
 
-- print_every (default: 100000)
+- `print_every` (default: 100000)
 
     Prints the status of the simulation every so many iteration steps.
 
-- print_link_info (default: 0)
+- `print_link_info` (default: 0)
 
     Specifies whether writhe, twist, and linking number shall be displayed. This may slow down the simulation if printing frequently to command line.
 
 ----
 ## Dump Setup
 
-- dump_dir:
+- `dump_dir`:
 
     Path and base name for output files. All output files will share this base name, complemented with the appropriate extension. Make sure that the specified directory exists, as **the directory will not be created**.
 
-- copy_input (default: 1)
+- `copy_input` (default: 1)
 
     If set to 1 all input files are included in the outfiles specified by dump_dir. The input file will be generated based on arguments provided in input file and command line. 
 
-- app (default: 0)
+- `app` (default: 0)
 
     Specifies whether output is appended to existing files or whether existing files are overwritten.
 
@@ -224,10 +224,10 @@ Dumps configuration in xyz format.
     - triadf:   Triad representation   	
 
 ```
-dump_every:         XYZn
-filename:           XYZfn
-translate_option:   XYZ_translate
-representation:     XYZ_repr
+dump_every:         `XYZn`
+filename:           `XYZfn`
+translate_option:   `XYZ_translate`
+representation:     `XYZ_repr`
 
 extension:          .xyz
 ```
