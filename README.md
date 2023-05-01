@@ -420,9 +420,11 @@ Prints the writhe map, the pairwise components of the double sum (see Ref [3](#s
 ----
 ## Persistence Length <a name=dump_persistencelength></a>
 Calculates the persistence length via the tangent-tangent correlation function using the inversion (see Ref [5](#es_phd))
+
 $$
 l_b(m) = \frac{-am}{\log\langle \hat{\mathbf{t}}_i \cdot \hat{\mathbf{t}}_ {i+m} \rangle}
 $$
+
 In this method, 'm' denotes the number of monomers by which the tangents are displaced, and 'a' represents the discretization length. The 'maxdist' argument sets the maximum value of 'm' that is considered.
 					
     dump_every:     LBn 
