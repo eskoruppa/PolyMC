@@ -27,7 +27,7 @@ Compile via make
 make -f MakePolyMC
 ```
 
-To compile using N cores run 
+To multithread compilation run
 ```
 make -f MakePolyMC -j N
 ```
