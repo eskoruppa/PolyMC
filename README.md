@@ -19,7 +19,48 @@ For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix 
 
     3.1 [Simulation Setup](#simsetup)
 
-    3.1.1 hello
+    3.2 [Interaction Setup](#interactionsetup)
+
+    3.3 [Simulation Parameters](#simparams) 
+
+    3.4 [Output](#output) 
+
+    3.5 [Dump Setup](#dumpsetup) 
+
+4. [Dumps](#dumps)
+
+    4.1 [XYZ](#simsetup)
+    
+    4.2 [Simulation State](#dump_state)
+
+    4.3 [Thetas](#dump_thetas)
+
+    4.4 [End-to-End Distance](#dump_endend)
+
+    4.5 [z-extension](#dump_zext)
+
+    4.6 [Force Extension](#dump_fext)
+
+    4.7 [Linking number](#dump_lk)
+
+    4.8 [Writhe Map](#dump_writhemap)
+
+    4.9 [Persistence Length](#dump_persistencelength)
+
+    4.10 [Tangent-tangent Correlation Function](#dump_tantancorr)
+
+    4.11 [Restart Snapshots](#dump_restart)
+
+5. [Interaction Database (IDB)](#idb)
+
+6. [Sequence File](#seq)
+
+7. [IOPolyMC](#iopolymc)
+
+8. [Publications](#publications)
+
+9. [References](#refs)
+
 
 
 
@@ -220,13 +261,13 @@ Configure command line output.
     Specifies whether output is appended to existing files or whether existing files are overwritten.
 
 ---
-## Dumps <a name=dumps></a>
+# Dumps <a name=dumps></a>
 PolyMC offers several different types of dumps that enable configurations and observables to be saved to a file.
 
 To activate most dumps, set the corresponding "dump_every" parameter to a positive value. This will cause the corresponding output to be saved to a file after a certain number of Monte Carlo (MC) steps. If no additional filename is specified, the dump filename will be the one specified in the "dump_dir" parameter, with the appropriate extension.
 
 ----
-### XYZ <a name=dump_xyz></a>
+## XYZ <a name=dump_xyz></a>
 Dumps configuration in xyz format.
 
 - Translation Options:
@@ -273,7 +314,7 @@ dump/xyzout
 Note that only one xyz dump can be active at a time. 
 
 ----
-### Simulation State <a name=dump_state></a>
+## Simulation State <a name=dump_state></a>
 Prints the state of the simulation to file. Monomer positions are printed by default. Triads and angles may be printed optionally if the corresponding flags are set. The arguments dump_triads and dump_omegas are booling flags (valid values 0 and 1)
 					
     dump_every:     Stn
@@ -292,7 +333,7 @@ dump_omegas = 1
 Prints state including monomer positions, triads, and angles to file every 1000 steps. Generates a file with name specified by the dump_dir flag with the extension complemented by the '.state' extension.
 
 ----
-### Thetas <a name=dump_thetas></a>
+## Thetas <a name=dump_thetas></a>
 Prints Euler vectors (Thetas) connecting consecutive triads to file
 					
     dump_every:     Thetasn
@@ -301,7 +342,7 @@ Prints Euler vectors (Thetas) connecting consecutive triads to file
     extension:      .thetas
 
 ----
-### End-to-End Distance <a name=dump_endend></a>
+## End-to-End Distance <a name=dump_endend></a>
 Distance between first and last monomer
 	
     output: distance
@@ -312,7 +353,7 @@ Distance between first and last monomer
     extension:      .e2e
 
 ----
-### z-extension <a name=dump_zext></a>
+## z-extension <a name=dump_zext></a>
 Extension along the force direction. This dump can be used at every step without significant loss of efficiency. 
 	
 	output: zext
@@ -323,7 +364,7 @@ Extension along the force direction. This dump can be used at every step without
     extension: .zext
 
 ----
-### Force Extension <a name=dump_fext></a>
+## Force Extension <a name=dump_fext></a>
 Calculates the force-extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
 	
 	output: force number_of_measurements z z_squared contour_length
@@ -335,7 +376,7 @@ Calculates the force-extension statistics in the direction of the force and prin
     extension: .fe
 
 ----
-### Energy <a name=dump_energy></a>
+## Energy <a name=dump_energy></a>
 Total elastic energy in the system in units of kT
 	
 ```
@@ -348,7 +389,7 @@ extension: .en
 ```
 
 ----
-### Linking number <a name=dump_lk></a>
+## Linking number <a name=dump_lk></a>
 Prints writhe and twist.
 
 Options for writhe: 
@@ -367,7 +408,7 @@ extension:      .lk
 ```
 
 ----
-### Writhe Map <a name=dump_writhemap></a>
+## Writhe Map <a name=dump_writhemap></a>
 Prints the writhe map, the pairwise components of the double sum (see Ref [3](#skor22)) to file.
 
     dump_every:     WMn
@@ -377,7 +418,7 @@ Prints the writhe map, the pairwise components of the double sum (see Ref [3](#s
     extension:      .wm
 
 ----
-### Persistence Length <a name=dump_persistencelength></a>
+## Persistence Length <a name=dump_persistencelength></a>
 Calculates the persistence length via the tangent-tangent correlation function using the inversion (see Ref [5](#es_phd))
 $$
 l_b(m) = \frac{-am}{\log\langle \hat{\mathbf{t}}_i \cdot \hat{\mathbf{t}}_ {i+m} \rangle}
@@ -391,7 +432,7 @@ In this method, 'm' denotes the number of monomers by which the tangents are dis
     extension:      .lb
 
 ----
-### Tangent-tangent Correlation Function <a name=dump_tantancorr></a>
+## Tangent-tangent Correlation Function <a name=dump_tantancorr></a>
 Analogous to persistence length
 					
     dump_every:     TCn
@@ -401,7 +442,7 @@ Analogous to persistence length
     extension:      .tancor
 
 ----
-### Restart Snapshots <a name="dump_restart"></a>
+## Restart Snapshots <a name="dump_restart"></a>
 Restart files allow the simulation to be resumed from a previously generated snapshots. 
 					
     dump_every:     Restartn, restartn
