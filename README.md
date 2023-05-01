@@ -6,9 +6,19 @@ Generates equilibrium configurations within a variety of different canonical ens
 
 For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix of [Ref 3](#skor22). Note that in these references, most algorithmic details are omitted. More detailed information will be provided in the future. 
 
+
+## Table of Contents
+
+1. [Installation](#install)
+2. [How to run](#howtorun)
+3. [Input File and command line arguments](#inputfile)
+    3.1 [Simulation Setup](#simsetup)
+
+
+
 ----
 ----
-# Installation
+# Installation <a name=install></a>
 
 ### Linux
 
@@ -41,7 +51,7 @@ After compiling, the executable can be found at
 
 ----
 ----
-# How to run
+# How to run <a name=howtorun></a>
 
 Running a simulation requires an `input file`, an `interaction database file (IDB)`, and a `sequence file`. All simulation details, such as the type of simulation (mode) and the number of Monte Carlo steps, are specified in the input file. Alternatively, all arguments specified in the input file may also be given via command line. Command line arguments will overwrite arguments given in the input file. 
 
@@ -56,7 +66,7 @@ Example input, IDB, and sequence files are provided in the directory RunScripts.
 
 ----
 ----
-# Input File and command line arguments
+# Input File and command line arguments <a name=inputfile></a>
 
 Most arguments may be passed either via the command line or via the input file. Exceptions will be discussed below. 
 In the input file, arguments have to be assigned as
@@ -71,7 +81,7 @@ Via command line, the argument name has to be given as a flag
 If arguments are provided both via the command line and input file, **command line arguments take precedence**.
 
 ----
-## Simulation Setup
+## Simulation Setup <a name=simsetup></a>
 
 
 ### Simulation Modes
