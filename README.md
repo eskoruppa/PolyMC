@@ -140,7 +140,7 @@ If arguments are provided both via the command line and input file, **command li
     Specify simulation mode. Currently, implemented modes are:
 
     - `open`: Linear molecule without any linking constraints. 
-    - `tweezer`: linear molecule emulating the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned, and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument tweezer_setup:
+    - `tweezer`: linear molecule emulating the setup of magnetic tweezers as used in Refs [3](#skor22) and [4](#vand22). Terminal tangents remain aligned, and conservation of linking number may be imposed via impenetrable planes aligned with the terminal monomers. Has four different setups specified by the argument `tweezer_setup`:
         - `free`: allows for free fluctuations of the total linking number
         - `fix_link`: fixed linking number ensemble
         - `torsional_trap`: traps the linking number in a quadratic potential to allow for the torque to be measured. Corresponds to quasi-fixed linking number ensemble.
@@ -178,7 +178,7 @@ Simulations may be initiated from previously generated snapshots if during these
     Provided sequence file. See below.
 
 - `EV`: (default: 0)
-    
+  
     Excluded volume diameter of the chain. Deactivated if set to zero. Excluded volumes are implemented via hard sphere repulsion between beads of diameter EV (See Supporting of [Ref 4](#vand2022)). Note that the number of excluded volume beads does not necessarily equal the number of chain monomers if the discretization length is smaller than the bead diameter. To improve performance, as few excluded volume beads as possible are considered.
 
 - `EV_check_crossings` (default: 1)
@@ -206,7 +206,7 @@ Simulations may be initiated from previously generated snapshots if during these
     Number of monomers
 
 - `sigma`: (default: 0)
-    
+  
     Supercoiling density 
     $$\sigma = \Delta Lk / Lk_0 = (Lk - Lk_0) / Lk_0$$ 
     of the initial configuration. Lk_0 is determined by the specified intrinsic twist (via the 'vec' argument in the IDB file). If no static twist is defined, the intrinsic twist is defined by helical_repeat (see next).
@@ -224,7 +224,7 @@ Simulations may be initiated from previously generated snapshots if during these
     Torque (in units of pN.nm) applied to the terminal triad. 
 
 - `T`: (default: 300)
-    
+  
     Temperature in Kelvin
 
 
@@ -296,11 +296,11 @@ Example for input file arguments:
 dump_dir        = dump/test
 XYZn            = 10000
 XYZ_translate   = COM
-``` 
+```
 This command will initiate the configuration to be printed to file in xyz format every 10000 steps and the center of mass of the configuration to be shifted to the origin of the coordinate system. The resulting output files will be 
 ```
 dump/test.xyz
-``` 
+```
 
 The same can be achieved via command line
 ```
@@ -309,7 +309,7 @@ The same can be achieved via command line
 This command will generate the same output as the input file command. Except in this case, we don't want to use the colloquial filename given by the dump_dir argument, but instead use the unique file name specified by -XYZfn. Generates the output file (this will not automatically add the .xyz extension)
 ```
 dump/xyzout
-``` 
+```
 
 Note that only one xyz dump can be active at a time. 
 
@@ -321,7 +321,7 @@ Prints the state of the simulation to file. Monomer positions are printed by def
     filename:       Stfn
     dump_triads:    Sttriads,Sttds
     dump_omegas:    StOmegas,StOm
-
+    
     extension:      .state
 
 Example (input file)
@@ -338,7 +338,7 @@ Prints Euler vectors (Thetas) connecting consecutive triads to file
 					
     dump_every:     Thetasn
     filename:       Thetasfn
-
+    
     extension:      .thetas
 
 ----
@@ -346,10 +346,10 @@ Prints Euler vectors (Thetas) connecting consecutive triads to file
 Distance between first and last monomer
 	
     output: distance
-
+    
     dump_every:     E2En 
     filename:       E2Efn
-
+    
     extension:      .e2e
 
 ----
@@ -357,23 +357,23 @@ Distance between first and last monomer
 Extension along the force direction. This dump can be used at every step without significant loss of efficiency. 
 	
 	output: zext
-
-    dump_every: Extn,  extn,  EXTn 
-    filename:   Extfn, extfn, EXTfn
-
-    extension: .zext
+	
+	dump_every: Extn,  extn,  EXTn 
+	filename:   Extfn, extfn, EXTfn
+	
+	extension: .zext
 
 ----
 ## Force Extension <a name=dump_fext></a>
 Calculates the force-extension statistics in the direction of the force and prints them to a file. Once the simulation is complete, a single line of output is generated. By specifying a fraction of the chain, only the middle portion of the monomers will be included in the calculation. For example, setting the "fefrac" parameter to 0.5 means only the middle half of the monomers will be used. This can help to avoid finite-size effects that can arise from boundary terms.
 	
 	output: force number_of_measurements z z_squared contour_length
-
-    dump_every: fen,  FEn   
-    filename:   fefn, FEfn
-    fraction:   fefrac, FEfrac (default 1, should be 0 < frac <= 1)
-
-    extension: .fe
+	
+	dump_every: fen,  FEn   
+	filename:   fefn, FEfn
+	fraction:   fefrac, FEfrac (default 1, should be 0 < frac <= 1)
+	
+	extension: .fe
 
 ----
 ## Energy <a name=dump_energy></a>
@@ -414,7 +414,7 @@ Prints the writhe map, the pairwise components of the double sum (see Ref [3](#s
     dump_every:     WMn
     filename:       WMfn
     segment_size:   WMseg
-
+    
     extension:      .wm
 
 ----
@@ -430,7 +430,7 @@ In this method, 'm' denotes the number of monomers by which the tangents are dis
     dump_every:     LBn 
     filename:       LBfn
     maxdist:        LBdist
-
+    
     extension:      .lb
 
 ----
@@ -440,7 +440,7 @@ Analogous to persistence length
     dump_every:     TCn
     filename:       TCfn
     maxdist:        TCdist
-
+    
     extension:      .tancor
 
 ----
@@ -449,7 +449,7 @@ Restart files allow the simulation to be resumed from a previously generated sna
 					
     dump_every:     Restartn, restartn
     filename:       Restartfn, restartfn
-
+    
     extension:      .restart
 
 
@@ -498,7 +498,7 @@ The sequence file can specify either the complete sequence using the letters spe
 ```
 repeat
 a
-``` 
+```
 
 ----
 ----
