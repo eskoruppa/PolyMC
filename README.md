@@ -29,7 +29,7 @@ For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix 
 
 4. [Dumps](#dumps)
 
-    4.1 [XYZ](#simsetup)
+    <!-- 4.1 [XYZ](#simsetup)
     
     4.2 [Simulation State](#dump_state)
 
@@ -49,7 +49,7 @@ For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix 
 
     4.10 [Tangent-tangent Correlation Function](#dump_tantancorr)
 
-    4.11 [Restart Snapshots](#dump_restart)
+    4.11 [Restart Snapshots](#dump_restart) -->
 
 5. [Interaction Database (IDB)](#idb)
 
