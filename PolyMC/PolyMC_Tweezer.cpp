@@ -173,16 +173,9 @@ bool PolyMC::init_tweezer() {
         MCSteps.push_back(pivcon);
         std::cout << " Added PivCon to MC Moves .. " << std::endl;
         MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,10));
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
-        MCSteps.push_back(rot);
+        for (int k=0;k<10;k++) {
+            MCSteps.push_back(rot);
+        }
         std::cout << " Added CSrot to MC Moves .. " << std::endl;
     }
     else {

@@ -983,9 +983,9 @@ bool PolyMC::check_chain_consistency(long long step) {
         ofstr.open(lkviolatedfn, std::ofstream::out | std::ofstream::app);
         ofstr << step << std::endl;
         ofstr.close();
-//        #ifdef POLYMC_TERMINATE_INCONSISTENT_ENERGY
-//        std::exit(0);
-//        #endif
+       #ifdef POLYMC_TERMINATE_INCONSISTENT_ENERGY
+       std::exit(0);
+       #endif
         chain->recal_energy();
     }
     if (!chain->config_consistent()) {

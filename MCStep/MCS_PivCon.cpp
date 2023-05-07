@@ -141,9 +141,6 @@ bool MCS_PivCon::MC_move() {
     hinge_dist = genhingedist(gen);
     id2        = id1 + hinge_dist;
 
-//    if (id2 >= num_bp) {
-//        id2 = num_bp-1;
-//    }
     if (id2 > rge_id2) {
         id2 = rge_id2;
     }
@@ -163,9 +160,9 @@ bool MCS_PivCon::MC_move() {
     Trot_id2m1 = rot_mat*triads->slice(id2m1);
 
     BPS[id1m1]->propose_move(triads->slice(id1m1),Trot_id1);
-    deltaE  = BPS[id1m1]->eval_delta_energy();
-
     BPS[id2m1]->propose_move(Trot_id2m1,triads->slice(id2));
+
+    deltaE  = BPS[id1m1]->eval_delta_energy();
     deltaE += BPS[id2m1]->eval_delta_energy();
 
 	if (chain->force_active() == true) {
