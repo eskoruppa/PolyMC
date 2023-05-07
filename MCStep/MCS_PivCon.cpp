@@ -165,15 +165,15 @@ bool MCS_PivCon::MC_move() {
     deltaE  = BPS[id1m1]->eval_delta_energy();
     deltaE += BPS[id2m1]->eval_delta_energy();
 
-	if (chain->force_active() == true) {
+    if (chain->force_active() == true) {
         arma::colvec trans = pos->col(id1) + rot_mat*(pos->col(id2) - pos->col(id1))  - pos->col(id2);
         deltaE += arma::dot(chain->get_beta_force_vec(),-trans);
-	}
-
-	if (exp(-deltaE) <= uniformdist(gen)) {
-		return false;
     }
-	else {
+
+    if (exp(-deltaE) <= uniformdist(gen)) {
+        return false;
+    }
+    else {
         triads->slice(id1) = Trot_id1;
         for (int i=id1+1;i<id2m1;i++) {
             triads->slice(i) = rot_mat * triads->slice(i);
