@@ -57,9 +57,11 @@ For more info see [Ref 5](#es_phd), Supplement of [Ref 4](#vand22) and Appendix 
 
 7. [IOPolyMC](#iopolymc)
 
-8. [Publications](#publications)
+8. [Citing PolyMC](#citing)
 
-9. [References](#refs)
+9. [Publications](#publications)
+
+10. [References](#refs)
 
 
 
@@ -528,6 +530,11 @@ Current functionality inclues:
 ## Holonomic constraints
 Constraints used in [Ref 4](#vand22).
 ---- -->
+
+----
+# Citing PolyMC <a name="citing"></a>
+
+Please cite [Vanderlinden and Skoruppa et al.](#vand22) for any work that uses the PolyMC simulation package.
 
 
 ----
