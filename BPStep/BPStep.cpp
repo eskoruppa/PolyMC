@@ -599,12 +599,7 @@ std::vector<double> BPStep::avg_params(const std::vector<double> & params1,const
 
 
 void BPStep::propose_move(const arma::mat& T1, const arma::mat& T2) {
-    if (T0_subtract) {
-        trial_Theta = ExtractTheta( T1.t() * T2 ) - *T0;
-    }
-    else {
-        trial_Theta = ExtractTheta( *R0_T * T1.t() * T2 );
-    }
+    trial_Theta = Triads2Theta(T1,T2);
     trial_pending      = true;
     trial_eval_pending = true;
 }
@@ -1047,6 +1042,7 @@ arma::colvec BPStep::Triads2Theta       (const arma::mat T1,const arma::mat T2) 
     }
     else {
         return ExtractTheta( *R0_T * T1.t() * T2 );
+        // return ExtractTheta( T1.t() * T2 * *R0_T  );
     }
 }
 arma::colvec BPStep::Triads2FullTheta   (const arma::mat T1,const arma::mat T2){

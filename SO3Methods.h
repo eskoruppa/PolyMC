@@ -12,6 +12,8 @@
 #ifndef __SO3METHODS_CONSTANTS__
 #define __SO3METHODS_CONSTANTS__
 
+#define __USE_CAYLEY_MAP
+
 #define SO3M_EPSILON                1e-12
 #define S03M_CLOSE_TO_ONE           0.999999999999
 #define S03M_CLOSE_TO_MINUS_ONE    -0.999999999999
@@ -55,6 +57,8 @@ inline arma::mat getRotMat(const arma::colvec& Omega)
     return R;
 }
 
+#ifndef __USE_CAYLEY_MAP
+// Use euler map
 inline arma::colvec ExtractTheta(const arma::mat& R) {
     double val = 0.5* (arma::trace(R)-1);
     if (val > S03M_CLOSE_TO_ONE) {
@@ -74,6 +78,18 @@ inline arma::colvec ExtractTheta(const arma::mat& R) {
     Theta = Th*0.5/std::sin(Th) * Theta;
     return Theta;
 }
+#else
+// Use cayley map for rotations
+inline arma::colvec ExtractTheta(const arma::mat& R) {
+    double val = (arma::trace(R)+1);
+    if (val < SO3M_EPSILON) {
+        return arma::zeros(3);
+    }
+    arma::colvec Theta =  {(R(2,1)-R(1,2)),(R(0,2)-R(2,0)),(R(1,0)-R(0,1))};
+    Theta = 2./val * Theta;
+    return Theta;
+}
+#endif
 
 inline double ExtractTheta1(const arma::mat& R) {
     double val = 0.5* (arma::trace(R)-1);
