@@ -597,7 +597,6 @@ std::vector<double> BPStep::avg_params(const std::vector<double> & params1,const
 /////////////////////////////////////
 /////////////// CORE ////////////////
 
-
 void BPStep::propose_move(const arma::mat& T1, const arma::mat& T2) {
     trial_Theta = Triads2Theta(T1,T2);
     trial_pending      = true;

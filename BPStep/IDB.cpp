@@ -230,7 +230,8 @@ void IDB::gen_typeperm() {
     typepermtree("",(interaction_range+1)*2,&typeperms_core);
 
     std::string seq = "";
-    for (unsigned i=1;i<(interaction_range+1)*2;i++) {
+    // for (unsigned i=1;i<(interaction_range+1)*2;i++) {
+    for (unsigned i=1;i<=interaction_range;i++) {
         seq+="x";
         typepermtree(seq,(interaction_range+1)*2,&typeperms_termini);
     }
@@ -254,6 +255,7 @@ void IDB::gen_typeperm() {
 //
 //    std::cout << typeperms.size() << std::endl;
 //    std::cout << num_perms << std::endl;
+//    std::exit(0);
 }
 
 void IDB::typepermtree(std::string seq, unsigned total,std::vector<std::string> * permlist) {
