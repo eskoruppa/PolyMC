@@ -12,7 +12,7 @@
 #ifndef __SO3METHODS_CONSTANTS__
 #define __SO3METHODS_CONSTANTS__
 
-#define __USE_CAYLEY_MAP
+// #define __USE_CAYLEY_MAP
 
 #define SO3M_EPSILON                1e-12
 #define S03M_CLOSE_TO_ONE           0.999999999999

@@ -349,7 +349,7 @@ bool BPStep::set_params(const std::string& type, int coup_range, IDB& data) {
     R0_T_store = R0_store.t();
     R0         = &R0_store;
     R0_T       = &R0_T_store;
-
+    
     if (T0_store(0)==0 && T0_store(1)==0 && T0_store(2)==0) {
         T0_subtract=true;
     }
