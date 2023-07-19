@@ -189,6 +189,11 @@ void Chain::set_intrinsic_twist_density(double twist_density){
     helical_repeat_length       = 2*M_PI/avg_intrinsic_twist_density;
 }
 
+void Chain::set_Lk0_from_static(bool set) {
+    cal_Lk0_from_static = set;
+}
+    
+
 void Chain::set_T(double temp) {
     T        = temp;
     kT       = kT_ref*temp/T_ref;
@@ -696,7 +701,7 @@ double Chain::sigma2dLk(double sigma) {
         If this is (close to) zero, LK_0 is calculated based on the specified
         average intrisc twist density.
     */
-    if (std::abs(LK_0)<1e-3) {
+    if (std::abs(LK_0)<1e-3 || !cal_Lk0_from_static) {
 //        LK_0 = avg_intrinsic_twist_density*num_bps*disc_len/(2*M_PI);
         LK_0 = num_bps*disc_len/helical_repeat_length;
     }

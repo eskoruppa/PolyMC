@@ -24,6 +24,13 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     dump_dir    = parse_arg(dump_dir, "-dir"     ,argv);
     dump_dir    = parse_arg(dump_dir, "-dump_dir",argv);
 
+    // create path if it doesn't exist
+    std::string path = std::filesystem::path(dump_dir).parent_path().u8string();
+    std::cout << path << std::endl;
+    if (!fs::is_directory(path)) {
+        fs::create_directories(path);
+    }
+
     bool append_dumps = false;
     append_dumps = parse_flag(append_dumps,"-app", argv);
     append_dumps = InputChoice_get_single<bool>        ("app"     ,&input,argv,append_dumps);

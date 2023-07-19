@@ -430,6 +430,8 @@ void PolyMC::init_general() {
     force       = InputChoice_get_single<double>      (input_force_keys,input,argv,force);
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);
+    std::vector<std::string> input_Lk0_from_static_keys = {"Lk0_from_static","Lk0_static"};
+    Lk0_from_static = InputChoice_get_single<bool>        (input_Lk0_from_static_keys,input,argv,Lk0_from_static);
 
     std::vector<std::string> input_hel_rep_len_keys = {"hel_rep_len","hel_rep","helical_repeat","helical_repeat_length"};
     hel_rep_len = InputChoice_get_single<double>      (input_hel_rep_len_keys,input,argv,hel_rep_len);
@@ -442,6 +444,7 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"force",force);
     geninfile.add_entry(GENINFILE_PARAMS,"torque",torque);
     geninfile.add_entry(GENINFILE_PARAMS,"helical_repeat",hel_rep_len);
+    geninfile.add_entry(GENINFILE_PARAMS,"Lk0_from_static",Lk0_from_static);
 
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};

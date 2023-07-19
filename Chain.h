@@ -58,6 +58,7 @@ protected:
     // Preset Helical Repeat
     double preset_helical_repeat_length = PRESET_HELICAL_REPEAT_LENGTH;
     double helical_repeat_length        = preset_helical_repeat_length;
+    bool   cal_Lk0_from_static          = true;
 
     // Interaction details
     IDB data;
@@ -398,6 +399,7 @@ public:
 
     void set_helical_repeat_length(double hel_rep);
     void set_intrinsic_twist_density(double twist_density);
+    void set_Lk0_from_static(bool set=true); 
 
     void set_T(double temp);
     void set_T0_subtract(bool subtract);

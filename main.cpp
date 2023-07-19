@@ -4,7 +4,7 @@
 
 #include "PolyMC.h"
 #include "MCMethods/ReplicaExchange.h"
-#define POLYMC_VERSION 0.610
+#define POLYMC_VERSION 0.710
 
 /*
 TO:

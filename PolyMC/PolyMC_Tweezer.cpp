@@ -116,7 +116,8 @@ bool PolyMC::init_tweezer() {
     chain->set_T(temp);
     chain->set_force(force,fdir);
     chain->set_T0_subtract(T0_subtract);
-//    chain->set_helical_repeat_length(hel_rep_len);
+    chain->set_helical_repeat_length(hel_rep_len);
+    chain->set_Lk0_from_static(Lk0_from_static);
 
 //    chain->fix_termini_position();
     chain->fix_termini_orientation();

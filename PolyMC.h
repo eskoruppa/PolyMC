@@ -191,8 +191,10 @@ protected:
 
     double temp         = 300;
 
+    // constant PRESET_HELICAL_REPEAT_LENGTH defined in Chain.h
     double hel_rep_len  = PRESET_HELICAL_REPEAT_LENGTH;
     double sigma        = 0;
+    bool Lk0_from_static = true;
     double torque       = 0;
     double force        = 0;
     arma::colvec fdir   = {0,0,1};

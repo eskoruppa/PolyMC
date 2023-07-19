@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 // include input functions
 #include "../Input/Argparse.h"
 #include "../Input/InputRead.h"
