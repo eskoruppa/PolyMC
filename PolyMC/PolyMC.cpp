@@ -538,16 +538,17 @@ void PolyMC::init_general() {
         geninfile.add_entry(GENINFILE_INTERACTIONS,"set_atoms",initialize_atom_types_fn);
     }
 
-    std::cout << " num_bp      = " << num_bp << std::endl;
-    std::cout << " equi        = " << equi << std::endl;
-    std::cout << " steps       = " << steps << std::endl;
-    std::cout << " IDB         = " << IDB_fn << std::endl;
-    std::cout << " temp        = " << temp << std::endl;
-    std::cout << " torque      = " << torque << std::endl;
-    std::cout << " force       = " << force << std::endl;
-    std::cout << " sigma       = " << sigma << std::endl;
-    std::cout << " subtract_T0 = " << subtract_T0 << std::endl;
-    std::cout << " print_every = " << print_every << std::endl;
+    std::cout << " num_bp           = " << num_bp << std::endl;
+    std::cout << " equi             = " << equi << std::endl;
+    std::cout << " steps            = " << steps << std::endl;
+    std::cout << " IDB              = " << IDB_fn << std::endl;
+    std::cout << " temp             = " << temp << std::endl;
+    std::cout << " torque           = " << torque << std::endl;
+    std::cout << " force            = " << force << std::endl;
+    std::cout << " sigma            = " << sigma << std::endl;
+    std::cout << " subtract_T0      = " << subtract_T0 << std::endl;
+    std::cout << " Lk0_from_static  = " << Lk0_from_static << std::endl;
+    std::cout << " print_every      = " << print_every << std::endl;
 
     if (check_consistency_every) {
         std::cout << std::endl << " checking consistency every " << check_consistency_every << " steps." << std::endl;
