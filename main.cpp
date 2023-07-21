@@ -1,6 +1,7 @@
 //// include input functions
 #include "Input/Argparse.h"
 #include "Input/InputRead.h"
+#include "Input/ManipulateArgv.h"
 
 #include "PolyMC.h"
 #include "MCMethods/ReplicaExchange.h"
@@ -9,11 +10,7 @@
 /*
 TO:
     - Tweezer Torque requires sigma to be set to zero upon initialization for dLK to stay consistent (not sure why).
-
-
-
 */
-
 
 // Defines
 /*
@@ -21,14 +18,12 @@ ARMA_DONT_USE_WRAPPER
 ARMA_USE_LAPACK
 ARMA_USE_BLAS
 ARMA_USE_CXX11
-
 ARMA_NO_DEBUG
 */
 
 // linkers
 /*
 -llapack
-
 -lblas
 */
 
@@ -37,7 +32,7 @@ ARMA_NO_DEBUG
 -larmadillo
 */
 
-#include "Input/ManipulateArgv.h"
+
 
 
 int main(int argc, const char **argcv) {
