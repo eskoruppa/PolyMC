@@ -34,7 +34,7 @@ input_given(false),nooutput(!produce_output),geninfile()
         input_given = true;
     }
 
-    std::cout << " mode        = " << mode << std::endl;
+    std::cout << " mode             = " << mode << std::endl;
     geninfile.add_entry(GENINFILE_SIMSETUP,"mode",mode);
 
     init_general();
