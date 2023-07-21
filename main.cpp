@@ -32,9 +32,6 @@ ARMA_NO_DEBUG
 -larmadillo
 */
 
-
-
-
 int main(int argc, const char **argcv) {
     std::cout << "PolyMC version: " << POLYMC_VERSION << std::endl;
     arma::arma_version ver;
