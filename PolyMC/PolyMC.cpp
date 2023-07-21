@@ -89,13 +89,9 @@ input_given(false),nooutput(!produce_output),geninfile()
 
 //    std::exit(0);
 
-
-
 //    strvec2doublevec
 
-
 //    Unbound * unb = new Unbound(chain);
-//
 //    unb->read_inputfile("UnboundInteractions");
 //    unb->init_monomer_type_assignments_from_file("SetAtoms");
 //
