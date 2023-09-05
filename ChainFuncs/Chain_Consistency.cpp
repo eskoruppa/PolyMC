@@ -13,13 +13,13 @@ bool Chain::config_consistent() {
     // check tangent position consistency
     for (unsigned i=0;i<num_bp-1;i++){
         if (arma::norm(bp_pos.col(i)+triads.slice(i).col(2)*disc_len - bp_pos.col(i+1)) >  MAX_POSITION_DISCREPANCY) {
-            std::cout << "Configuration inconsistent " << arma::norm(bp_pos.col(i)+triads.slice(i).col(2)*disc_len - bp_pos.col(i+1)) << std::endl;
+            std::cout << "Configuration inconsistent " << i << " " << i+1 << ": " << arma::norm(bp_pos.col(i)+triads.slice(i).col(2)*disc_len - bp_pos.col(i+1)) << std::endl;
             return false;
         }
     }
     if (closed_topology) {
         if (arma::norm(bp_pos.col(num_bp-1)+triads.slice(num_bp-1).col(2)*disc_len - bp_pos.col(0)) >  MAX_POSITION_DISCREPANCY) {
-            std::cout << "Configuration inconsistent " << arma::norm(bp_pos.col(num_bp-1)+triads.slice(num_bp-1).col(2)*disc_len - bp_pos.col(0)) << std::endl;
+            std::cout << "Configuration inconsistent " << num_bp-1 << " " << 0 << ": " <<  arma::norm(bp_pos.col(num_bp-1)+triads.slice(num_bp-1).col(2)*disc_len - bp_pos.col(0)) << std::endl;
             return false;
         }
     }

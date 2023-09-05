@@ -74,8 +74,10 @@ inline arma::colvec ExtractTheta(const arma::mat& R) {
         return {0,0,M_PI};
     }
     double Th = std::acos(val);
+    // arma::colvec Theta =  {(R(2,1)-R(1,2)),(R(0,2)-R(2,0)),(R(1,0)-R(0,1))};
+    // Theta = Th*0.5/std::sin(Th) * Theta;
     arma::colvec Theta =  {(R(2,1)-R(1,2)),(R(0,2)-R(2,0)),(R(1,0)-R(0,1))};
-    Theta = Th*0.5/std::sin(Th) * Theta;
+    Theta = Theta/arma::norm(Theta) * Th ;
     return Theta;
 }
 #else

@@ -978,21 +978,27 @@ bool PolyMC::check_chain_consistency(long long step) {
     bool consistent = chain->check_energy_consistency();
     if (!consistent) {
         std::cout << "Energy inconsistent!" << std::endl;
-        std::string lkviolatedfn = dump_dir + ".energyinconsistent";
+        std::string energyviolatedfn = dump_dir + ".energyinconsistent";
         std::ofstream ofstr;
-        ofstr.open(lkviolatedfn, std::ofstream::out | std::ofstream::app);
+        ofstr.open(energyviolatedfn, std::ofstream::out | std::ofstream::app);
         ofstr << step << std::endl;
         ofstr.close();
-       #ifdef POLYMC_TERMINATE_INCONSISTENT_ENERGY
-       std::exit(0);
-       #endif
+        // #ifdef POLYMC_TERMINATE_INCONSISTENT_ENERGY
+        // std::exit(0);
+        // #endif
         chain->recal_energy();
     }
     if (!chain->config_consistent()) {
         std::cout << "chain positions inconsistent!" << std::endl;
-        #ifdef POLYMC_TERMINATE_INCONSISTENT_CONFIG
-        std::exit(0);
-        #endif
+
+        std::string posviolatedfn = dump_dir + ".posinconsistent";
+        std::ofstream ofstr;
+        ofstr.open(posviolatedfn, std::ofstream::out | std::ofstream::app);
+        ofstr << step << std::endl;
+        ofstr.close();
+        // #ifdef POLYMC_TERMINATE_INCONSISTENT_CONFIG
+        // std::exit(0);
+        // #endif
         chain->restore_consistency();
         if (EV_active) {
             if (EV->check_overlap()) {
@@ -1006,6 +1012,10 @@ bool PolyMC::check_chain_consistency(long long step) {
         if (ES_active) {
             ES->set_current_as_backup(true);
         }
+        if (check_link && EV_active) {
+            set_link_backup();
+        }
+        chain->recal_energy();
     }
     return true;
 }

@@ -187,6 +187,11 @@ bool PolyMC::init_tweezer() {
         MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/4));
         MCSteps.push_back(rot);
         std::cout << " Added CSrot to MC Moves .. " << std::endl;
+
+        // MCS_CSrot*  small_rot       = new MCS_CSrot(chain,seedseq,2,10);
+        // for (int k=0;k<10;k++) {
+        //     MCSteps.push_back(small_rot);
+        // }
     }
 
     if (use_cluster_twist) {

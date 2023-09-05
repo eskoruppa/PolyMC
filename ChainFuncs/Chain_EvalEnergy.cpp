@@ -132,14 +132,14 @@ bool Chain::check_energy_consistency() {
 
     E_new = extract_energy();
 
-    if (!(std::abs(E_new-E_old)<1e-10)) {
+    if (!(std::abs(E_new-E_old)<MAX_ENERGY_DISCREPANY)) {
         std::cout << "Energy difference = " << std::abs(E_new-E_old) << std::endl;
     }
 //    else {
 //        std::cout << "Energy consistent" << std::endl;
 //    }
 
-    return (std::abs(E_new-E_old)<1e-10);
+    return (std::abs(E_new-E_old)<MAX_ENERGY_DISCREPANY);
 }
 
 

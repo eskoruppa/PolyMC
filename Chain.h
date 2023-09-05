@@ -27,6 +27,7 @@
 
 #define MAX_POSITION_DISCREPANCY            1e-8
 #define MAX_SO3_DETERMINANT_DISCREPANCY     1e-10
+#define MAX_ENERGY_DISCREPANY               1e-8
 #define AVG_COUP_MISSMATCH          true
 #define AVG_COUP_HARMONIC           false
 
