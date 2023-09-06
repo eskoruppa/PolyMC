@@ -1035,7 +1035,7 @@ EvalEnergy * BPStep::get_EvalEnergy_diag() {
 
 
 /////////////////////////////////////////////
-arma::colvec BPStep::Triads2Theta       (const arma::mat T1,const arma::mat T2) {
+arma::colvec BPStep::Triads2Theta       (const arma::mat & T1, const arma::mat & T2) {
     if (T0_subtract) {
         return ExtractTheta( T1.t() * T2 ) - *T0;
     }
@@ -1044,10 +1044,10 @@ arma::colvec BPStep::Triads2Theta       (const arma::mat T1,const arma::mat T2) 
         // return ExtractTheta( T1.t() * T2 * *R0_T  );
     }
 }
-arma::colvec BPStep::Triads2FullTheta   (const arma::mat T1,const arma::mat T2){
+arma::colvec BPStep::Triads2FullTheta   (const arma::mat & T1, const arma::mat & T2){
     return ExtractTheta( T1.t() * T2 );
 }
-arma::mat    BPStep::Theta2Rotmat       (const arma::colvec Theta) {
+arma::mat    BPStep::Theta2Rotmat       (const arma::colvec & Theta) {
     if (T0_subtract) {
         return getRotMat(Theta + *T0);
     }
@@ -1055,7 +1055,7 @@ arma::mat    BPStep::Theta2Rotmat       (const arma::colvec Theta) {
         return *R0 * getRotMat(Theta);
     }
 }
-arma::mat    BPStep::FullTheta2Rotmat   (const arma::colvec FullTheta) {
+arma::mat    BPStep::FullTheta2Rotmat   (const arma::colvec & FullTheta) {
     return getRotMat(FullTheta);
 }
 

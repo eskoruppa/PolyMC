@@ -129,20 +129,6 @@ arma::mat Chain::get_avg_chol() {
         return arma::zeros(3,3);
     }
 }
-
-
-bool     Chain::force_active(){
-    return force_constrained;
-}
-double   Chain::get_force() {
-    return force;
-}
-arma::colvec Chain::get_force_dir() {
-    return force_dir;
-}
-arma::colvec Chain::get_beta_force_vec() {
-    return beta_force_vec;
-}
 bool     Chain::fixed_termini() {
     return termini_fixed;
 }
@@ -168,6 +154,28 @@ std::string Chain::get_sequence() {
     return seq;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////// FORCE METHODS ///////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool     Chain::force_active(){
+    return force_constrained;
+}
+double   Chain::get_force() {
+    return force;
+}
+arma::colvec Chain::get_force_dir() {
+    return force_dir;
+}
+arma::colvec Chain::get_beta_force_vec() {
+    return beta_force_vec;
+}
+double Chain::extract_force_betaenergy() {
+    if (force_constrained) {
+        return arma::dot(beta_force_vec,bp_pos.col(num_bp-1) - bp_pos.col(0));
+	}
+    return 0;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -673,20 +681,40 @@ bool Chain::set_config(arma::mat* bp_pos, arma::cube* triads, bool closed, bool 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////// CALCULATE LINKING NUMBER  ///////////////////////////////////////////////////////////////////////////
+////////////// CONVERT DLK TO SIGMA AND VICE VERSA /////////////////////////////////////////////////////////////////
+
+
 
 double Chain::sigma2dLk(double sigma) {
     /*
         Calulates the excess linking number for the given supercoiling density sigma using the expression
         LK = LK_0(1+sigma)
+    */
+    double LK_0 = get_Lk0();
+    double LK = LK_0*(1+sigma);
+    if (closed_topology) {
+        double LK_mismatch=fpmod(LK,1);
+        if (LK_mismatch > 0.5)   LK_mismatch=1-LK_mismatch;
+        else                     LK_mismatch=-LK_mismatch;
+        LK = std::round(LK+LK_mismatch);
+    }
+    return LK-LK_0;
+}
 
+double Chain::dlk2sigma(double dlk) {
+    return dlk / get_Lk0();
+}
+
+
+double Chain::get_Lk0() {
+    /*
+        Calculates the relaxed state linking number Lk0. 
         If the base pair steps include intrinsic twist LK_0 is deduced by the sum of the individual
         intrinsic twist contributions.
 
         If the steps do not include intrinsic twist, LK_0 is calculated based on the specified average
         intrinsic twist density (avg_intrinsic_twist_density), which is either preset or has been specified.
     */
-
 
     /*
         calculate LK_0 based on the intrinsic twist of the base pair steps
@@ -712,16 +740,7 @@ double Chain::sigma2dLk(double sigma) {
         else                       LK_0_mismatch=-LK_0_mismatch;
         LK_0 = std::round(LK_0+LK_0_mismatch);
     }
-
-    double LK = LK_0*(1+sigma);
-    if (closed_topology) {
-        double LK_mismatch=fpmod(LK,1);
-        if (LK_mismatch > 0.5)   LK_mismatch=1-LK_mismatch;
-        else                     LK_mismatch=-LK_mismatch;
-        LK = std::round(LK+LK_mismatch);
-    }
-
-    return LK-LK_0;
+    return LK_0;
 }
 
 

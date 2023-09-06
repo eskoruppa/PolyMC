@@ -142,6 +142,7 @@ protected:
 public:
     void impose_torque(double torque);
     void change_torque(double torque);
+    double extract_torque_betaenergy();
 
 
 ////// Terminus changing Move ///////
@@ -352,6 +353,7 @@ public:
     double       get_force();
     arma::colvec get_force_dir();
     arma::colvec get_beta_force_vec();
+    double       extract_force_betaenergy();
 
     bool        fixed_termini();
     bool        fixed_termini_radial();
@@ -378,6 +380,7 @@ public:
     double  extract_energy();
 
     double  extract_true_energy();
+    double  extract_full_energy();
 
 protected:
     void    extract_energy_select(int from, int to);
@@ -437,8 +440,9 @@ public:
     void set_sigma(double sigma);
     void set_sigma(double sigma, int id_first, int id_last=-1);
 
-
     double sigma2dLk(double sigma);
+    double dlk2sigma(double dlk);
+    double get_Lk0();
 protected:
     void init_BPS();
     void init_energies();

@@ -278,7 +278,6 @@ bool PolyMC::run(long long steps,std::vector<MCStep*> run_MCSteps ,const std::st
 }
 
 void PolyMC::init_external_run() {
-    std::cout <<  "start init" << std::endl;
     external_run_steps = 0;
     start_timers();
     for (unsigned i=0;i<MCSteps.size();i++) {
@@ -294,7 +293,6 @@ void PolyMC::init_external_run() {
         ES->set_current_as_backup(true);
     }
     chain->recal_energy();
-    std::cout <<  "finish init" << std::endl;
 }
 
 bool PolyMC::external_run(long long steps ,const std::string & run_name,bool dump,bool print,bool recal_energy, bool set_backups, bool reset_count) {
@@ -315,15 +313,7 @@ bool PolyMC::external_run(long long steps ,const std::string & run_name,bool dum
         }
     }
     if (set_backups) {
-        if (check_link && EV_active) {
-            set_link_backup();
-        }
-        if (EV_active) {
-            EV->set_current_as_backup();
-        }
-        if (ES_active) {
-            ES->set_current_as_backup(true);
-        }
+        set_all_backups();
     }
     if (recal_energy) {
         chain->recal_energy();
@@ -973,6 +963,18 @@ void PolyMC::init_pair_interactions() {
 
 }
 
+void PolyMC::set_all_backups() {
+    if (EV_active) {
+        EV->set_current_as_backup();
+    }
+    if (ES_active) {
+        ES->set_current_as_backup(true);
+    }
+    if (check_link && EV_active) {
+        set_link_backup();
+    }
+}
+
 
 bool PolyMC::check_chain_consistency(long long step) {
     bool consistent = chain->check_energy_consistency();
@@ -1064,6 +1066,19 @@ bool PolyMC::check_link_consistency(long long step) {
         return true;
     }
 }
+
+double PolyMC::cal_dlk() {
+    double Wr,Tw;
+//    Wr  = chain->cal_langowski_writhe_1a();
+    arma::mat writhe_elem;
+    chain->langowski_writhe_elements(&writhe_elem, false);
+    Wr = arma::accu(writhe_elem);
+    Tw  = chain->cal_twist(0,num_bp);
+    // std::cout << "  LK = " << Tw+Wr << " ( " << chain->get_dLK() << ")" << std::endl;
+    return Tw+Wr;
+}
+
+
 
 void PolyMC::start_timers() {
     timer_start  = std::chrono::high_resolution_clock::now();

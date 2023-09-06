@@ -515,6 +515,17 @@ void InputRead::print_entries() {
 
 
 void InputRead::get_linelist(std::string &str, std::vector<std::string> &output) {
+    
+    int hashid = str.find("#");
+    if (hashid != std::string::npos) {
+        if (hashid == 0) {
+            str = "";
+        }
+        else {
+            str = str.substr (0,hashid); 
+        }
+    }
+    
     if (str[0] == ' ' || str[0] == '\t'){
         output.push_back("\t");
         str.erase(0, 1);

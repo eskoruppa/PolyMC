@@ -103,6 +103,17 @@ double  Chain::extract_true_energy() {
     return extract_energy(0,num_bps-1)/beta;
 }
 
+//////////////////////////////////////////////////////////
+////////////// Calculate Full Energy /////////////////////
+//////////////////////////////////////////////////////////
+
+double Chain::extract_full_energy() {
+    double E = extract_true_energy();
+    E += extract_torque_betaenergy()/beta;
+    E += extract_force_betaenergy()/beta;
+    return E;
+}
+
 
 //////////////////////////////////////////////////////////
 ////////////// CHECK ENERGY CONSISTENCY //////////////////
@@ -129,16 +140,10 @@ bool Chain::check_energy_consistency() {
     for (unsigned bps=0;bps<num_bps;bps++) {
         BPS[bps]->set_move(true);
     }
-
     E_new = extract_energy();
-
     if (!(std::abs(E_new-E_old)<MAX_ENERGY_DISCREPANY)) {
         std::cout << "Energy difference = " << std::abs(E_new-E_old) << std::endl;
     }
-//    else {
-//        std::cout << "Energy consistent" << std::endl;
-//    }
-
     return (std::abs(E_new-E_old)<MAX_ENERGY_DISCREPANY);
 }
 

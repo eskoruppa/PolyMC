@@ -376,8 +376,14 @@ public:
     Getters and Setters
 */
     bool   exchange_configs(PolyMC * other_polymc);
+    double cal_dlk();
     double get_energy();
     Chain * get_chain();
+
+/*
+    Set backups
+*/
+    void set_all_backups();
 
 
 protected:

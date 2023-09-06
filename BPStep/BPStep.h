@@ -280,10 +280,10 @@ public:
     EvalEnergy * get_EvalEnergy_diag();
 
     // methods to relate deformation vector Theta (excess rotation) to triads for given BPS
-    arma::colvec Triads2Theta       (const arma::mat T1,const arma::mat T2);
-    arma::colvec Triads2FullTheta   (const arma::mat T1,const arma::mat T2);
-    arma::mat    Theta2Rotmat       (const arma::colvec Theta);
-    arma::mat    FullTheta2Rotmat   (const arma::colvec FullTheta);
+    arma::colvec Triads2Theta       (const arma::mat & T1,const arma::mat & T2);
+    arma::colvec Triads2FullTheta   (const arma::mat & T1,const arma::mat & T2);
+    arma::mat    Theta2Rotmat       (const arma::colvec & Theta);
+    arma::mat    FullTheta2Rotmat   (const arma::colvec & FullTheta);
 
 //////////////////////////////////////
 ////// Extract Current Energies //////

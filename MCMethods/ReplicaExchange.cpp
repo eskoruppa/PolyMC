@@ -63,7 +63,7 @@ ReplicaExchange::ReplicaExchange(std::string inputfn, const std::vector<std::str
     }
 
     polymcs .push_back(main_polyMC);
-    energies.push_back(main_polyMC->get_chain()->extract_true_energy());
+    energies.push_back(main_polyMC->get_chain()->extract_full_energy());
     betas   .push_back(main_polyMC->get_chain()->get_beta());
     sim_id  .push_back(0);
 
@@ -95,7 +95,7 @@ ReplicaExchange::ReplicaExchange(std::string inputfn, const std::vector<std::str
 
         PolyMC * new_polyMC = new PolyMC(rep_argv,output_all);
         polymcs .push_back(new_polyMC);
-        energies.push_back(new_polyMC->get_chain()->extract_true_energy());
+        energies.push_back(new_polyMC->get_chain()->extract_full_energy());
         betas   .push_back(new_polyMC->get_chain()->get_beta());
         sim_id  .push_back(i);
     }
@@ -199,8 +199,8 @@ bool ReplicaExchange::replica_swap(long long int sweep) {
         sim_id[id1] = sim_id[id2];
         sim_id[id2] = tmpi;
 
-//        std::cout << energies[id1] << " " << polymcs[id1]->get_chain()->extract_true_energy() << std::endl;
-//        std::cout << energies[id2] << " " << polymcs[id2]->get_chain()->extract_true_energy() << std::endl;
+//        std::cout << energies[id1] << " " << polymcs[id1]->get_chain()->extract_full_energy() << std::endl;
+//        std::cout << energies[id2] << " " << polymcs[id2]->get_chain()->extract_full_energy() << std::endl;
         return true;
     }
 //    std::cout << id1 << " " << id2 << std::endl;
@@ -239,8 +239,8 @@ int ReplicaExchange::replica_swaps(long long int sweep) {
             sim_id[id2] = tmpi;
 
             num_swaps++;
-//            std::cout << energies[id1] << " " << polymcs[id1]->get_chain()->extract_true_energy() << std::endl;
-//            std::cout << energies[id2] << " " << polymcs[id2]->get_chain()->extract_true_energy() << std::endl;
+//            std::cout << energies[id1] << " " << polymcs[id1]->get_chain()->extract_full_energy() << std::endl;
+//            std::cout << energies[id2] << " " << polymcs[id2]->get_chain()->extract_full_energy() << std::endl;
         }
     }
     return num_swaps;
@@ -266,8 +266,8 @@ double ReplicaExchange::metropolis(PolyMC* RunA, PolyMC* RunB) {
     double EA,EB,betaA,betaB;
     double dE;
 
-    EA = RunA->get_chain()->extract_true_energy();
-    EB = RunB->get_chain()->extract_true_energy();
+    EA = RunA->get_chain()->extract_full_energy();
+    EB = RunB->get_chain()->extract_full_energy();
     betaA = RunA->get_chain()->get_beta();
     betaB = RunB->get_chain()->get_beta();
 
@@ -277,7 +277,7 @@ double ReplicaExchange::metropolis(PolyMC* RunA, PolyMC* RunB) {
 
 void ReplicaExchange::get_all_energies() {
     for (int i=0;i<energies.size();i++) {
-        energies[i] = polymcs[i]->get_chain()->extract_true_energy();
+        energies[i] = polymcs[i]->get_chain()->extract_full_energy();
     }
 }
 

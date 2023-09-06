@@ -5,6 +5,7 @@
 
 #include "PolyMC.h"
 #include "MCMethods/ReplicaExchange.h"
+#include "MCMethods/TopologyExchange.h"
 #define POLYMC_VERSION 0.710
 
 /*
@@ -51,7 +52,10 @@ int main(int argc, const char **argcv) {
     InputRead * input = new InputRead(inputfn);
 
     if (input->contains_multi("replica_exchange")) {
-        ReplicaExchange re(inputfn,argv);
+        ReplicaExchange reex(inputfn,argv);
+    }
+    else if (input->contains_multi("topology_exchange")) {
+        TopologyExchange toex(inputfn,argv);
     }
     else {
         PolyMC polyMC(argv);
