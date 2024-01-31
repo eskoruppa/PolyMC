@@ -249,10 +249,20 @@ bool PolyMC::init_tweezer() {
 
 bool PolyMC::tweezer_slow_wind(double dLK_from, double dLK_to, double dLK_step, long long steps_per_dLK_step) {
 
+    // std::vector<MCStep*> wind_MCSteps;
+    // MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp/10);
+    // wind_MCSteps.push_back(pivcon);
+    // MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/4));
+    // wind_MCSteps.push_back(rot);
+    // if (use_cluster_twist) {
+    //     MCS_ClusterTwist* cltwist = new MCS_ClusterTwist(chain,seedseq,2,larger(2,num_bp/4));
+    //     wind_MCSteps.push_back(cltwist);
+    // }
+
     std::vector<MCStep*> wind_MCSteps;
-    MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp/10);
+    MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp);
     wind_MCSteps.push_back(pivcon);
-    MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/4));
+    MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp));
     wind_MCSteps.push_back(rot);
     if (use_cluster_twist) {
         MCS_ClusterTwist* cltwist = new MCS_ClusterTwist(chain,seedseq,2,larger(2,num_bp/4));

@@ -18,7 +18,9 @@ MCS_CSrot::MCS_CSrot(Chain * ch,const std::vector<long long int> & seedseq, int 
     closed = chain->topology_closed();
 
     // set the range of the random generators selecting the hinges
-    if (selrange_max >= num_bp/2)    selrange_max = num_bp/2;
+    if (closed) {
+        if (selrange_max >= num_bp/2)    selrange_max = num_bp/2;
+    }
     if (selrange_min < 2)            selrange_min = 2;
     if (selrange_max < selrange_min) selrange_max = selrange_min;
 
@@ -105,7 +107,9 @@ MCS_CSrot::MCS_CSrot(Chain * ch,const std::vector<long long int> & seedseq, int 
     closed = chain->topology_closed();
 
     // set the range of the random generators selecting the hinges
-    if (selrange_max >= num_bp/2)    selrange_max = num_bp/2;
+    if (closed) {
+        if (selrange_max >= num_bp/2)    selrange_max = num_bp/2;
+    }
     if (selrange_min < 2)            selrange_min = 2;
     if (selrange_max < selrange_min) selrange_max = selrange_min;
 

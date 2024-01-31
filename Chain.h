@@ -378,6 +378,7 @@ public:
 
     double  extract_energy(int from, int to);
     double  extract_energy();
+    double  __extract_energy(int from, int to);
 
     double  extract_true_energy();
     double  extract_full_energy();

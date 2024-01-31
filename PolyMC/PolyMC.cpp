@@ -365,9 +365,9 @@ bool   PolyMC::exchange_configs(PolyMC * other_polymc) {
 
     chain->set_config(och->get_bp_pos(),och->get_triads(),och->topology_closed());
     chain->set_dLK(och->get_dLK());
-//    if (EV_active) {
+    if (EV_active) {
         EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
-//    }
+    }
     if (ES_active) {
         ES->set_current_as_backup(true);
     }
@@ -375,9 +375,9 @@ bool   PolyMC::exchange_configs(PolyMC * other_polymc) {
 
     och->set_config(&temp_bp_pos,&temp_triads,chain->topology_closed());
     och->set_dLK(temp_dLK);
-//    if (EV_active) {
+    if (EV_active) {
         other_polymc->EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
-//    }
+    }
     if (ES_active) {
         other_polymc->ES->set_current_as_backup(true);
     }

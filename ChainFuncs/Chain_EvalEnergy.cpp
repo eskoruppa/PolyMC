@@ -75,13 +75,20 @@ void  Chain::extract_energy_select(int from, int to) {
     }
 }
 
+double  Chain::extract_energy() {
+    return extract_energy(0,num_bps-1);
+}
+
 double  Chain::extract_energy(int from, int to) {
     extract_energy_select(from,to);
+    return __extract_energy(from,to);
+}
 
+double  Chain::__extract_energy(int from, int to) {
     double energy=0;
     if (from>to && closed_topology) {
-        energy  = extract_energy(0,to);
-        energy += extract_energy(from,num_bps-1);
+        energy  = __extract_energy(0,to);
+        energy += __extract_energy(from,num_bps-1);
         return energy;
     }
     for (int i=from;i<=to;i++) {
@@ -89,11 +96,6 @@ double  Chain::extract_energy(int from, int to) {
     }
     return energy;
 }
-
-double  Chain::extract_energy() {
-    return extract_energy(0,num_bps-1);
-}
-
 
 //////////////////////////////////////////////////////////
 ////////////// Calculate True Energy /////////////////////

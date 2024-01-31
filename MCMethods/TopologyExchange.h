@@ -12,10 +12,10 @@
 #include "Replica.h"
 
 #define TOPOLEXCHANGE_OPENMP
+#define TOPOLEXCHANGE_OPENMPSWAPS
 
 
 class TopologyExchange;
-
 class TopologyExchange {
 
 protected:
@@ -27,6 +27,7 @@ protected:
     bool output_all      = false;
     bool use_openmp      = false;
     int  num_threads = 1;
+    int swap_counter;
 
     std::string                 seedstr = "-1";
     std::vector<long long int>  seedseq;
@@ -58,6 +59,8 @@ protected:
     std::chrono::high_resolution_clock::time_point timer_ref;
     std::chrono::duration<double> timer_elapsed;
 
+    long long int stats_every; 
+
 
 public:
     TopologyExchange(std::string input_file, const std::vector<std::string> & argv);
@@ -66,18 +69,17 @@ public:
     bool run();
 
     double mean_steprate();
+    void init_stats();
     void dump_stats(long long sweep);
 
 protected:
-    // int    replica_swaps(long long int sweep);
-    bool   replica_swap(long long int sweep);
-//     std::vector<int> gen_rand_order(int num);
-//     double metropolis(PolyMC* RunA, PolyMC* RunB);
-//     void   get_all_energies();
+    bool replica_swaps(long long int sweep, int num_swaps);
+    bool replica_swap(long long int sweep, int id1, int id2);
+    
 
-//     void        init_print_state();
-//     void        print_state(long long sweep,long long tot_sweeps);
-//     std::string time_remaining(int seconds);
+    void        init_print_state();
+    void        print_state(long long sweep,long long tot_sweeps);
+    std::string time_remaining(int seconds);
 
 };
 
