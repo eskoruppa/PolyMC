@@ -111,7 +111,7 @@ bool MCS_Pivot::MC_move() {
         changed_bps.reset();
         rot_mat = getRotMat(move_Phi);
     }
-	if (chain->force_active() == true) {
+	if (chain->force_active()) {
         // TODO: don_t assume that the first position is at (0,0,0)
 		arma::colvec ETE_old = pos->col(num_bp-1) - pos->col(0);
 		arma::colvec ETE_new = rot_mat*(pos->col(num_bp-1)-pos->col(hingeID)) + pos->col(hingeID) - pos->col(0);

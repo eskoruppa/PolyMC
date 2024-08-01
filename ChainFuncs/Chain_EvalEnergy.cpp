@@ -75,13 +75,20 @@ void  Chain::extract_energy_select(int from, int to) {
     }
 }
 
+double  Chain::extract_energy() {
+    return extract_energy(0,num_bps-1);
+}
+
 double  Chain::extract_energy(int from, int to) {
     extract_energy_select(from,to);
+    return __extract_energy(from,to);
+}
 
+double  Chain::__extract_energy(int from, int to) {
     double energy=0;
     if (from>to && closed_topology) {
-        energy  = extract_energy(0,to);
-        energy += extract_energy(from,num_bps-1);
+        energy  = __extract_energy(0,to);
+        energy += __extract_energy(from,num_bps-1);
         return energy;
     }
     for (int i=from;i<=to;i++) {
@@ -90,17 +97,23 @@ double  Chain::extract_energy(int from, int to) {
     return energy;
 }
 
-double  Chain::extract_energy() {
-    return extract_energy(0,num_bps-1);
-}
-
-
 //////////////////////////////////////////////////////////
 ////////////// Calculate True Energy /////////////////////
 //////////////////////////////////////////////////////////
 
 double  Chain::extract_true_energy() {
     return extract_energy(0,num_bps-1)/beta;
+}
+
+//////////////////////////////////////////////////////////
+////////////// Calculate Full Energy /////////////////////
+//////////////////////////////////////////////////////////
+
+double Chain::extract_full_energy() {
+    double E = extract_true_energy();
+    E += extract_torque_betaenergy()/beta;
+    E += extract_force_betaenergy()/beta;
+    return E;
 }
 
 
@@ -129,17 +142,11 @@ bool Chain::check_energy_consistency() {
     for (unsigned bps=0;bps<num_bps;bps++) {
         BPS[bps]->set_move(true);
     }
-
     E_new = extract_energy();
-
-    if (!(std::abs(E_new-E_old)<1e-10)) {
+    if (!(std::abs(E_new-E_old)<MAX_ENERGY_DISCREPANY)) {
         std::cout << "Energy difference = " << std::abs(E_new-E_old) << std::endl;
     }
-//    else {
-//        std::cout << "Energy consistent" << std::endl;
-//    }
-
-    return (std::abs(E_new-E_old)<1e-10);
+    return (std::abs(E_new-E_old)<MAX_ENERGY_DISCREPANY);
 }
 
 

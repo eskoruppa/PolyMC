@@ -120,16 +120,17 @@ input_given(false),nooutput(!produce_output),geninfile()
         std::exit(0);
     }
 
+    /*
+        Initialialze additional interactions and constraints
+    */
+
     init_ExVol();
-
     init_ElStat(ElStat_fn);
-
     init_constraints();
     init_constraints(constraint_fn, true);
-
     init_GenForce(GenForce_fn);
-
     init_pair_interactions();
+    init_stateswitch_moves();
 
     if (!nooutput) {
         init_dump();
@@ -158,7 +159,7 @@ input_given(false),nooutput(!produce_output),geninfile()
     if (mode == POLYMC_MODE_LIN2D && use_slither2d) {
         lin2d_slither_equi_with_pivot();
     }
-
+    
 }
 
 
@@ -197,18 +198,16 @@ bool PolyMC::simple_execute() {
     if (equi>0) {
         run(equi,MCSteps,"Equilibration",false);
     }
-
+    ///////////////////////////////////////////////
+    // Main loop
     run(steps,MCSteps,"Production Run");
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
-
     for (unsigned i=0;i<Dumps.size();i++) {
         Dumps[i]->final_dump();
     }
+    ///////////////////////////////////////////////
     // dump restart file for last configuration
     DumpLast->final_dump();
-    ///////////////////////////////////////////////
     ///////////////////////////////////////////////
     std::cout << "PolyMC finished!" << std::endl;
     return true;
@@ -278,7 +277,6 @@ bool PolyMC::run(long long steps,std::vector<MCStep*> run_MCSteps ,const std::st
 }
 
 void PolyMC::init_external_run() {
-    std::cout <<  "start init" << std::endl;
     external_run_steps = 0;
     start_timers();
     for (unsigned i=0;i<MCSteps.size();i++) {
@@ -294,7 +292,6 @@ void PolyMC::init_external_run() {
         ES->set_current_as_backup(true);
     }
     chain->recal_energy();
-    std::cout <<  "finish init" << std::endl;
 }
 
 bool PolyMC::external_run(long long steps ,const std::string & run_name,bool dump,bool print,bool recal_energy, bool set_backups, bool reset_count) {
@@ -315,15 +312,7 @@ bool PolyMC::external_run(long long steps ,const std::string & run_name,bool dum
         }
     }
     if (set_backups) {
-        if (check_link && EV_active) {
-            set_link_backup();
-        }
-        if (EV_active) {
-            EV->set_current_as_backup();
-        }
-        if (ES_active) {
-            ES->set_current_as_backup(true);
-        }
+        set_all_backups();
     }
     if (recal_energy) {
         chain->recal_energy();
@@ -375,9 +364,9 @@ bool   PolyMC::exchange_configs(PolyMC * other_polymc) {
 
     chain->set_config(och->get_bp_pos(),och->get_triads(),och->topology_closed());
     chain->set_dLK(och->get_dLK());
-//    if (EV_active) {
+    if (EV_active) {
         EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
-//    }
+    }
     if (ES_active) {
         ES->set_current_as_backup(true);
     }
@@ -385,9 +374,9 @@ bool   PolyMC::exchange_configs(PolyMC * other_polymc) {
 
     och->set_config(&temp_bp_pos,&temp_triads,chain->topology_closed());
     och->set_dLK(temp_dLK);
-//    if (EV_active) {
+    if (EV_active) {
         other_polymc->EV->set_backup_conf(och->get_bp_pos(),och->get_triads());
-//    }
+    }
     if (ES_active) {
         other_polymc->ES->set_current_as_backup(true);
     }
@@ -431,6 +420,10 @@ void PolyMC::init_general() {
 
     std::vector<std::string> input_hel_rep_len_keys = {"hel_rep_len","hel_rep","helical_repeat","helical_repeat_length"};
     hel_rep_len = InputChoice_get_single<double>      (input_hel_rep_len_keys,input,argv,hel_rep_len);
+    stateswitch_size      = InputChoice_get_single<unsigned>    ("stateswitch_size",input,argv,stateswitch_size);
+    stateswitch_size      = InputChoice_get_single<unsigned>    ("ss_size",input,argv,stateswitch_size);
+    stateswitch_num_moves      = InputChoice_get_single<unsigned>    ("stateswitch_num_moves",input,argv,stateswitch_num_moves);
+    stateswitch_num_moves      = InputChoice_get_single<unsigned>    ("ss_num",input,argv,stateswitch_num_moves);
 
     geninfile.add_entry(GENINFILE_PARAMS,"steps",steps);
     geninfile.add_entry(GENINFILE_PARAMS,"equi",equi);
@@ -441,6 +434,8 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"torque",torque);
     geninfile.add_entry(GENINFILE_PARAMS,"helical_repeat",hel_rep_len);
     geninfile.add_entry(GENINFILE_PARAMS,"Lk0_from_static",Lk0_from_static);
+    geninfile.add_entry(GENINFILE_PARAMS,"ss_size",stateswitch_size);
+    geninfile.add_entry(GENINFILE_PARAMS,"ss_num",stateswitch_num_moves);
 
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};
@@ -604,10 +599,7 @@ void PolyMC::init_dump() {
     dump_dir = parse_arg(dump_dir, "-dump_dir" ,argv);
     geninfile.add_entry(GENINFILE_DUMPS_SETUP,"dump_dir",dump_dir);
 
-
     Dumps = init_dump_cmdargs(argv,&geninfile,chain,mode,EV_rad,inputfn);
-
-
     /*
         Dump Energy
     */
@@ -970,7 +962,39 @@ void PolyMC::init_pair_interactions() {
             MCSteps[i]->set_unbound(unbound);
         }
     }
+}
 
+void PolyMC::set_all_backups() {
+    if (EV_active) {
+        EV->set_current_as_backup();
+    }
+    if (ES_active) {
+        ES->set_current_as_backup(true);
+    }
+    if (check_link && EV_active) {
+        set_link_backup();
+    }
+}
+
+
+void PolyMC::init_stateswitch_moves() {
+    if (stateswitch_size == 0 || stateswitch_num_moves == 0) {
+        return;
+    }
+    for (unsigned i=0;i<chain->get_BPS()->size();i++) {
+        if (!chain->get_BPS()->at(i)->is_bubble()) {
+            stateswitch_size = 0;
+            return;
+        }
+    }
+    if (stateswitch_size > 0) {
+        std::cout << " Adding Stateswitch to MC Moves .. " << std::endl;
+        std::cout << stateswitch_size << std::endl;
+        MCS_Stateswitch*  sw  = new MCS_Stateswitch(chain,seedseq,0,larger(0,stateswitch_size-1));
+        for (unsigned jj=0;jj<stateswitch_num_moves;jj++) {
+            MCSteps.push_back(sw);
+        }
+    }
 }
 
 
@@ -978,21 +1002,27 @@ bool PolyMC::check_chain_consistency(long long step) {
     bool consistent = chain->check_energy_consistency();
     if (!consistent) {
         std::cout << "Energy inconsistent!" << std::endl;
-        std::string lkviolatedfn = dump_dir + ".energyinconsistent";
+        std::string energyviolatedfn = dump_dir + ".energyinconsistent";
         std::ofstream ofstr;
-        ofstr.open(lkviolatedfn, std::ofstream::out | std::ofstream::app);
+        ofstr.open(energyviolatedfn, std::ofstream::out | std::ofstream::app);
         ofstr << step << std::endl;
         ofstr.close();
-       #ifdef POLYMC_TERMINATE_INCONSISTENT_ENERGY
-       std::exit(0);
-       #endif
+        // #ifdef POLYMC_TERMINATE_INCONSISTENT_ENERGY
+        // std::exit(0);
+        // #endif
         chain->recal_energy();
     }
     if (!chain->config_consistent()) {
         std::cout << "chain positions inconsistent!" << std::endl;
-        #ifdef POLYMC_TERMINATE_INCONSISTENT_CONFIG
-        std::exit(0);
-        #endif
+
+        std::string posviolatedfn = dump_dir + ".posinconsistent";
+        std::ofstream ofstr;
+        ofstr.open(posviolatedfn, std::ofstream::out | std::ofstream::app);
+        ofstr << step << std::endl;
+        ofstr.close();
+        // #ifdef POLYMC_TERMINATE_INCONSISTENT_CONFIG
+        // std::exit(0);
+        // #endif
         chain->restore_consistency();
         if (EV_active) {
             if (EV->check_overlap()) {
@@ -1006,6 +1036,10 @@ bool PolyMC::check_chain_consistency(long long step) {
         if (ES_active) {
             ES->set_current_as_backup(true);
         }
+        if (check_link && EV_active) {
+            set_link_backup();
+        }
+        chain->recal_energy();
     }
     return true;
 }
@@ -1054,6 +1088,19 @@ bool PolyMC::check_link_consistency(long long step) {
         return true;
     }
 }
+
+double PolyMC::cal_dlk() {
+    double Wr,Tw;
+//    Wr  = chain->cal_langowski_writhe_1a();
+    arma::mat writhe_elem;
+    chain->langowski_writhe_elements(&writhe_elem, false);
+    Wr = arma::accu(writhe_elem);
+    Tw  = chain->cal_twist(0,num_bp);
+    // std::cout << "  LK = " << Tw+Wr << " ( " << chain->get_dLK() << ")" << std::endl;
+    return Tw+Wr;
+}
+
+
 
 void PolyMC::start_timers() {
     timer_start  = std::chrono::high_resolution_clock::now();
@@ -1122,7 +1169,8 @@ void PolyMC::print_state(long long step,long long steps,const std::string & run_
     timer_elapsed = timer_finish-timer_start;
     std::cout << "  estimated to finished in: " << time_remaining((timer_elapsed.count())/step*(steps-step)) << "\n";
 
-
+    // std::cout << (*chain->get_states()).t() << std::endl;
+    // std::cout << arma::sum((*chain->get_states()))- chain->get_states()->size() << std::endl;
 
 ////    // TESTING !!!!
 //    int dim = 1;

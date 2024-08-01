@@ -27,6 +27,7 @@
 
 #define MAX_POSITION_DISCREPANCY            1e-8
 #define MAX_SO3_DETERMINANT_DISCREPANCY     1e-10
+#define MAX_ENERGY_DISCREPANY               1e-8
 #define AVG_COUP_MISSMATCH          true
 #define AVG_COUP_HARMONIC           false
 
@@ -141,6 +142,7 @@ protected:
 public:
     void impose_torque(double torque);
     void change_torque(double torque);
+    double extract_torque_betaenergy();
 
 
 ////// Terminus changing Move ///////
@@ -279,7 +281,6 @@ protected:
     //arma::mat  Omegas;
     //arma::mat  energy;
 
-
     /*
     TODO: These backup states could be deleted. They should rather be stored in
     the dedicated Excluded Volume Objects.
@@ -351,6 +352,7 @@ public:
     double       get_force();
     arma::colvec get_force_dir();
     arma::colvec get_beta_force_vec();
+    double       extract_force_betaenergy();
 
     bool        fixed_termini();
     bool        fixed_termini_radial();
@@ -375,8 +377,10 @@ public:
 
     double  extract_energy(int from, int to);
     double  extract_energy();
+    double  __extract_energy(int from, int to);
 
     double  extract_true_energy();
+    double  extract_full_energy();
 
 protected:
     void    extract_energy_select(int from, int to);
@@ -436,13 +440,25 @@ public:
     void set_sigma(double sigma);
     void set_sigma(double sigma, int id_first, int id_last=-1);
 
-
     double sigma2dLk(double sigma);
+    double dlk2sigma(double dlk);
+    double get_Lk0();
 protected:
     void init_BPS();
     void init_energies();
     void set_seq(const std::string& sequence, int num_bp);
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////  BUBBLESTATES //////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+protected:
+    arma::ivec states;
+
+public:
+    void init_states();
+    arma::ivec* get_states();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

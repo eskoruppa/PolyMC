@@ -40,6 +40,7 @@ class IDB {
 
 private:
     std::string       fn;
+    InputRead         * input;
     std::vector<IDBU> idbus;
 
     unsigned int      amount_units;
@@ -53,10 +54,11 @@ private:
     std::string                 bp_types;
     double                      disc_len;
     bool                        avg_inconsist = false;
+    bool                        all_olis_required = false;
 
 public:
 
-    IDB(const std::string & filename);
+    IDB(const std::string & filename, bool all_oligomers_required = false);
     ~IDB();
 
 public:

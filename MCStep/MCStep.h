@@ -56,6 +56,7 @@ protected:
     std::vector<BPStep*> BPS;
     arma::mat*  pos;
     arma::cube* triads;
+    arma::ivec* states;
 
     int num_bp;
     int num_bps;
@@ -90,6 +91,7 @@ protected:
     ElStat *    ES;
 
 
+    bool                     requires_constraint_check = true;
     bool                     constraints_active = false;
     std::vector<Constraint*> constraints;
 

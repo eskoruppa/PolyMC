@@ -27,6 +27,20 @@
 //double          ExtractTheta3(const arma::mat& R);
 //arma::mat       Rotz(const double& theta);
 
+inline arma::mat hat_map(const arma::colvec & Omega) {
+    arma::mat Omhat = arma::zeros(3,3);
+    Omhat(0,1) = -Omega(2);
+    Omhat(1,0) =  Omega(2);
+    Omhat(0,2) =  Omega(1);
+    Omhat(2,0) = -Omega(1);
+    Omhat(1,2) = -Omega(0);
+    Omhat(2,1) =  Omega(0);
+    return Omhat;
+}
+
+
+#ifndef __USE_CAYLEY_MAP
+// Use euler map
 inline arma::mat getRotMat(const arma::colvec& Omega)
 {
     double Om = arma::norm(Omega);
@@ -56,9 +70,6 @@ inline arma::mat getRotMat(const arma::colvec& Omega)
     R(2,1) = A+B;
     return R;
 }
-
-#ifndef __USE_CAYLEY_MAP
-// Use euler map
 inline arma::colvec ExtractTheta(const arma::mat& R) {
     double val = 0.5* (arma::trace(R)-1);
     if (val > S03M_CLOSE_TO_ONE) {
@@ -74,12 +85,24 @@ inline arma::colvec ExtractTheta(const arma::mat& R) {
         return {0,0,M_PI};
     }
     double Th = std::acos(val);
+    // arma::colvec Theta =  {(R(2,1)-R(1,2)),(R(0,2)-R(2,0)),(R(1,0)-R(0,1))};
+    // Theta = Th*0.5/std::sin(Th) * Theta;
     arma::colvec Theta =  {(R(2,1)-R(1,2)),(R(0,2)-R(2,0)),(R(1,0)-R(0,1))};
-    Theta = Th*0.5/std::sin(Th) * Theta;
+    Theta = Theta/arma::norm(Theta) * Th ;
     return Theta;
 }
 #else
 // Use cayley map for rotations
+inline arma::mat getRotMat(const arma::colvec& Omega)
+{
+    double Om = arma::norm(Omega);
+    if (Om < SO3M_EPSILON) {
+        return arma::eye(3,3);
+    }
+    arma::mat omhat = hat_map(Omega);
+    arma::mat R = arma::eye(3,3) + 1./(1+0.25*(Om*Om))*(omhat + 0.5*omhat*omhat);
+    return R;
+}
 inline arma::colvec ExtractTheta(const arma::mat& R) {
     double val = (arma::trace(R)+1);
     if (val < SO3M_EPSILON) {

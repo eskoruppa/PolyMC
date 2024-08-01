@@ -55,6 +55,9 @@
 #include "MCStep/MCS_Pivot2d.h"
 #include "MCStep/MCS_Slither2d.h"
 
+// include stateswitch MC move
+#include "MCStep/MCS_Stateswitch.h"
+
 // include Dumps
 #include "dump/InitDump.h"
 
@@ -204,6 +207,9 @@ protected:
     bool closed                  = false;
     bool terminus_fixed_tangents = false;
     bool terminus_fixed_triads   = false;
+
+    unsigned stateswitch_size      = 0;
+    unsigned stateswitch_num_moves = 1;
 
     /*
         In terms of elastic couplings the chain is not closed, but
@@ -376,8 +382,14 @@ public:
     Getters and Setters
 */
     bool   exchange_configs(PolyMC * other_polymc);
+    double cal_dlk();
     double get_energy();
     Chain * get_chain();
+
+/*
+    Set backups
+*/
+    void set_all_backups();
 
 
 protected:
@@ -399,6 +411,8 @@ protected:
     void init_GenForce(const std::string & GenForce_fn);
 
     void init_pair_interactions();
+
+    void init_stateswitch_moves();
 
 /*
     Preset Protocols

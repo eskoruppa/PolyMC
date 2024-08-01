@@ -855,9 +855,8 @@ bool ExVol::check_interval_singleMove(int A1, int A2, int B1, int B2) {
 bool ExVol::check_interval_doubleMove(int A1, int A2, int B1, int B2) {
 /*
     Checks for projected overlap between EV beads in the two intervals limited by
-    A1,A2 and B1,B2 respectively. This method assumes that the beads in the B
-    interval have not moved, such that only the linear displacement of the beads
-    in the A interval have to be considered. The checking is done by the
+    A1,A2 and B1,B2 respectively. This method assumes that the beads in both
+    intervals have not moved such that The checking needs to be done by the 
     doubleMove method.
 */
 

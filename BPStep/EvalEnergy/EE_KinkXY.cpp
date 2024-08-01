@@ -310,3 +310,15 @@ arma::colvec EE_KinkXY::get_theta_swap_right_kink(const arma::colvec & Theta) {
     newTheta(2) = -sinTk* x_new + cosTk* y;
     return newTheta;
 }
+
+
+// ////////////////////////////////////////////////////////////////////////////////
+// /////////////////   stateswitch   //////////////////////////////////////////////
+
+// void EE_KinkXY::propose_stateswitch(int new_state) {
+//     throw std::logic_error("propose_stateswitch() not defined in class EE_KinkXY");
+// }
+
+// void EE_KinkXY::set_switch(bool accepted) {
+//     throw std::logic_error("set_switch() not defined in class class EE_KinkXY");
+// }

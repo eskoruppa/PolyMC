@@ -7,8 +7,8 @@ TODO:
 
 */
 
-IDB::IDB(const std::string & filename)
-: fn(filename) {
+IDB::IDB(const std::string & filename, bool all_oligomers_required)
+: fn(filename), all_olis_required(all_oligomers_required) {
     read_file(fn);
 }
 
@@ -41,14 +41,58 @@ bool IDB::IDBU_contained(const std::string & type) {
     return false;
 }
 
+// IDBU * IDB::get_IDBU(const std::string & type) {
+    // for (unsigned i=0;i<idbus.size();i++) {
+    //     if (idbus[i].type == type) {
+    //         return &idbus[i];
+    //     }
+    // }
+    // std::cout << "Error IDB::get_IDBU - requested type '" << type << "' was not provided in IDB file." << std::endl;
+    // std::exit(0);
+// }
+
 IDBU * IDB::get_IDBU(const std::string & type) {
+
+    // std::cout << "Requesting ologomer '" << type << "'." << std::endl;
+
+    // check if idbu is already contained
     for (unsigned i=0;i<idbus.size();i++) {
         if (idbus[i].type == type) {
             return &idbus[i];
         }
     }
-    std::cout << "Error IDB::get_IDBU - requested type '" << type << "' was not provided in IDB file." << std::endl;
-    std::exit(0);
+
+    if (!input->contains_multi(type)) {
+        throw std::runtime_error("IDB::get_IDBU: missing entry.");
+    }
+
+    MultiLine * ml = input->get_multiline(type);
+    if (ml->amount_multilines() > 1) {
+        throw std::runtime_error("IDB::get_IDBU: Double mention of interaction in IDB file.");
+    }
+
+    MultiLineInstance * mli = ml->get_instance(0);
+    unsigned num_single = mli->amount_singlelines();
+
+    if (num_single != sets_per_unit+1) {
+        throw std::runtime_error("IDB::get_IDBU: Invalid number of subentries.");
+    }
+
+    IDBU * new_idbu = new IDBU();
+    // IDBU new_idbu;
+    new_idbu->type=type;
+    std::vector<SingleLineInstance> singles = *(mli->get_all_singlelines());
+    for (unsigned j=0;j<num_single;j++) {
+        if (singles[j].identifier == IDB_ID_GROUNDSTATE) {
+            new_idbu->Theta0 = arma::colvec(singles[j].get_vec());
+        }
+        else {
+            new_idbu->methods.push_back(singles[j].identifier);
+            new_idbu->interactions.push_back(singles[j].get_vec());
+        }
+    }
+    idbus.push_back(*new_idbu);
+    return new_idbu;
 }
 
 //////////////////////////////////////////////////////////
@@ -56,17 +100,20 @@ IDBU * IDB::get_IDBU(const std::string & type) {
 //////////////////////////////////////////////////////////
 
 bool IDB::read_file(const std::string & filename) {
-    InputRead input(filename);
+    // InputRead idbinput(filename);
+    InputRead * inputread = new InputRead(filename);
+    input = inputread;
 
-    bp_types          = input.get_single_val<std::string>(IDB_ID_MONOMER_TYPES);
-    disc_len          = input.get_single_val<double>(IDB_ID_DISC_LEN);
-    avg_inconsist     = input.get_single_val<bool>(IDB_ID_AVG_INCONSIST);
+    bp_types          = input->get_single_val<std::string>(IDB_ID_MONOMER_TYPES);
+    disc_len          = input->get_single_val<double>(IDB_ID_DISC_LEN);
+    avg_inconsist     = input->get_single_val<bool>(IDB_ID_AVG_INCONSIST);
 
-    interaction_range = input.get_single_val<unsigned>(IDB_ID_INTERACTION_RANGE);
+    interaction_range = input->get_single_val<unsigned>(IDB_ID_INTERACTION_RANGE);
     sets_per_unit     = 1+2*interaction_range;
 
-    gen_typeperm();
-    gen_idbus(&input);
+    // gen_typeperm();
+    // gen_idbus(&input);
+    std::vector<IDBU>().swap(idbus);
 
     return true;
 }
@@ -86,8 +133,10 @@ void IDB::gen_idbus(InputRead * input) {
     */
     for (unsigned i=0;i<typeperms_core.size();i++) {
         if (!input->contains_multi(typeperms_core[i])) {
-            std::cout << "Error: Missing interaction in IDB file: " << typeperms_core[i] << std::endl;
-            consistent_inputfile=false;
+            if (all_olis_required) {
+                std::cout << "Error: Missing interaction in IDB file: " << typeperms_core[i] << std::endl;
+                consistent_inputfile=false;
+            }
             missing_counter++;
             continue;
         }
