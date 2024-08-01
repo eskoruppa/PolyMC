@@ -120,16 +120,17 @@ input_given(false),nooutput(!produce_output),geninfile()
         std::exit(0);
     }
 
+    /*
+        Initialialze additional interactions and constraints
+    */
+
     init_ExVol();
-
     init_ElStat(ElStat_fn);
-
     init_constraints();
     init_constraints(constraint_fn, true);
-
     init_GenForce(GenForce_fn);
-
     init_pair_interactions();
+    init_stateswitch_moves();
 
     if (!nooutput) {
         init_dump();
@@ -158,7 +159,7 @@ input_given(false),nooutput(!produce_output),geninfile()
     if (mode == POLYMC_MODE_LIN2D && use_slither2d) {
         lin2d_slither_equi_with_pivot();
     }
-
+    
 }
 
 
@@ -197,18 +198,16 @@ bool PolyMC::simple_execute() {
     if (equi>0) {
         run(equi,MCSteps,"Equilibration",false);
     }
-
+    ///////////////////////////////////////////////
+    // Main loop
     run(steps,MCSteps,"Production Run");
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
-
     for (unsigned i=0;i<Dumps.size();i++) {
         Dumps[i]->final_dump();
     }
+    ///////////////////////////////////////////////
     // dump restart file for last configuration
     DumpLast->final_dump();
-    ///////////////////////////////////////////////
     ///////////////////////////////////////////////
     std::cout << "PolyMC finished!" << std::endl;
     return true;
@@ -421,6 +420,10 @@ void PolyMC::init_general() {
 
     std::vector<std::string> input_hel_rep_len_keys = {"hel_rep_len","hel_rep","helical_repeat","helical_repeat_length"};
     hel_rep_len = InputChoice_get_single<double>      (input_hel_rep_len_keys,input,argv,hel_rep_len);
+    stateswitch_size      = InputChoice_get_single<unsigned>    ("stateswitch_size",input,argv,stateswitch_size);
+    stateswitch_size      = InputChoice_get_single<unsigned>    ("ss_size",input,argv,stateswitch_size);
+    stateswitch_num_moves      = InputChoice_get_single<unsigned>    ("stateswitch_num_moves",input,argv,stateswitch_num_moves);
+    stateswitch_num_moves      = InputChoice_get_single<unsigned>    ("ss_num",input,argv,stateswitch_num_moves);
 
     geninfile.add_entry(GENINFILE_PARAMS,"steps",steps);
     geninfile.add_entry(GENINFILE_PARAMS,"equi",equi);
@@ -431,6 +434,8 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"torque",torque);
     geninfile.add_entry(GENINFILE_PARAMS,"helical_repeat",hel_rep_len);
     geninfile.add_entry(GENINFILE_PARAMS,"Lk0_from_static",Lk0_from_static);
+    geninfile.add_entry(GENINFILE_PARAMS,"ss_size",stateswitch_size);
+    geninfile.add_entry(GENINFILE_PARAMS,"ss_num",stateswitch_num_moves);
 
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};
@@ -594,10 +599,7 @@ void PolyMC::init_dump() {
     dump_dir = parse_arg(dump_dir, "-dump_dir" ,argv);
     geninfile.add_entry(GENINFILE_DUMPS_SETUP,"dump_dir",dump_dir);
 
-
     Dumps = init_dump_cmdargs(argv,&geninfile,chain,mode,EV_rad,inputfn);
-
-
     /*
         Dump Energy
     */
@@ -960,7 +962,6 @@ void PolyMC::init_pair_interactions() {
             MCSteps[i]->set_unbound(unbound);
         }
     }
-
 }
 
 void PolyMC::set_all_backups() {
@@ -972,6 +973,27 @@ void PolyMC::set_all_backups() {
     }
     if (check_link && EV_active) {
         set_link_backup();
+    }
+}
+
+
+void PolyMC::init_stateswitch_moves() {
+    if (stateswitch_size == 0 || stateswitch_num_moves == 0) {
+        return;
+    }
+    for (unsigned i=0;i<chain->get_BPS()->size();i++) {
+        if (!chain->get_BPS()->at(i)->is_bubble()) {
+            stateswitch_size = 0;
+            return;
+        }
+    }
+    if (stateswitch_size > 0) {
+        std::cout << " Adding Stateswitch to MC Moves .. " << std::endl;
+        std::cout << stateswitch_size << std::endl;
+        MCS_Stateswitch*  sw  = new MCS_Stateswitch(chain,seedseq,0,larger(0,stateswitch_size-1));
+        for (unsigned jj=0;jj<stateswitch_num_moves;jj++) {
+            MCSteps.push_back(sw);
+        }
     }
 }
 
@@ -1147,7 +1169,8 @@ void PolyMC::print_state(long long step,long long steps,const std::string & run_
     timer_elapsed = timer_finish-timer_start;
     std::cout << "  estimated to finished in: " << time_remaining((timer_elapsed.count())/step*(steps-step)) << "\n";
 
-
+    // std::cout << (*chain->get_states()).t() << std::endl;
+    // std::cout << arma::sum((*chain->get_states()))- chain->get_states()->size() << std::endl;
 
 ////    // TESTING !!!!
 //    int dim = 1;

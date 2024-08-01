@@ -803,6 +803,7 @@ void Chain::init_BPS() {
     }
     // calculate average stiffness and covariance matrix
     cal_avg_stiff(true);
+    init_states();
 }
 
 void Chain::init_energies() {
@@ -919,4 +920,17 @@ void Chain::set_sigma(double sigma) {
 
 void Chain::set_sigma(double sigma, int id_first, int id_last) {
     set_Delta_Lk(sigma2dLk(sigma),id_first,id_last);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////  BUBBLESTATES //////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Chain::init_states() {
+    states = arma::ones<arma::ivec>(num_bps);
+}
+
+arma::ivec* Chain::get_states() {
+    return &states;
 }

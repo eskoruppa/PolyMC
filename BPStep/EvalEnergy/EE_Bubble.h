@@ -1,29 +1,47 @@
-#ifndef __EE_STIFFMAT_INCLUDED__
-#define __EE_STIFFMAT_INCLUDED__
+#ifndef __EE_BUBBLE_INCLUDED__
+#define __EE_BUBBLE_INCLUDED__
 
 #include "../EvalEnergy.h"
 
-class EE_StiffMat;
+class EE_Bubble;
 
-class EE_StiffMat: public EvalEnergy
+class EE_Bubble: public EvalEnergy
 {
 //////////////////////////////////////////////////////////////////////////////////
 // member variables //////////////////////////////////////////////////////////////
 protected:
-    arma::mat stiffmat;
-    arma::mat current_stiffmat;
     double    factor;
+    // arma::mat stiffmat;
+
+    int current_state, proposed_state;
+    bool stateswitch_pending; 
+
+    arma::mat current_stiffmat;
+    double    current_stateenergy; 
+
+    arma::mat proposed_stiffmat;
+    double    proposed_stateenergy; 
+
+    arma::mat state1_stiffmat, state2_stiffmat;
+    double    state1_stateenergy, state2_stateenergy;
+
+    double interface_energy;
 
 public:
 ////////////////////////////////////////////////////////////////////////////////////
 /////// constructor / destructor ///////////////////////////////////////////////////
-    EE_StiffMat(const std::vector<double> & params,double disc_len, double temp, bool is_diag);
-    ~EE_StiffMat();
+    EE_Bubble(const std::vector<double> & params,double disc_len, double temp, bool is_diag);
+    ~EE_Bubble();
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 /////////////////   main   /////////////////////////////////////////////////////////
     double cal_beta_energy_diag(const arma::colvec & Theta);
     double cal_beta_energy_offdiag(const arma::colvec & Theta1, const arma::colvec & Theta2);
+////////////////////////////////////////////////////////////////////////////////////
+/////////////////   stateswitch   //////////////////////////////////////////////////
+    void propose_stateswitch(int new_state);
+    void set_switch(bool accepted); 
 ////////////////////////////////////////////////////////////////////////////////////
 /////////////////  setters /////////////////////////////////////////////////////////
     void set_temp(double temp);
@@ -37,12 +55,7 @@ public:
 /////////////////  getters /////////////////////////////////////////////////////////
     arma::mat get_cov();
     bool isotropic_bending();
-
-
-// ////////////////////////////////////////////////////////////////////////////////////
-// /////////////////   stateswitch   //////////////////////////////////////////////////
-//     void propose_stateswitch(int new_state);
-//     void set_switch(bool accepted); 
+    double get_interface_energy();
 
 };
 

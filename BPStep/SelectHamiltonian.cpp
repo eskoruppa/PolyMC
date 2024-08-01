@@ -14,6 +14,10 @@ EvalEnergy * BPStep::select_EvalEnergy(const std::string & method, const std::ve
         return kinkxy;
     }
 
+    if (method=="bubble") {
+        EE_Bubble * bubble = new EE_Bubble(params,disc_len,temp,is_diag);
+        return bubble;
+    }
 
     /*
         Add new methods here

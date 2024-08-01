@@ -25,6 +25,17 @@ double EvalEnergy::cal_beta_energy_offdiag(const arma::colvec & Theta1, const ar
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/////////////////   stateswitch   //////////////////////////////////////////////
+
+void EvalEnergy::propose_stateswitch(int new_state) {
+    throw std::logic_error("propose_stateswitch() not defined in class inheriting EvalEnergy");
+}
+
+void EvalEnergy::set_switch(bool accepted) {
+    throw std::logic_error("set_switch() not defined in class inheriting EvalEnergy");
+}
+
+////////////////////////////////////////////////////////////////////////////////
 ///////////////  setters ///////////////////////////////////////////////////////
 void EvalEnergy::set_temp(double temp) {
     this->temp = temp;
@@ -97,6 +108,10 @@ bool EvalEnergy::isotropic_bending() {
 
 std::vector<double> EvalEnergy::get_status_diag(const arma::colvec & Theta) {
     return {};
+}
+
+double EvalEnergy::get_interface_energy() {
+    return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -26,7 +26,7 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
 
     // create path if it doesn't exist
     std::string path = std::filesystem::path(dump_dir).parent_path().u8string();
-    std::cout << path << std::endl;
+    // std::cout << path << std::endl;
     if (!fs::is_directory(path)) {
         fs::create_directories(path);
     }
@@ -37,6 +37,27 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     append_dumps = InputChoice_get_single<bool>        ("append"  ,&input,argv,append_dumps);
 
     std::vector<Dump*>   Dumps;
+
+    /*
+        Dump Meltingbubble Statistics
+    */
+    int    BUB_dump_every    = 0;
+    std::string BUB_filename = dump_dir+".bub";
+    BUB_dump_every  = InputChoice_get_single<int>        ("BUBn"  ,&input,argv,BUB_dump_every);
+    BUB_dump_every  = InputChoice_get_single<int>        ("bubn"  ,&input,argv,BUB_dump_every);
+    BUB_dump_every  = InputChoice_get_single<int>        ("Bubn"  ,&input,argv,BUB_dump_every);
+    BUB_filename    = InputChoice_get_single<std::string>("BUBfn" ,&input,argv,BUB_filename);
+    BUB_filename    = InputChoice_get_single<std::string>("bubfn" ,&input,argv,BUB_filename);
+    BUB_filename    = InputChoice_get_single<std::string>("Bubfn" ,&input,argv,BUB_filename);
+
+    if (BUB_dump_every>0) {
+        Dump_BubbleStats* Dbub = new Dump_BubbleStats(_chain, BUB_dump_every, BUB_filename ,append_dumps);
+        Dumps.push_back(Dbub);
+
+        geninfile->add_entry(GENINFILE_DUMPS,"BUBn",BUB_dump_every);
+        geninfile->add_entry(GENINFILE_DUMPS,"BUBfn",BUB_filename);
+        geninfile->add_newline(GENINFILE_DUMPS);
+    }
 
     /*
         Dump Configuration

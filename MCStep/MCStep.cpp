@@ -7,6 +7,7 @@ seedseq(seedseq),
 BPS(*ch->get_BPS()),
 pos(ch->get_bp_pos()),
 triads(ch->get_triads()),
+states(ch->get_states()),
 num_bp(ch->get_num_bp()),
 num_bps(ch->get_num_bps()),
 disc_len(ch->get_disc_len()),
@@ -42,7 +43,7 @@ bool MCStep::MC() {
             accepted = false;
         }
 
-        if (accepted && constraints_active) {
+        if (accepted && constraints_active && requires_constraint_check) {
             /*
                 Check Constraints
             */
@@ -138,7 +139,7 @@ bool MCStep::MC() {
         if (accepted) {
             count_accept++;
 
-            if (constraints_active) {
+            if (constraints_active && requires_constraint_check) {
                 /*
                     Check Constraints
                 */

@@ -6,7 +6,7 @@
 #include "PolyMC.h"
 #include "MCMethods/ReplicaExchange.h"
 #include "MCMethods/TopologyExchange.h"
-#define POLYMC_VERSION 0.710
+#define POLYMC_VERSION 0.720
 
 /*
 TO:

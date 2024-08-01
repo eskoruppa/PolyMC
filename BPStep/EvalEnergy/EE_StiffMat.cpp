@@ -75,3 +75,13 @@ bool EE_StiffMat::isotropic_bending() {
     return ( stiffmat(0,0) == stiffmat(1,1) && stiffmat(0,1) == 0 && stiffmat(0,2) == 0 && stiffmat(1,2) == 0 );
 }
 
+
+// ////////////////////////////////////////////////////////////////////////////////
+// /////////////////   stateswitch   //////////////////////////////////////////////
+// void EE_StiffMat::propose_stateswitch(int new_state) {
+//     throw std::logic_error("propose_stateswitch() not defined in class EE_KinkXY");
+// }
+
+// void EE_StiffMat::set_switch(bool accepted) {
+//     throw std::logic_error("set_switch() not defined in class class EE_KinkXY");
+// }

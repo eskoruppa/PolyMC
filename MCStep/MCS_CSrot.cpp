@@ -355,7 +355,7 @@ bool MCS_CSrot::MC_move() {
 
 bool MCS_CSrot::rotation(int idA, int idB) {
 
-//    int             idA,idB;
+//    int             idA,idB;gen_trial_conf
     int             idAn,idBn;
     double          theta;
     arma::mat       Rlab,TA_rot,TBn_rot;
