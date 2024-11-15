@@ -340,12 +340,12 @@ bool TopologyExchange::replica_swap(long long int sweep, int id1, int id2) {
     boltzmann = std::exp(-beta*(dE1+dE2));
     randval   = uniformdist(gen);
 
-    if (randval<boltzmann) {
-        // std::cout << "swapped " << id1 << " and " << id2 << std::endl;
-        // std::cout << "dE1 = " << dE1 << std::endl;
-        // std::cout << "dE2 = " << dE2 << std::endl;
-        // std::cout << "p = " << boltzmann << std::endl;
+    // std::cout << "swapped " << id1 << " and " << id2 << std::endl;
+    // std::cout << "dE1 = " << dE1 << std::endl;
+    // std::cout << "dE2 = " << dE2 << std::endl;
+    // std::cout << "p = " << boltzmann << std::endl;
 
+    if (randval<boltzmann) {
         replicas[id1]->polymc->set_all_backups();
         replicas[id2]->polymc->set_all_backups();
 
