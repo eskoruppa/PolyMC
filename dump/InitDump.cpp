@@ -182,8 +182,12 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     /*
         Dump Extension
     */
-    int    Ext_dump_every = 0;
+    int         Ext_dump_every = 0;
     std::string Ext_filename   = dump_dir+".zext";
+    int         Ext_dump_from  = -1;
+    int         Ext_dump_to    = -1;
+    int         Ext_subdomsize = 0;
+
     Ext_dump_every  = InputChoice_get_single<int>         ("Extn" ,&input,argv,Ext_dump_every);
     Ext_dump_every  = InputChoice_get_single<int>         ("extn" ,&input,argv,Ext_dump_every);
     Ext_dump_every  = InputChoice_get_single<int>         ("EXTn" ,&input,argv,Ext_dump_every);
@@ -191,13 +195,37 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     Ext_filename    = InputChoice_get_single<std::string> ("extfn",&input,argv,Ext_filename);
     Ext_filename    = InputChoice_get_single<std::string> ("EXTfn",&input,argv,Ext_filename);
 
-    if (Ext_dump_every>0) {
-        Dump_Extension* DEXT = new Dump_Extension(_chain, Ext_dump_every, Ext_filename,append_dumps);
-        Dumps.push_back(DEXT);
+    Ext_dump_from   = InputChoice_get_single<int>         ("Extfr" ,&input,argv,Ext_dump_from);
+    Ext_dump_from   = InputChoice_get_single<int>         ("extfr" ,&input,argv,Ext_dump_from);
+    Ext_dump_from   = InputChoice_get_single<int>         ("EXTfr" ,&input,argv,Ext_dump_from);
+    Ext_dump_to     = InputChoice_get_single<int>         ("Extto" ,&input,argv,Ext_dump_to);
+    Ext_dump_to     = InputChoice_get_single<int>         ("extto" ,&input,argv,Ext_dump_to);
+    Ext_dump_to     = InputChoice_get_single<int>         ("EXTto" ,&input,argv,Ext_dump_to);
 
+    Ext_subdomsize  = InputChoice_get_single<int>         ("Extsds" ,&input,argv,Ext_subdomsize);
+    Ext_subdomsize  = InputChoice_get_single<int>         ("Extsub" ,&input,argv,Ext_subdomsize);
+    Ext_subdomsize  = InputChoice_get_single<int>         ("extsds" ,&input,argv,Ext_subdomsize);
+    Ext_subdomsize  = InputChoice_get_single<int>         ("extsub" ,&input,argv,Ext_subdomsize);
+    Ext_subdomsize  = InputChoice_get_single<int>         ("EXTsds" ,&input,argv,Ext_subdomsize);
+    Ext_subdomsize  = InputChoice_get_single<int>         ("EXTsub" ,&input,argv,Ext_subdomsize);
+
+    if (Ext_dump_every>0) {
         geninfile->add_entry(GENINFILE_DUMPS,"Extn" ,Ext_dump_every);
 //        geninfile->add_entry(GENINFILE_DUMPS,"Extfn",Ext_filename);
         geninfile->add_newline(GENINFILE_DUMPS);
+
+        // Dump_Extension* DEXT = new Dump_Extension(_chain, Ext_dump_every, Ext_filename,append_dumps);
+        // Dumps.push_back(DEXT);
+    
+        if (Ext_subdomsize == 0) {
+            Dump_Extension* DEXT = new Dump_Extension(_chain, Ext_dump_every, Ext_filename, Ext_dump_from, Ext_dump_to, append_dumps);
+            Dumps.push_back(DEXT);
+        }
+        else {
+            Dump_Extension* DEXT = new Dump_Extension(_chain, Ext_dump_every, Ext_filename, Ext_dump_from, Ext_dump_to, Ext_subdomsize, append_dumps);
+            Dumps.push_back(DEXT);
+        }
+
     }
 
     /*

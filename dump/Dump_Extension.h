@@ -14,10 +14,17 @@ protected:
     int iID,fID;
     arma::colvec store_exts;
     unsigned store_counter;
+    int sdom;
+    bool multi_store;
+    arma::mat multi_store_exts;
+    arma::colvec multi_ids;
+    unsigned multi_num;
+    
 
 public:
     Dump_Extension(Chain * ch, int N_dump, const std::string& filename, bool append=true);
     Dump_Extension(Chain * ch, int N_dump, const std::string& filename, int start_id, int end_id, bool append=true);
+    Dump_Extension(Chain * ch, int N_dump, const std::string& filename, int start_id, int end_id, int subdomain_size, bool append=true);
     ~Dump_Extension();
 
     void init_store();
