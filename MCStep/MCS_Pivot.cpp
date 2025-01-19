@@ -112,7 +112,6 @@ bool MCS_Pivot::MC_move() {
         rot_mat = getRotMat(move_Phi);
     }
 
-
 	if (chain->force_active()) {
         // TODO: don_t assume that the first position is at (0,0,0) -> since the first position doesn't change in this move subtracting pos->(0) is technically unnecessary
 		arma::colvec e2e_old = pos->col(num_bp-1) - pos->col(0);
@@ -136,23 +135,7 @@ bool MCS_Pivot::MC_move() {
         deltaE -= chain->eval_closure_angularstiff_energy(tan1,tan2);
         tan2 = rot_mat*tan2;
         deltaE += chain->eval_closure_angularstiff_energy(tan1,tan2);
-
-        // std::cout << "##########" << std::endl;
-        // std::cout << arma::dot(tan1,tan2) << std::endl;
-        // std::cout << chain->eval_closure_force_energy(tan1,tan2) << std::endl;
     }
-
-
-    // if (chain->force_active() && hingeID < 10000000) {
-	// 	arma::colvec ETE_old = pos->col(num_bp-1) - pos->col(0);
-	// 	arma::colvec ETE_new = rot_mat*(pos->col(num_bp-1)-pos->col(hingeID)) + pos->col(hingeID) - pos->col(0);
-    //     // std::cout << "etes" << std::endl;
-    //     // std::cout << ETE_old << std::endl;
-    //     // std::cout << ETE_new << std::endl;
-    //     deltaE += chain->get_force()*chain->get_beta() * (arma::norm(ETE_old) - arma::norm(ETE_new)); //- arma::dot(chain->get_beta_force_vec(),ETE_new);
-    //     deltaE += 10*(arma::dot(triads->slice(num_bp-1).col(2),triads->slice(0).col(2)) - arma::dot(rot_mat*triads->slice(num_bp-1).col(2),triads->slice(0).col(2)));
-    // }
-
 
 	if (exp(-deltaE) <= choice) {
 		return false;
