@@ -12,7 +12,6 @@ input_given(false),nooutput(!produce_output),geninfile()
     init_geninfile();
 
 //    this->argc = argc;
-//    this->argv = argv;
     this->argv = argv;
 
     mode = parse_str_atpos(1,argv);
@@ -411,10 +410,16 @@ void PolyMC::init_general() {
     temp        = InputChoice_get_single<double>      ("T",input,argv,temp);
     temp        = InputChoice_get_single<double>      ("temp",input,argv,temp);
     torque      = InputChoice_get_single<double>      ("torque",input,argv,force);
+
     std::vector<std::string> input_force_keys = {"force","f"};
     force       = InputChoice_get_single<double>      (input_force_keys,input,argv,force);
+
+    closure_force  = InputChoice_get_single<double>         ("closure_force",input,argv,closure_force);
+    closure_angularstiff = InputChoice_get_single<double>   ("closure_angularstiff",input,argv,closure_angularstiff);
+
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);
+
     std::vector<std::string> input_Lk0_from_static_keys = {"Lk0_from_static","Lk0_static"};
     Lk0_from_static = InputChoice_get_single<bool>        (input_Lk0_from_static_keys,input,argv,Lk0_from_static);
 
@@ -437,6 +442,8 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"ss_size",stateswitch_size);
     geninfile.add_entry(GENINFILE_PARAMS,"ss_num",stateswitch_num_moves);
 
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_force",closure_force);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_angularstiff",closure_angularstiff);
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};
     IDB_fn      = InputChoice_get_single<std::string> (input_IDB_keys,input,argv,IDB_fn);
@@ -540,6 +547,11 @@ void PolyMC::init_general() {
     std::cout << " subtract_T0      = " << subtract_T0 << std::endl;
     std::cout << " Lk0_from_static  = " << Lk0_from_static << std::endl;
     std::cout << " print_every      = " << print_every << std::endl;
+
+    if (closure_force != 0 || closure_angularstiff != 0) {
+        std::cout << " closure_force        = " << print_every << std::endl;
+        std::cout << " closure_angularstiff = " << print_every << std::endl;
+    }
 
     if (check_consistency_every) {
         std::cout << std::endl << " checking consistency every " << check_consistency_every << " steps." << std::endl;

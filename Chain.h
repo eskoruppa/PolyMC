@@ -228,10 +228,20 @@ public:
 
 protected:
     // Force Constraint
-    double  force_constrained   = false;
+    bool    force_constrained   = false;
     double  force               = 0;
     arma::colvec force_dir      = {0,0,1};
     arma::colvec beta_force_vec = {0,0,1};
+
+    // closure Forcel
+    bool    closure_force_on = false;
+    double  closure_force        = 0;
+    double  beta_closure_force   = 0;
+
+    // closure angularstiff 
+    bool   closure_angularstiff_on      = false;
+    double closure_angularstiff         = 0;
+    double beta_closure_angularstiff    = 0;
 
     // Termini Constraint
     bool termini_fixed           = false;
@@ -348,11 +358,26 @@ public:
     arma::mat   get_avg_cov();
     arma::mat   get_avg_chol();
 
+    void         set_force (double f, const arma::colvec& dir={0,0,1});
     bool         force_active();
     double       get_force();
     arma::colvec get_force_dir();
     arma::colvec get_beta_force_vec();
     double       extract_force_betaenergy();
+
+    void         set_closure_force (double f);
+    bool         closure_force_active();
+    double       get_closure_force();
+    double       get_beta_closure_force();
+    double       eval_closure_force_energy(arma::colvec& p1, arma::colvec& p2);
+    double       extract_closure_force_betaenergy();
+
+    void         set_closure_angularstiff (double k);
+    bool         closure_angularstiff_active();
+    double       get_closure_angularstiff();
+    double       get_beta_closure_angularstiff();
+    double       eval_closure_angularstiff_energy(arma::colvec& tan1, arma::colvec& tan2);
+    double       extract_closure_angularstiff_betaenergy();
 
     bool        fixed_termini();
     bool        fixed_termini_radial();
@@ -408,8 +433,6 @@ public:
     void set_T(double temp);
     void set_T0_subtract(bool subtract);
     void set_interaction_range(unsigned ir);
-
-    void set_force (double f, const arma::colvec& dir={0,0,1});
 
 //    void fix_link  (bool fix=true);
 

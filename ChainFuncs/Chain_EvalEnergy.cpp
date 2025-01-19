@@ -113,6 +113,13 @@ double Chain::extract_full_energy() {
     double E = extract_true_energy();
     E += extract_torque_betaenergy()/beta;
     E += extract_force_betaenergy()/beta;
+
+    if (closure_force_on) {
+        E += extract_closure_force_betaenergy()/beta;
+    }
+    if (closure_angularstiff_on) {
+        E += extract_closure_angularstiff_betaenergy()/beta;
+    }
     return E;
 }
 

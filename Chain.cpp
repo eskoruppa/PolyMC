@@ -158,6 +158,16 @@ std::string Chain::get_sequence() {
 ////////////////// FORCE METHODS ///////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void Chain::set_force(double f, const arma::colvec& dir) {
+    if (f==0) { force_constrained = false; }
+    else      { force_constrained = true; }
+    force             = f;
+    if (force==0) force_dir = {0,0,1};
+    else          force_dir = dir/arma::norm(dir);
+    beta_force_vec    = f*force_dir/kT;
+//    cout << "Force set to " << f << " pN" << std::endl;
+}
+
 bool     Chain::force_active(){
     return force_constrained;
 }
@@ -177,6 +187,58 @@ double Chain::extract_force_betaenergy() {
     return 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////// CLOSURE FORCE METHODS ///////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Chain::set_closure_force(double f) {
+    if (f==0) { closure_force_on = false; }
+    else      { closure_force_on = true; }
+    closure_force       = f;
+    beta_closure_force  = closure_force/kT;
+}
+bool     Chain::closure_force_active(){
+    return closure_force_on;
+}
+double   Chain::get_closure_force() {
+    return closure_force;
+}
+double   Chain::get_beta_closure_force() {
+    return beta_closure_force;
+}
+double Chain::eval_closure_force_energy(arma::colvec& p1, arma::colvec& p2) {
+    return beta_closure_force * arma::norm(p2-p1);
+}
+double Chain::extract_closure_force_betaenergy() {
+    return beta_closure_force * arma::norm(bp_pos.col(num_bp-1)-bp_pos.col(0));
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////// CLOSURE ANGULARSTIFF METHODS ////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Chain::set_closure_angularstiff(double angularstiff) {
+    if (angularstiff==0)    { closure_angularstiff_on = false; }
+    else                    { closure_angularstiff_on = true; }
+    closure_angularstiff        = angularstiff;
+    beta_closure_angularstiff   = closure_angularstiff/kT;
+}
+bool     Chain::closure_angularstiff_active(){
+    return closure_angularstiff_on;
+}
+double   Chain::get_closure_angularstiff() {
+    return closure_angularstiff;
+}
+double   Chain::get_beta_closure_angularstiff() {
+    return beta_closure_angularstiff;
+}
+double Chain::eval_closure_angularstiff_energy(arma::colvec& tan1, arma::colvec& tan2) {
+    return beta_closure_angularstiff * arma::dot(tan1,tan2);
+}
+double Chain::extract_closure_angularstiff_betaenergy() {
+    return beta_closure_angularstiff * arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2));
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////// SETTINGS MUTATORS ///////////////////////////////////////////////////////////////////////////////
@@ -210,6 +272,8 @@ void Chain::set_T(double temp) {
 
     change_torque (torque);
     set_force  (force,force_dir);
+    set_closure_force(closure_force);
+    set_closure_angularstiff(closure_angularstiff);
 
     if (conf_initialized) {
         for (unsigned bps=0;bps<num_bps;bps++) {
@@ -243,17 +307,6 @@ void Chain::set_interaction_range(unsigned ir) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-void Chain::set_force(double f, const arma::colvec& dir) {
-    if (f==0) { force_constrained = false; }
-    else      { force_constrained = true; }
-    force             = f;
-    if (force==0) force_dir = {0,0,1};
-    else          force_dir = dir/arma::norm(dir);
-    beta_force_vec    = f*force_dir/kT;
-//    cout << "Force set to " << f << " pN" << std::endl;
-}
-
 void Chain::fix_termini_position(bool fix_radial, bool fix) {
     if (closed_topology) {
         termini_fixed      = false;
@@ -275,7 +328,6 @@ void Chain::fix_termini_orientation(bool fix) {
         first_fixed_orientation = fix;
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////// TOPOLOGY MUTATORS ///////////////////////////////////////////////////////////////////////////////
@@ -300,6 +352,14 @@ void Chain::set_closed_topology(bool closed) {
             std::cout << "Warning: Force deactivated due to closed topology." << std::endl;
         }
         set_force(0);
+        if (closure_force_on) {
+            std::cout << "Warning: closure_force deactivated due to closed topology." << std::endl;
+        }
+        set_closure_force(0);
+        if (closure_angularstiff_on) {
+            std::cout << "Warning: closure_angularstiff deactivated due to closed topology." << std::endl;
+        }
+        set_closure_angularstiff(0);
         if (link_torsional_trap || link_const_torque) {
             std::cout << "Warning: Torque deactivated due to closed topology." << std::endl;
         }

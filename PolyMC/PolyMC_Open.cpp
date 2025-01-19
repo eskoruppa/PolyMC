@@ -26,6 +26,10 @@ bool PolyMC::init_open() {
 
     chain->set_T(temp);
     chain->set_force(force,fdir);
+
+    chain->set_closure_force(closure_force);
+    chain->set_closure_angularstiff(closure_angularstiff);
+
     chain->set_T0_subtract(subtract_T0);
     chain->set_helical_repeat_length(hel_rep_len);
     chain->set_Lk0_from_static(Lk0_from_static);
@@ -53,6 +57,11 @@ bool PolyMC::init_open() {
     MCS_Pivot* piv = new MCS_Pivot(chain,seedseq);
     MCSteps.push_back(piv);
     std::cout << " Added Pivot to MC Moves .. " << std::endl;
+
+    // // TEST CODE!
+    // MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,num_bp/4));
+    // MCSteps.push_back(rot);
+    // std::cout << " Added CSrot to MC Moves .. " << std::endl;
 
     if (use_cluster_twist) {
         MCS_ClusterTwist* cltwist = new MCS_ClusterTwist(chain,seedseq,2,larger(2,num_bp/4));

@@ -170,9 +170,9 @@ bool PolyMC::init_tweezer() {
         std::cout << std::endl << "Initializing MC Moves" << std::endl;
 //        MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,num_bp/10);
         MCS_PivCon* pivcon    = new MCS_PivCon(chain,seedseq,2,15,larger(2,num_bp-15),num_bp);
-
         MCSteps.push_back(pivcon);
         std::cout << " Added PivCon to MC Moves .. " << std::endl;
+        
         MCS_CSrot*  rot       = new MCS_CSrot(chain,seedseq,2,larger(2,10));
         for (int k=0;k<10;k++) {
             MCSteps.push_back(rot);
