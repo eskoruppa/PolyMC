@@ -15,6 +15,8 @@ namespace fs = std::filesystem;
 // include Dumps
 #include "Dump.h"
 #include "Dump_BubbleStats.h"
+#include "Dump_Closure.h"
+#include "Dump_ClosureHist.h"
 #include "Dump_Conf.h"
 #include "Dump_DistanceMap.h"
 #include "Dump_Endbead.h"

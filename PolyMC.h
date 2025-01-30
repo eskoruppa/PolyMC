@@ -202,8 +202,9 @@ protected:
     double force        = 0;
     arma::colvec fdir   = {0,0,1};
 
-    double closure_force = 0;
-    double closure_angularstiff = 0;
+    double closure_distance_stiff = 0;
+    double closure_distance_equi  = 0;
+    double closure_angle_stiff    = 0;
 
     bool subtract_T0    = false;
 

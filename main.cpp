@@ -6,7 +6,7 @@
 #include "PolyMC.h"
 #include "MCMethods/ReplicaExchange.h"
 #include "MCMethods/TopologyExchange.h"
-#define POLYMC_VERSION 0.720
+#define POLYMC_VERSION 0.730
 
 /*
 TO:
@@ -39,7 +39,6 @@ int main(int argc, const char **argcv) {
     std::cout << "ARMA version: "<< ver.as_string() << std::endl;
 
     std::vector<std::string> argv(argcv, argcv+argc);
-
     std::string inputfn = "";
     inputfn  = parse_arg(inputfn, "-in",argv);
 

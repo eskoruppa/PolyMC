@@ -119,22 +119,26 @@ bool MCS_Pivot::MC_move() {
         deltaE += arma::dot(chain->get_beta_force_vec(),e2e_old-e2e_new); //- arma::dot(chain->get_beta_force_vec(),e2e_new);
 	}
 
-    if (chain->closure_force_active()) {
+    if (chain->closure_distance_active()) {
         // std::cout << "closure force active" << std::endl;
         arma::colvec p1 = pos->col(0);
         arma::colvec p2 = pos->col(num_bp-1);
-        deltaE -= chain->eval_closure_force_energy(p1,p2);
+        // old
+        deltaE -= chain->eval_closure_distance_betaenergy(p1,p2);
+        // new
         p2 = rot_mat*(pos->col(num_bp-1)-pos->col(hingeID)) + pos->col(hingeID);
-        deltaE += chain->eval_closure_force_energy(p1,p2);
+        deltaE += chain->eval_closure_distance_betaenergy(p1,p2);
     }
 
-    if (chain->closure_angularstiff_active()) {
+    if (chain->closure_angle_active()) {
         // std::cout << "closure angularstiff active" << std::endl;
         arma::colvec tan1 = triads->slice(0).col(2);
         arma::colvec tan2 = triads->slice(num_bp-1).col(2);
-        deltaE -= chain->eval_closure_angularstiff_energy(tan1,tan2);
+        // old
+        deltaE -= chain->eval_closure_angle_betaenergy(tan1,tan2);
+        // new
         tan2 = rot_mat*tan2;
-        deltaE += chain->eval_closure_angularstiff_energy(tan1,tan2);
+        deltaE += chain->eval_closure_angle_betaenergy(tan1,tan2);
     }
 
 	if (exp(-deltaE) <= choice) {

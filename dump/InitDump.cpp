@@ -60,6 +60,100 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     }
 
     /*
+        Dump Closure 
+    */
+    int    CLOS_every    = 0;
+    std::string CLOS_filename = dump_dir+".closure";
+    double CLOS_dist_threshold = 0;
+    double CLOS_angle_threshold = 0;
+    double CLOS_twist_threshold = 0;
+
+    CLOS_every          = InputChoice_get_single<int>        ("Closure_n"  ,&input,argv,CLOS_every);
+    CLOS_filename       = InputChoice_get_single<std::string>("Closure_fn" ,&input,argv,CLOS_filename);
+    CLOS_dist_threshold     = InputChoice_get_single<double>     ("Closure_dist_threshold"  ,&input,argv,CLOS_dist_threshold);
+    CLOS_angle_threshold     = InputChoice_get_single<double>     ("Closure_angle_threshold"  ,&input,argv,CLOS_angle_threshold);
+    CLOS_twist_threshold     = InputChoice_get_single<double>     ("Closure_twist_threshold"  ,&input,argv,CLOS_twist_threshold);
+
+    if ((CLOS_dist_threshold > 0 || CLOS_angle_threshold > 0 || CLOS_twist_threshold > 0) && CLOS_every > 0) {
+        Dump_Closure* Dclos = new Dump_Closure(      
+        _chain, 
+        CLOS_every, 
+        CLOS_filename, 
+        CLOS_dist_threshold,
+        CLOS_angle_threshold,
+        CLOS_twist_threshold
+        );
+        Dumps.push_back(Dclos);
+
+        geninfile->add_entry(GENINFILE_DUMPS,"Closure_n",CLOS_every);
+        geninfile->add_entry(GENINFILE_DUMPS,"Closure_fn",CLOS_filename);
+        geninfile->add_entry(GENINFILE_DUMPS,"Closure_dist_threshold",CLOS_dist_threshold);
+        geninfile->add_entry(GENINFILE_DUMPS,"Closure_angle_threshold",CLOS_angle_threshold);
+        geninfile->add_entry(GENINFILE_DUMPS,"Closure_twist_threshold",CLOS_twist_threshold);
+        geninfile->add_newline(GENINFILE_DUMPS);
+    }
+
+
+    /*
+        Dump Closure Histograms
+    */
+    int    CLOSHIST_every    = 0;
+    std::string CLOSHIST_filename = dump_dir;
+    int CLOSHIST_num_dist_bins = 0; 
+    int CLOSHIST_num_angle_bins = 0; 
+    double CLOSHIST_dist_lower = 0; 
+    double CLOSHIST_dist_upper = _chain->get_disc_len()*_chain->get_num_bp(); 
+    double CLOSHIST_angle_lower = 0; 
+    double CLOSHIST_angle_upper = 0;
+    bool CLOSHIST_bin_costheta = false;
+
+    CLOSHIST_bin_costheta    = InputChoice_get_single<bool>      ("ClosureHist_angle_costheta"  ,&input,argv,CLOSHIST_bin_costheta);
+    if (CLOSHIST_bin_costheta) {
+        CLOSHIST_angle_lower = -1;
+        CLOSHIST_angle_upper = 1;
+    }
+    else {
+        CLOSHIST_angle_lower = 0;
+        CLOSHIST_angle_upper = M_PI;
+    }
+    CLOSHIST_every          = InputChoice_get_single<int>        ("ClosureHist_n"  ,&input,argv,CLOSHIST_every);
+    CLOSHIST_filename       = InputChoice_get_single<std::string>("ClosureHist_fn" ,&input,argv,CLOSHIST_filename);
+    CLOSHIST_num_dist_bins  = InputChoice_get_single<int>        ("ClosureHist_dist_num"  ,&input,argv,CLOSHIST_num_dist_bins);
+    CLOSHIST_num_angle_bins = InputChoice_get_single<int>        ("ClosureHist_angle_num"  ,&input,argv,CLOSHIST_num_angle_bins);
+    CLOSHIST_dist_lower     = InputChoice_get_single<double>     ("ClosureHist_dist_lower"  ,&input,argv,CLOSHIST_dist_lower);
+    CLOSHIST_dist_upper     = InputChoice_get_single<double>     ("ClosureHist_dist_upper"  ,&input,argv,CLOSHIST_dist_upper);
+    CLOSHIST_angle_lower     = InputChoice_get_single<double>    ("ClosureHist_angle_lower"  ,&input,argv,CLOSHIST_angle_lower);
+    CLOSHIST_angle_upper     = InputChoice_get_single<double>    ("ClosureHist_angle_upper"  ,&input,argv,CLOSHIST_angle_upper);
+
+    if (CLOSHIST_num_dist_bins>0 && CLOSHIST_dist_lower < CLOSHIST_dist_upper && CLOSHIST_every > 0) {
+        Dump_ClosureHist* Dcloshist = new Dump_ClosureHist(      
+        _chain, 
+        CLOSHIST_every, 
+        CLOSHIST_filename, 
+        CLOSHIST_num_dist_bins, 
+        CLOSHIST_num_angle_bins, 
+        CLOSHIST_dist_lower, 
+        CLOSHIST_dist_upper, 
+        CLOSHIST_angle_lower, 
+        CLOSHIST_angle_upper,
+        CLOSHIST_bin_costheta);
+        if (Dcloshist->is_active()) {
+            Dumps.push_back(Dcloshist);
+        }
+
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_n",CLOSHIST_every);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_fn",CLOSHIST_filename);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_dist_num",CLOSHIST_num_dist_bins);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_num",CLOSHIST_num_angle_bins);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_dist_lower",CLOSHIST_dist_lower);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_dist_upper",CLOSHIST_dist_upper);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_lower",CLOSHIST_angle_lower);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_upper",CLOSHIST_angle_upper);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_costheta",CLOSHIST_bin_costheta);
+        geninfile->add_newline(GENINFILE_DUMPS);
+    }
+
+    /*
         Dump Configuration
     */
     int    CONF_dump_every    = 0;

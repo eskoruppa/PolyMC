@@ -414,8 +414,9 @@ void PolyMC::init_general() {
     std::vector<std::string> input_force_keys = {"force","f"};
     force       = InputChoice_get_single<double>      (input_force_keys,input,argv,force);
 
-    closure_force  = InputChoice_get_single<double>         ("closure_force",input,argv,closure_force);
-    closure_angularstiff = InputChoice_get_single<double>   ("closure_angularstiff",input,argv,closure_angularstiff);
+    closure_distance_stiff  = InputChoice_get_single<double>    ("closure_distance_stiff",input,argv,closure_distance_stiff);
+    closure_distance_equi   = InputChoice_get_single<double>    ("closure_distance_equi",input,argv,closure_distance_equi);
+    closure_angle_stiff     = InputChoice_get_single<double>    ("closure_angle_stiff",input,argv,closure_angle_stiff);
 
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);
@@ -442,8 +443,9 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"ss_size",stateswitch_size);
     geninfile.add_entry(GENINFILE_PARAMS,"ss_num",stateswitch_num_moves);
 
-    geninfile.add_entry(GENINFILE_PARAMS,"closure_force",closure_force);
-    geninfile.add_entry(GENINFILE_PARAMS,"closure_angularstiff",closure_angularstiff);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_distance_stiff",closure_distance_stiff);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_distance_equi",closure_distance_equi);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_angle_stiff",closure_angle_stiff);
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};
     IDB_fn      = InputChoice_get_single<std::string> (input_IDB_keys,input,argv,IDB_fn);
@@ -548,9 +550,10 @@ void PolyMC::init_general() {
     std::cout << " Lk0_from_static  = " << Lk0_from_static << std::endl;
     std::cout << " print_every      = " << print_every << std::endl;
 
-    if (closure_force != 0 || closure_angularstiff != 0) {
-        std::cout << " closure_force        = " << print_every << std::endl;
-        std::cout << " closure_angularstiff = " << print_every << std::endl;
+    if (closure_distance_stiff != 0 || closure_angle_stiff != 0) {
+        std::cout << " closure_distance_stiff = " << closure_distance_stiff << std::endl;
+        std::cout << " closure_distance_equi  = " << closure_distance_equi << std::endl;
+        std::cout << " closure_angle_stiff    = " << closure_angle_stiff << std::endl;
     }
 
     if (check_consistency_every) {

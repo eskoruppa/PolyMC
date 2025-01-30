@@ -234,14 +234,16 @@ protected:
     arma::colvec beta_force_vec = {0,0,1};
 
     // closure Forcel
-    bool    closure_force_on = false;
-    double  closure_force        = 0;
-    double  beta_closure_force   = 0;
+    bool    closure_distance_on         = false;
+    double  closure_distance_stiff      = 0;
+    double  closure_distance_equi       = 0;
+    double  closure_distance_betastiff  = 0;
 
     // closure angularstiff 
-    bool   closure_angularstiff_on      = false;
-    double closure_angularstiff         = 0;
-    double beta_closure_angularstiff    = 0;
+    bool   closure_angle_on         = false;
+    double closure_angle_stiff      = 0;
+    // double closure_angle_equi       = 0;
+    double closure_angle_betastiff  = 0;
 
     // Termini Constraint
     bool termini_fixed           = false;
@@ -365,19 +367,19 @@ public:
     arma::colvec get_beta_force_vec();
     double       extract_force_betaenergy();
 
-    void         set_closure_force (double f);
-    bool         closure_force_active();
-    double       get_closure_force();
-    double       get_beta_closure_force();
-    double       eval_closure_force_energy(arma::colvec& p1, arma::colvec& p2);
-    double       extract_closure_force_betaenergy();
+    void         set_closure_distance_stiff (double k, double r0);
+    bool         closure_distance_active();
+    double       get_closure_distance_stiff();
+    double       get_closure_distance_betastiff();
+    double       eval_closure_distance_betaenergy(arma::colvec& p1, arma::colvec& p2);
+    double       extract_closure_distance_betaenergy();
 
-    void         set_closure_angularstiff (double k);
-    bool         closure_angularstiff_active();
-    double       get_closure_angularstiff();
-    double       get_beta_closure_angularstiff();
-    double       eval_closure_angularstiff_energy(arma::colvec& tan1, arma::colvec& tan2);
-    double       extract_closure_angularstiff_betaenergy();
+    void         set_closure_angle_stiff (double k);
+    bool         closure_angle_active();
+    double       get_closure_angle_stiff();
+    double       get_closure_angle_betastiff();
+    double       eval_closure_angle_betaenergy(arma::colvec& tan1, arma::colvec& tan2);
+    double       extract_closure_angle_betaenergy();
 
     bool        fixed_termini();
     bool        fixed_termini_radial();

@@ -1,0 +1,76 @@
+########################################################
+## Simulation Mode #####################################
+########################################################
+
+mode = open
+
+use_cluster_twist   = 0
+num_twist           = 0
+
+check_link              = 0
+check_consistency_every = 1000000
+
+seed = -1
+   
+########################################################
+## Interaction Database ################################
+########################################################
+
+IDB         = TWLC.idb
+sequence    = seq
+subtract_T0 = 0
+
+########################################################
+## Simulation Parameters ###############################
+########################################################
+
+T      = 300
+num_bp = 100
+sigma  = 0
+torque = 0 
+force  = 0
+EV     = 0
+
+closure_distance_stiff = 6
+closure_distance_equi  = 0
+closure_angle_stiff    = 9
+
+steps  = 10000000
+equi   = 0
+
+########################################################
+## Output ##############################################
+########################################################
+
+print_every     = 100000
+print_link_info = 0
+
+########################################################
+## Dump Setup ##########################################
+########################################################
+
+copy_input = 1
+dump_dir   = dump/test2
+
+
+
+###################################
+# dump XYZ configuration
+XYZn          = 10000
+XYZ_translate = first
+
+ClosureHist_n 	 	   = 1
+ClosureHist_dist_num       = 10
+ClosureHist_angle_num      = 10
+ClosureHist_angle_costheta = false
+
+Closure_n = 1
+Closure_dist_threshold = 0.4
+Closure_angle_threshold = 0.3
+Closure_twist_threshold = 0
+
+
+
+
+
+
