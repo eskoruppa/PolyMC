@@ -414,9 +414,10 @@ void PolyMC::init_general() {
     std::vector<std::string> input_force_keys = {"force","f"};
     force       = InputChoice_get_single<double>      (input_force_keys,input,argv,force);
 
-    closure_distance_stiff  = InputChoice_get_single<double>    ("closure_distance_stiff",input,argv,closure_distance_stiff);
-    closure_distance_equi   = InputChoice_get_single<double>    ("closure_distance_equi",input,argv,closure_distance_equi);
-    closure_angle_stiff     = InputChoice_get_single<double>    ("closure_angle_stiff",input,argv,closure_angle_stiff);
+    closure_distance_stiff      = InputChoice_get_single<double>    ("closure_distance_stiff",input,argv,closure_distance_stiff);
+    closure_distance_equi       = InputChoice_get_single<double>    ("closure_distance_equi",input,argv,closure_distance_equi);
+    closure_angle_stiff         = InputChoice_get_single<double>    ("closure_angle_stiff",input,argv,closure_angle_stiff);
+    closure_angle_use_costheta  = InputChoice_get_single<bool>      ("closure_angle_use_costheta",input,argv,closure_angle_use_costheta);
 
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);

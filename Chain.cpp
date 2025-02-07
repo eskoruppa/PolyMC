@@ -222,11 +222,13 @@ double Chain::extract_closure_distance_betaenergy() {
 ////////////////// CLOSURE ANGULARSTIFF METHODS ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Chain::set_closure_angle_stiff(double angularstiff) {
+
+void Chain::set_closure_angle_stiff(double angularstiff, bool use_costheta) {
     if (angularstiff==0)    { closure_angle_on = false; }
     else                    { closure_angle_on = true; }
     closure_angle_stiff       = angularstiff;
     closure_angle_betastiff   = closure_angle_stiff/kT;
+    closure_angle_costheta    = use_costheta;
 }
 bool     Chain::closure_angle_active(){
     return closure_angle_on;
@@ -238,10 +240,18 @@ double   Chain::get_closure_angle_betastiff() {
     return closure_angle_betastiff;
 }
 double Chain::eval_closure_angle_betaenergy(arma::colvec& tan1, arma::colvec& tan2) {
-    return -closure_angle_betastiff * arma::dot(tan1,tan2);
+    if (closure_angle_costheta) {
+        return -closure_angle_betastiff * arma::dot(tan1,tan2);  
+    }
+    double angle = std::acos(arma::dot(tan1,tan2));
+    return 0.5*closure_angle_betastiff*angle*angle;
 }
 double Chain::extract_closure_angle_betaenergy() {
-    return -closure_angle_betastiff * arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2));
+    if (closure_angle_costheta) {
+        return -closure_angle_betastiff * arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2));
+    }
+    double angle = std::acos(arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2)));
+    return 0.5*closure_angle_betastiff*angle*angle;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

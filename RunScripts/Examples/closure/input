@@ -25,15 +25,15 @@ subtract_T0 = 0
 ########################################################
 
 T      = 300
-num_bp = 100
+num_bp = 101
 sigma  = 0
 torque = 0 
 force  = 0
 EV     = 0
 
-closure_distance_stiff = 5
-closure_distance_equi  = 0
-closure_angle_stiff    = 5
+closure_distance_stiff = 0
+closure_distance_equi  = 20
+closure_angle_stiff    = 0
 
 steps  = 1000000
 equi   = 0
