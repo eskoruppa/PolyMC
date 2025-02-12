@@ -244,7 +244,6 @@ protected:
     double closure_angle_stiff      = 0;
     double closure_angle_equi       = 0;
     double closure_angle_betastiff  = 0;
-    // bool   closure_angle_costheta   = false;
 
     // Termini Constraint
     bool termini_fixed           = false;
