@@ -28,8 +28,8 @@ bool PolyMC::init_open() {
     chain->set_force(force,fdir);
 
     // set closure parameters
-    chain->set_closure_distance_stiff(closure_distance_stiff,closure_distance_equi);
-    chain->set_closure_angle_stiff(closure_angle_stiff,closure_angle_use_costheta);
+    chain->set_closure_distance_potential(closure_distance_stiff,closure_distance_equi);
+    chain->set_closure_angle_potential(closure_angle_stiff,closure_angle_equi);
 
     chain->set_T0_subtract(subtract_T0);
     chain->set_helical_repeat_length(hel_rep_len);

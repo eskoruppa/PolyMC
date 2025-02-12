@@ -242,9 +242,9 @@ protected:
     // closure angularstiff 
     bool   closure_angle_on         = false;
     double closure_angle_stiff      = 0;
-    // double closure_angle_equi       = 0;
+    double closure_angle_equi       = 0;
     double closure_angle_betastiff  = 0;
-    bool   closure_angle_costheta   = false;
+    // bool   closure_angle_costheta   = false;
 
     // Termini Constraint
     bool termini_fixed           = false;
@@ -368,14 +368,14 @@ public:
     arma::colvec get_beta_force_vec();
     double       extract_force_betaenergy();
 
-    void         set_closure_distance_stiff (double k, double r0);
+    void         set_closure_distance_potential (double k, double r0);
     bool         closure_distance_active();
     double       get_closure_distance_stiff();
     double       get_closure_distance_betastiff();
     double       eval_closure_distance_betaenergy(arma::colvec& p1, arma::colvec& p2);
     double       extract_closure_distance_betaenergy();
 
-    void         set_closure_angle_stiff (double k, bool use_costheta = false);
+    void         set_closure_angle_potential (double k, double theta_0 = 0);
     bool         closure_angle_active();
     double       get_closure_angle_stiff();
     double       get_closure_angle_betastiff();

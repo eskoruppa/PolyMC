@@ -417,7 +417,7 @@ void PolyMC::init_general() {
     closure_distance_stiff      = InputChoice_get_single<double>    ("closure_distance_stiff",input,argv,closure_distance_stiff);
     closure_distance_equi       = InputChoice_get_single<double>    ("closure_distance_equi",input,argv,closure_distance_equi);
     closure_angle_stiff         = InputChoice_get_single<double>    ("closure_angle_stiff",input,argv,closure_angle_stiff);
-    closure_angle_use_costheta  = InputChoice_get_single<bool>      ("closure_angle_use_costheta",input,argv,closure_angle_use_costheta);
+    closure_angle_equi          = InputChoice_get_single<double>    ("closure_angle_equi",input,argv,closure_angle_equi);
 
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);
@@ -447,6 +447,7 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"closure_distance_stiff",closure_distance_stiff);
     geninfile.add_entry(GENINFILE_PARAMS,"closure_distance_equi",closure_distance_equi);
     geninfile.add_entry(GENINFILE_PARAMS,"closure_angle_stiff",closure_angle_stiff);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_angle_equi",closure_angle_equi);
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};
     IDB_fn      = InputChoice_get_single<std::string> (input_IDB_keys,input,argv,IDB_fn);

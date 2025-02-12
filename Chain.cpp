@@ -192,7 +192,7 @@ double Chain::extract_force_betaenergy() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void Chain::set_closure_distance_stiff(double k, double r0) {
+void Chain::set_closure_distance_potential(double k, double r0) {
     if (k<=0) { closure_distance_on = false; }
     else      { closure_distance_on = true; }
     closure_distance_stiff      = k;
@@ -223,12 +223,13 @@ double Chain::extract_closure_distance_betaenergy() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void Chain::set_closure_angle_stiff(double angularstiff, bool use_costheta) {
+void Chain::set_closure_angle_potential(double angularstiff, double theta_0) {
     if (angularstiff==0)    { closure_angle_on = false; }
     else                    { closure_angle_on = true; }
     closure_angle_stiff       = angularstiff;
     closure_angle_betastiff   = closure_angle_stiff/kT;
-    closure_angle_costheta    = use_costheta;
+    closure_angle_equi        = theta_0;
+    // closure_angle_costheta    = use_costheta;
 }
 bool     Chain::closure_angle_active(){
     return closure_angle_on;
@@ -240,17 +241,17 @@ double   Chain::get_closure_angle_betastiff() {
     return closure_angle_betastiff;
 }
 double Chain::eval_closure_angle_betaenergy(arma::colvec& tan1, arma::colvec& tan2) {
-    if (closure_angle_costheta) {
-        return -closure_angle_betastiff * arma::dot(tan1,tan2);  
-    }
-    double angle = std::acos(arma::dot(tan1,tan2));
+    // if (closure_angle_costheta) {
+    //     return -closure_angle_betastiff * arma::dot(tan1,tan2);  
+    // }
+    double angle = std::acos(arma::dot(tan1,tan2)) - closure_angle_equi;
     return 0.5*closure_angle_betastiff*angle*angle;
 }
 double Chain::extract_closure_angle_betaenergy() {
-    if (closure_angle_costheta) {
-        return -closure_angle_betastiff * arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2));
-    }
-    double angle = std::acos(arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2)));
+    // if (closure_angle_costheta) {
+    //     return -closure_angle_betastiff * arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2));
+    // }
+    double angle = std::acos(arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2))) - closure_angle_equi;
     return 0.5*closure_angle_betastiff*angle*angle;
 }
 
@@ -285,8 +286,8 @@ void Chain::set_T(double temp) {
 
     change_torque (torque);
     set_force  (force,force_dir);
-    set_closure_distance_stiff(closure_distance_stiff,closure_distance_equi);
-    set_closure_angle_stiff(closure_angle_stiff);
+    set_closure_distance_potential(closure_distance_stiff,closure_distance_equi);
+    set_closure_angle_potential(closure_angle_stiff,closure_angle_equi);
 
     if (conf_initialized) {
         for (unsigned bps=0;bps<num_bps;bps++) {
@@ -368,11 +369,11 @@ void Chain::set_closed_topology(bool closed) {
         if (closure_distance_on) {
             std::cout << "Warning: closure_force deactivated due to closed topology." << std::endl;
         }
-        set_closure_distance_stiff(0,0);
+        set_closure_distance_potential(0,0);
         if (closure_angle_on) {
             std::cout << "Warning: closure_angularstiff deactivated due to closed topology." << std::endl;
         }
-        set_closure_angle_stiff(0);
+        set_closure_angle_potential(0,0);
         if (link_torsional_trap || link_const_torque) {
             std::cout << "Warning: Torque deactivated due to closed topology." << std::endl;
         }

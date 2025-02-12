@@ -81,7 +81,7 @@ void Dump_ClosureHist::final_dump() {
     else {
         for (unsigned i=0;i<num_dist_bins;i++){
             histfile << mathist(i,0);
-            for (unsigned j=0;j<num_angle_bins;j++){
+            for (unsigned j=1;j<num_angle_bins;j++){
                 histfile << " " << mathist(i,j);
             }
             histfile << "\n";

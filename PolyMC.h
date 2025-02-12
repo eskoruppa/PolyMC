@@ -205,7 +205,8 @@ protected:
     double closure_distance_stiff = 0;
     double closure_distance_equi  = 0;
     double closure_angle_stiff    = 0;
-    bool   closure_angle_use_costheta = false;
+    double closure_angle_equi     = 0;
+    // bool   closure_angle_use_costheta = false;
 
     bool subtract_T0    = false;
 
