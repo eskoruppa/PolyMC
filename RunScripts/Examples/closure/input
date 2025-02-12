@@ -25,15 +25,16 @@ subtract_T0 = 0
 ########################################################
 
 T      = 300
-num_bp = 101
+num_bp = 100
 sigma  = 0
 torque = 0 
 force  = 0
 EV     = 0
 
-closure_distance_stiff = 0
-closure_distance_equi  = 20
-closure_angle_stiff    = 0
+closure_distance_stiff = 6
+closure_distance_equi  = 15
+closure_angle_stiff    = 200
+closure_angle_equi     = 3
 
 steps  = 1000000
 equi   = 0
@@ -52,11 +53,23 @@ print_link_info = 0
 copy_input = 1
 dump_dir   = dump/test
 
-
-
-###################################
+########################################################
 # dump XYZ configuration
 XYZn          = 1000
 XYZ_translate = first
+
+ClosureHist_n 	 	   = 1
+ClosureHist_dist_num       = 10
+ClosureHist_angle_num      = 10
+ClosureHist_angle_costheta = 0
+
+Closure_n = 1
+Closure_dist_threshold  = 0.3
+Closure_angle_threshold = 0.2
+Closure_twist_threshold = 0
+
+
+
+
 
 
