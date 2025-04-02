@@ -22,14 +22,26 @@ protected:
     double angle_lower;
     double angle_range;
 
-    // bool dist_active = true;
+    double twist_upper;
+    double twist_lower;
+    double twist_range;
+
+    bool dist_active  = false;
     bool angle_active = false;
+    bool twist_active = false;
+    int num_active = 0;
+    int combination_id = -1;
     int num_dist_bins;
     int num_angle_bins;
+    int num_twist_bins;
+
+    int num_bins_1 = 0;
+    int num_bins_2 = 0;
+    int num_bins_3 = 0;
     
     arma::ivec hist;
-    // arma::colvec angles;
     arma::imat mathist;
+    arma::icube cubehist;
     long long int invalid_counter;
 
 
@@ -40,11 +52,14 @@ public:
         const std::string& filename, 
         int num_dist_bins, 
         int num_angle_bins, 
+        int num_twist_bins, 
         double dist_lower, 
         double dist_upper = -1, 
         double angle_lower = 0, 
         double angle_upper = 0,
-        bool bin_costheta = true);
+        double twist_lower = 0,
+        double twist_upper = 0,
+        bool bin_costheta = false);
     ~Dump_ClosureHist();
 
     void prod_dump();

@@ -101,10 +101,13 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     std::string CLOSHIST_filename = dump_dir;
     int CLOSHIST_num_dist_bins = 0; 
     int CLOSHIST_num_angle_bins = 0; 
+    int CLOSHIST_num_twist_bins = 0; 
     double CLOSHIST_dist_lower = 0; 
     double CLOSHIST_dist_upper = _chain->get_disc_len()*_chain->get_num_bp(); 
     double CLOSHIST_angle_lower = 0; 
-    double CLOSHIST_angle_upper = 0;
+    double CLOSHIST_angle_upper = M_PI;
+    double CLOSHIST_twist_lower = -M_PI; 
+    double CLOSHIST_twist_upper = M_PI;
     bool CLOSHIST_bin_costheta = false;
 
     CLOSHIST_bin_costheta    = InputChoice_get_single<bool>      ("ClosureHist_angle_costheta"  ,&input,argv,CLOSHIST_bin_costheta);
@@ -112,30 +115,32 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
         CLOSHIST_angle_lower = -1;
         CLOSHIST_angle_upper = 1;
     }
-    else {
-        CLOSHIST_angle_lower = 0;
-        CLOSHIST_angle_upper = M_PI;
-    }
-    CLOSHIST_every          = InputChoice_get_single<int>        ("ClosureHist_n"  ,&input,argv,CLOSHIST_every);
-    CLOSHIST_filename       = InputChoice_get_single<std::string>("ClosureHist_fn" ,&input,argv,CLOSHIST_filename);
-    CLOSHIST_num_dist_bins  = InputChoice_get_single<int>        ("ClosureHist_dist_num"  ,&input,argv,CLOSHIST_num_dist_bins);
-    CLOSHIST_num_angle_bins = InputChoice_get_single<int>        ("ClosureHist_angle_num"  ,&input,argv,CLOSHIST_num_angle_bins);
-    CLOSHIST_dist_lower     = InputChoice_get_single<double>     ("ClosureHist_dist_lower"  ,&input,argv,CLOSHIST_dist_lower);
-    CLOSHIST_dist_upper     = InputChoice_get_single<double>     ("ClosureHist_dist_upper"  ,&input,argv,CLOSHIST_dist_upper);
-    CLOSHIST_angle_lower     = InputChoice_get_single<double>    ("ClosureHist_angle_lower"  ,&input,argv,CLOSHIST_angle_lower);
-    CLOSHIST_angle_upper     = InputChoice_get_single<double>    ("ClosureHist_angle_upper"  ,&input,argv,CLOSHIST_angle_upper);
+    CLOSHIST_every           = InputChoice_get_single<int>        ("ClosureHist_n"  ,&input,argv,CLOSHIST_every);
+    CLOSHIST_filename        = InputChoice_get_single<std::string>("ClosureHist_fn" ,&input,argv,CLOSHIST_filename);
+    CLOSHIST_num_dist_bins   = InputChoice_get_single<int>        ("ClosureHist_dist_num"  ,&input,argv,CLOSHIST_num_dist_bins);
+    CLOSHIST_num_angle_bins  = InputChoice_get_single<int>        ("ClosureHist_angle_num"  ,&input,argv,CLOSHIST_num_angle_bins);
+    CLOSHIST_num_twist_bins  = InputChoice_get_single<int>        ("ClosureHist_twist_num"  ,&input,argv,CLOSHIST_num_twist_bins);
+    CLOSHIST_dist_lower      = InputChoice_get_single<double>     ("ClosureHist_dist_lower"  ,&input,argv,CLOSHIST_dist_lower);
+    CLOSHIST_dist_upper      = InputChoice_get_single<double>     ("ClosureHist_dist_upper"  ,&input,argv,CLOSHIST_dist_upper);
+    CLOSHIST_angle_lower     = InputChoice_get_single<double>     ("ClosureHist_angle_lower"  ,&input,argv,CLOSHIST_angle_lower);
+    CLOSHIST_angle_upper     = InputChoice_get_single<double>     ("ClosureHist_angle_upper"  ,&input,argv,CLOSHIST_angle_upper);
+    CLOSHIST_twist_lower     = InputChoice_get_single<double>     ("ClosureHist_twist_lower"  ,&input,argv,CLOSHIST_twist_lower);
+    CLOSHIST_twist_upper     = InputChoice_get_single<double>     ("ClosureHist_twist_upper"  ,&input,argv,CLOSHIST_twist_upper);
 
-    if (CLOSHIST_num_dist_bins>0 && CLOSHIST_dist_lower < CLOSHIST_dist_upper && CLOSHIST_every > 0) {
+    if (CLOSHIST_num_dist_bins>0 || CLOSHIST_num_angle_bins>0 || CLOSHIST_num_twist_bins>0) {
         Dump_ClosureHist* Dcloshist = new Dump_ClosureHist(      
         _chain, 
         CLOSHIST_every, 
         CLOSHIST_filename, 
         CLOSHIST_num_dist_bins, 
         CLOSHIST_num_angle_bins, 
+        CLOSHIST_num_twist_bins, 
         CLOSHIST_dist_lower, 
         CLOSHIST_dist_upper, 
         CLOSHIST_angle_lower, 
         CLOSHIST_angle_upper,
+        CLOSHIST_twist_lower, 
+        CLOSHIST_twist_upper,
         CLOSHIST_bin_costheta);
         if (Dcloshist->is_active()) {
             Dumps.push_back(Dcloshist);
@@ -145,10 +150,13 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_fn",CLOSHIST_filename);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_dist_num",CLOSHIST_num_dist_bins);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_num",CLOSHIST_num_angle_bins);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_twist_num",CLOSHIST_num_angle_bins);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_dist_lower",CLOSHIST_dist_lower);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_dist_upper",CLOSHIST_dist_upper);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_lower",CLOSHIST_angle_lower);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_upper",CLOSHIST_angle_upper);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_twist_lower",CLOSHIST_twist_lower);
+        geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_tiwst_upper",CLOSHIST_twist_upper);
         geninfile->add_entry(GENINFILE_DUMPS,"ClosureHist_angle_costheta",CLOSHIST_bin_costheta);
         geninfile->add_newline(GENINFILE_DUMPS);
     }
