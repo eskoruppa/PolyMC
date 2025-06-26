@@ -44,6 +44,7 @@
 #include "MCStep/MCS_PivCon.h"
 #include "MCStep/MCS_Pivot.h"
 #include "MCStep/MCS_TailTwist.h"
+#include "MCStep/MCS_TopolPerm.h"
 #include "MCStep/MCS_TorquePiv.h"
 #include "MCStep/MCS_Twist.h"
 #include "MCStep/MCS_zPiv.h"
@@ -206,6 +207,8 @@ protected:
     double closure_distance_equi  = 0;
     double closure_angle_stiff    = 0;
     double closure_angle_equi     = 0;
+    double closure_twist_stiff    = 0;
+    double closure_twist_equi     = 0;
     // bool   closure_angle_use_costheta = false;
 
     bool subtract_T0    = false;
@@ -226,6 +229,9 @@ protected:
 
     bool use_cluster_twist = true;
     unsigned num_twist = 0;
+
+    bool     use_topolperm = false;
+    unsigned topolperm_every = 1;
 
 /*
     MCStep Members

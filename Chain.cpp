@@ -188,7 +188,7 @@ double Chain::extract_force_betaenergy() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////// CLOSURE FORCE METHODS ///////////////////////////////////////////////////////////////////////////
+////////////////// CLOSURE DISTANCE METHODS ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -219,7 +219,7 @@ double Chain::extract_closure_distance_betaenergy() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////// CLOSURE ANGULARSTIFF METHODS ////////////////////////////////////////////////////////////////////
+////////////////// CLOSURE ANGULAR METHODS /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -246,6 +246,37 @@ double Chain::eval_closure_angle_betaenergy(arma::colvec& tan1, arma::colvec& ta
 double Chain::extract_closure_angle_betaenergy() {
     double angle = std::acos(arma::dot(triads.slice(0).col(2),triads.slice(num_bp-1).col(2))) - closure_angle_equi;
     return 0.5*closure_angle_betastiff*angle*angle;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////// CLOSURE TWIST METHODS ///////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void Chain::set_closure_twist_potential(double twiststiff, double Omega_0) {
+    if (twiststiff==0)    { closure_twist_on = false; }
+    else                    { closure_twist_on = true; }
+    closure_twist_stiff       = twiststiff;
+    closure_twist_betastiff   = closure_twist_stiff/kT;
+    closure_twist_equi        = Omega_0;
+}
+bool     Chain::closure_twist_active(){
+    return closure_twist_on;
+}
+double   Chain::get_closure_twist_stiff() {
+    return closure_twist_stiff;
+}
+double   Chain::get_closure_twist_betastiff() {
+    return closure_twist_betastiff;
+}
+double Chain::eval_closure_twist_betaenergy(arma::mat& triad1, arma::mat& triad2) {
+    double twist = ExtractTheta(triad1.t() * triad2 )(2) - closure_twist_equi;
+    return 0.5*closure_twist_betastiff*twist*twist;
+}
+double Chain::extract_closure_twist_betaenergy() {
+    double twist = ExtractTheta(triads.slice(num_bp-1).t() * triads.slice(0) )(2) - closure_twist_equi;
+    return 0.5*closure_twist_betastiff*twist*twist;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,6 +312,7 @@ void Chain::set_T(double temp) {
     set_force  (force,force_dir);
     set_closure_distance_potential(closure_distance_stiff,closure_distance_equi);
     set_closure_angle_potential(closure_angle_stiff,closure_angle_equi);
+    set_closure_twist_potential(closure_twist_stiff,closure_twist_equi);
 
     if (conf_initialized) {
         for (unsigned bps=0;bps<num_bps;bps++) {
@@ -367,6 +399,10 @@ void Chain::set_closed_topology(bool closed) {
             std::cout << "Warning: closure_angularstiff deactivated due to closed topology." << std::endl;
         }
         set_closure_angle_potential(0,0);
+        if (closure_twist_on) {
+            std::cout << "Warning: closure_twiststiff deactivated due to closed topology." << std::endl;
+        }
+        set_closure_twist_potential(0,0);
         if (link_torsional_trap || link_const_torque) {
             std::cout << "Warning: Torque deactivated due to closed topology." << std::endl;
         }

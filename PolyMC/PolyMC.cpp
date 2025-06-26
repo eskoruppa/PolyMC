@@ -418,6 +418,8 @@ void PolyMC::init_general() {
     closure_distance_equi       = InputChoice_get_single<double>    ("closure_distance_equi",input,argv,closure_distance_equi);
     closure_angle_stiff         = InputChoice_get_single<double>    ("closure_angle_stiff",input,argv,closure_angle_stiff);
     closure_angle_equi          = InputChoice_get_single<double>    ("closure_angle_equi",input,argv,closure_angle_equi);
+    closure_twist_stiff         = InputChoice_get_single<double>    ("closure_twist_stiff",input,argv,closure_twist_stiff);
+    closure_twist_equi          = InputChoice_get_single<double>    ("closure_twist_equi",input,argv,closure_twist_equi);
 
     std::vector<std::string> input_sigma_keys = {"sig","sigma"};
     sigma       = InputChoice_get_single<double>      (input_sigma_keys,input,argv,sigma);
@@ -448,6 +450,8 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_PARAMS,"closure_distance_equi",closure_distance_equi);
     geninfile.add_entry(GENINFILE_PARAMS,"closure_angle_stiff",closure_angle_stiff);
     geninfile.add_entry(GENINFILE_PARAMS,"closure_angle_equi",closure_angle_equi);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_twist_stiff",closure_twist_stiff);
+    geninfile.add_entry(GENINFILE_PARAMS,"closure_twist_equi",closure_twist_equi);
 
     std::vector<std::string> input_IDB_keys = {"IDB_fn","IDB","idb"};
     IDB_fn      = InputChoice_get_single<std::string> (input_IDB_keys,input,argv,IDB_fn);
@@ -480,6 +484,9 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_OUTPUT,"print_elstat_info",print_elstat_info);
 
 
+    use_topolperm   = InputChoice_get_single<bool>  ("use_topolperm",input,argv,use_topolperm);
+    topolperm_every = InputChoice_get_single<unsigned>  ("topolperm_every",input,argv,topolperm_every);
+
     use_cluster_twist = InputChoice_get_single<bool>  ("use_cluster_twist",input,argv,use_cluster_twist);
     num_twist         = InputChoice_get_single<unsigned> ("num_twist",input,argv,num_twist);
     check_link        = InputChoice_get_single<bool>  ("check_link",input,argv,check_link);
@@ -494,7 +501,6 @@ void PolyMC::init_general() {
     geninfile.add_entry(GENINFILE_SIMSETUP,"check_link",check_link);
     geninfile.add_entry(GENINFILE_SIMSETUP,"check_consistency",check_consistency);
     geninfile.add_entry(GENINFILE_SIMSETUP,"check_consistency_every",check_consistency_every);
-
 
     copy_input        = InputChoice_get_single<bool>  ("copy_input",input,argv,copy_input);
     geninfile.add_entry(GENINFILE_DUMPS_SETUP,"copy_input",copy_input);
@@ -552,10 +558,14 @@ void PolyMC::init_general() {
     std::cout << " Lk0_from_static  = " << Lk0_from_static << std::endl;
     std::cout << " print_every      = " << print_every << std::endl;
 
-    if (closure_distance_stiff != 0 || closure_angle_stiff != 0) {
+    if (closure_distance_stiff != 0 || closure_angle_stiff != 0 || closure_twist_stiff != 0) {
+    // if (closure_distance_stiff != 0 || closure_angle_stiff != 0) {
         std::cout << " closure_distance_stiff = " << closure_distance_stiff << std::endl;
         std::cout << " closure_distance_equi  = " << closure_distance_equi << std::endl;
         std::cout << " closure_angle_stiff    = " << closure_angle_stiff << std::endl;
+        std::cout << " closure_angle_equi     = " << closure_angle_equi << std::endl;
+        std::cout << " closure_twist_stiff    = " << closure_twist_stiff << std::endl;
+        std::cout << " closure_twist_equi     = " << closure_twist_equi << std::endl;
     }
 
     if (check_consistency_every) {

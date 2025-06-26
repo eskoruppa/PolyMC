@@ -141,6 +141,17 @@ bool MCS_Pivot::MC_move() {
         deltaE += chain->eval_closure_angle_betaenergy(tan1,tan2);
     }
 
+    if (chain->closure_twist_active()) {
+        // std::cout << "closure angularstiff active" << std::endl;
+        arma::mat triad1 = triads->slice(num_bp-1);
+        arma::mat triad2 = triads->slice(0);
+        // old
+        deltaE -= chain->eval_closure_twist_betaenergy(triad1,triad2);
+        // new
+        triad1 = rot_mat*triad1;
+        deltaE += chain->eval_closure_twist_betaenergy(triad1,triad2);
+    }
+
 	if (exp(-deltaE) <= choice) {
 		return false;
     }

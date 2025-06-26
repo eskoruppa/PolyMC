@@ -127,12 +127,6 @@ bool MCS_TailTwist::MC_move() {
             Contribution due to torque or torsional trap
         */
         deltaE += chain->propose_terminus_rotation( triads->slice(num_bp-1) * Rz, dtheta );
-
-//        std::cout << sigma << std::endl;
-//        std::cout << chain->get_torstrap_dLK_aim() << std::endl;
-//        std::cout << Rz << std::endl;
-//        std::cout << deltaE << std::endl;
-
         if (exp(-deltaE) <= choice) {
             chain->set_terminus_rotation(false);
             return false;

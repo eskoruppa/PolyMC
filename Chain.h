@@ -233,17 +233,23 @@ protected:
     arma::colvec force_dir      = {0,0,1};
     arma::colvec beta_force_vec = {0,0,1};
 
-    // closure Forcel
+    // closure distance
     bool    closure_distance_on         = false;
     double  closure_distance_stiff      = 0;
     double  closure_distance_equi       = 0;
     double  closure_distance_betastiff  = 0;
 
-    // closure angularstiff 
+    // closure angle 
     bool   closure_angle_on         = false;
     double closure_angle_stiff      = 0;
     double closure_angle_equi       = 0;
     double closure_angle_betastiff  = 0;
+
+    // closure twist 
+    bool   closure_twist_on         = false;
+    double closure_twist_stiff      = 0;
+    double closure_twist_equi       = 0;
+    double closure_twist_betastiff  = 0;
 
     // Termini Constraint
     bool termini_fixed           = false;
@@ -380,6 +386,13 @@ public:
     double       get_closure_angle_betastiff();
     double       eval_closure_angle_betaenergy(arma::colvec& tan1, arma::colvec& tan2);
     double       extract_closure_angle_betaenergy();
+
+    void         set_closure_twist_potential (double k, double Omega_0 = 0);
+    bool         closure_twist_active();
+    double       get_closure_twist_stiff();
+    double       get_closure_twist_betastiff();
+    double       eval_closure_twist_betaenergy(arma::mat& triad1, arma::mat& triad2);
+    double       extract_closure_twist_betaenergy();
 
     bool        fixed_termini();
     bool        fixed_termini_radial();

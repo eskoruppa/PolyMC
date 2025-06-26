@@ -62,6 +62,7 @@ XYZ_translate = first
 ClosureHist_n 	 	   = 1
 ClosureHist_dist_num       = 10
 ClosureHist_angle_num      = 10
+ClosureHist_twist_num      = 10
 ClosureHist_angle_costheta = false
 
 Closure_n = 1

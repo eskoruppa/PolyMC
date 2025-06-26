@@ -30,6 +30,7 @@ bool PolyMC::init_open() {
     // set closure parameters
     chain->set_closure_distance_potential(closure_distance_stiff,closure_distance_equi);
     chain->set_closure_angle_potential(closure_angle_stiff,closure_angle_equi);
+    chain->set_closure_twist_potential(closure_twist_stiff,closure_twist_equi);
 
     chain->set_T0_subtract(subtract_T0);
     chain->set_helical_repeat_length(hel_rep_len);
@@ -77,5 +78,12 @@ bool PolyMC::init_open() {
         }
         std::cout << " Added " << num_twist << " Twist-Moves to MC Moves .. " << std::endl;
     }
+
+    if (use_topolperm && topolperm_every > 0) {
+        MCS_TopolPerm* topolperm = new MCS_TopolPerm(chain,seedseq,topolperm_every);
+        MCSteps.push_back(topolperm);
+        std::cout << " Added TopolPerm to MC Moves .. " << std::endl; 
+    }
+
     return true;
 }

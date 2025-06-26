@@ -127,7 +127,7 @@ std::vector<Dump*> init_dump_cmdargs(const std::vector<std::string> & argv, GenI
     CLOSHIST_twist_lower     = InputChoice_get_single<double>     ("ClosureHist_twist_lower"  ,&input,argv,CLOSHIST_twist_lower);
     CLOSHIST_twist_upper     = InputChoice_get_single<double>     ("ClosureHist_twist_upper"  ,&input,argv,CLOSHIST_twist_upper);
 
-    if (CLOSHIST_num_dist_bins>0 || CLOSHIST_num_angle_bins>0 || CLOSHIST_num_twist_bins>0) {
+    if (CLOSHIST_every > 0 && (CLOSHIST_num_dist_bins>0 || CLOSHIST_num_angle_bins>0 || CLOSHIST_num_twist_bins>0)) {
         Dump_ClosureHist* Dcloshist = new Dump_ClosureHist(      
         _chain, 
         CLOSHIST_every, 

@@ -1,9 +1,9 @@
 #include "MCS_ClusterTwist.h"
 
+
 /*
     For open chains this move will never touch the termini
 */
-
 
 MCS_ClusterTwist::MCS_ClusterTwist(Chain * ch,const std::vector<long long int> & seedseq, int selrange_min, int selrange_max)
 : MCStep(ch,seedseq)
@@ -278,5 +278,3 @@ bool MCS_ClusterTwist::MC_move() {
     }
     return true;
 }
-
-

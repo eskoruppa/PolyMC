@@ -3,11 +3,6 @@
 #include "MCStep.h"
 
 
-/*
-Perhaps exclude the possibility to rotate te first triad.
-
-*/
-
 class MCS_ClusterTwist;
 
 class MCS_ClusterTwist: public MCStep
@@ -34,8 +29,7 @@ public:
 // Monte Carlo Step (call main functionality)
 public:
     bool MC_move();
-    bool rotation(int idA, int idB);
-
+    // bool rotation(int idA, int idB);
 
 };
 
